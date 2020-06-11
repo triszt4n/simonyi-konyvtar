@@ -21,7 +21,7 @@ export default function Navbar() {
     >
       <Stack shouldWrapChildren spacing={8} direction='row'>
         <NextLink href='/'>
-          <Link>Home</Link>
+          <Link>Simonyi Könyvtár</Link>
         </NextLink>
         {user ? (
           <Stack shouldWrapChildren spacing={8} direction='row'>

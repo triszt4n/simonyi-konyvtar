@@ -8,11 +8,6 @@ const db = new PrismaClient()
 const handler = nextConnect()
 
 handler
-  .get(async (req, res) => {
-    // For demo purpose only. You will never have an endpoint which returns all users.
-    // Remove this in production
-    res.json({ users: await db.user.findMany() })
-  })
   .use(auth)
   .post(async (req, res) => {
     const { email, name, password } = req.body
@@ -20,7 +15,7 @@ handler
       return res.status(400).send('Missing fields')
     }
     // Security-wise, you must hash the password before saving it
-    const hashedPass = await argon2.hash(password);
+    const hashedPass = await argon2.hash(password)
     const user = { name, password: hashedPass, email }
     let createdUser: User
     try {

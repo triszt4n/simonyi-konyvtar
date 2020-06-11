@@ -1,25 +1,38 @@
+import {
+  Box,
+  ColorModeProvider,
+  CSSReset,
+  ThemeProvider,
+} from '@chakra-ui/core'
 import { AppProps } from 'next/app'
-import { ThemeProvider, CSSReset, ColorModeProvider, Text, Flex, Box } from '@chakra-ui/core'
+import Head from 'next/head'
 
-import theme from '../theme'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 import { Container } from '../components/Container'
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar'
+import theme from '../theme'
 
 const App = ({ Component }: AppProps) => {
   return (
-    <ThemeProvider theme={theme}>
-      <ColorModeProvider>
-        <CSSReset />
-        <Container>
-          <Navbar />
-          <Box flex='1'>
-            <Component />
-          </Box>
-          <Footer />
-        </Container>
-      </ColorModeProvider>
-    </ThemeProvider>
+    <>
+      <Head>
+        <title>Simonyi Könyvtár</title>
+        <meta property='og:title' content='Simonyi Könvtár' key='title' />
+        <meta lang='hu' />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <ColorModeProvider>
+          <CSSReset />
+          <Container>
+            <Navbar />
+            <Box flex='1' maxWidth='84rem' width='100%'>
+              <Component />
+            </Box>
+            <Footer />
+          </Container>
+        </ColorModeProvider>
+      </ThemeProvider>
+    </>
   )
 }
 
