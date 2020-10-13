@@ -7,24 +7,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum orderstatus {
+  LATE
+  PENDING
+  RENTED
+  RETURNED
+}
+
+enum userrole {
+  ADMIN
+  BASIC
+  EDITOR
+}
+
 model Book {
-  author        String?
-  comment       String?
-  count         Int?
-  createdAt     DateTime   @default(now())
-  id            Int        @default(autoincrement()) @id
-  image         String?
-  isbn          String?
-  publishedAt   Int?
-  publisher     String?
-  stock         Int?
-  title         String
-  updatedAt     DateTime   @default(now())
-  categories    Category[] @relation(references: [id])
+  author      String?
+  count       Int?
+  createdAt   DateTime?     @default(now())
+  id          Int           @default(autoincrement()) @id
+  image       String?
+  isbn        String?       @unique
+  notes       String?
+  publishedAt Int?
+  publisher   String?
+  stockCount  Int?
+  title       String?
+  updatedAt   DateTime?     @default(now())
+  carts       BookToCart[]
+  orders      BookToOrder[]
+  categories  Category[]
+}
+
+model BookToCart {
+  bookId   Int
+  cartId   Int
+  id       Int  @default(autoincrement()) @id
+  quantity Int? @default(1)
+  book     Book @relation(fields: [bookId], references: [id])
+  cart     Cart @relation(fields: [cartId], references: [id])
+}
+
+model BookToOrder {
+  bookId   Int
+  id       Int   @default(autoincrement()) @id
+  orderId  Int
+  quantity Int?  @default(1)
+  book     Book  @relation(fields: [bookId], references: [id])
+  order    Order @relation(fields: [orderId], references: [id])
+}
+
+model Cart {
+  id         Int          @id
+  userId     Int?
+  books      BookToCart[]
 }
 
 model Category {
-  id    Int    @default(autoincrement()) @id
-  name  String
-  books Book[] @relation(references: [id])
+  id   Int     @default(autoincrement()) @id
+  name String?
+  books Book[]
+}
+
+model Comment {
+  createdAt DateTime? @default(now())
+  id        Int       @default(autoincrement()) @id
+  orderId   Int?
+  text      String?
+  userId    Int?
+}
+
+model Order {
+  createdAt   DateTime?     @default(now())
+  id          Int           @default(autoincrement()) @id
+  returnDate  DateTime?
+  status      orderstatus?  @default(PENDING)
+  updatedAt   DateTime?     @default(now())
+  userId      Int           @unique
+  user        User          @relation(fields: [userId], references: [id])
+  books       BookToOrder[]
+}
+
+model User {
+  createdAt DateTime? @default(now())
+  email     String?
+  id        Int       @default(autoincrement()) @id
+  name      String?
+  password  String?
+  role      userrole? @default(BASIC)
+  orders    Order[]
 }

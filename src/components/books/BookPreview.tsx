@@ -55,15 +55,15 @@ export const BookPreview: React.FC<BookPreviewProps> = ({ book }) => {
             </ListItem>
           </List>
         </Flex>
+        <Text mt='0.5rem' opacity={0.7} fontSize='sm'>
+          Legutóbb frissítve:&nbsp;
+          <TimeAgo date={book.updatedAt} />
+        </Text>
         <Stack spacing={4} isInline mt='0.5rem'>
           {book.categories?.map((it) => (
             <Tag key={it.id}>{it.name}</Tag>
           ))}
         </Stack>
-        <Text mt='0.5rem' opacity={0.7} fontSize='sm'>
-          Legutóbb frissítve:&nbsp;
-          <TimeAgo date={book.updatedAt} />
-        </Text>
       </MotionBox>
     </NextLink>
   )

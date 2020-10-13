@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Book } from '@prisma/client'
 import nextConnect from 'next-connect'
 
 const handler = nextConnect()
@@ -16,18 +16,27 @@ handler
   })
   .post(async (req, res) => {
     try {
-      // const book = req.body
-      // validate, insert categories too!
-      // const newBook = await db.book.create({ ...book })
+      // TODO: validate book props here too!
+      console.log(req.body)
+      const { categories, ...rest }: { categories: { id: number }[], book: Book } = req.body
       const newBook = await db.book.create({
         data: {
-          title: 'A very informative book',
-          isbn: '1234abcd',
-          author: 'Teszt Elek',
-          comment: 'rafolyt a sor',
-          image: 'https://www.pdf-archive.com/2017/12/29/gajdos-sandor-adatbazisok-uj-kiadas/preview-gajdos-sandor-adatbazisok-uj-kiadas-1.jpg',
+          ...rest.book,
+          categories: {
+            connect: categories
+          }
         }
       })
+      // const newBook = await db.book.create({
+      //   data: {
+      //     title: 'Lorem ipsum',
+      //     author: 'Dolor sit amet',
+      //     isbn: 'aaabbbbcccc1234',
+      //     categories: {
+      //       connect: [{ id: 1 }, { id: 2 }]
+      //     }
+      //   }
+      // })
       res.status(201).json({ book: newBook })
 
     } catch (e) {

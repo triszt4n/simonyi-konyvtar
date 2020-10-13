@@ -1,5 +1,5 @@
 {
-  "name": "with-chakra-ui",
+  "name": "simonyi-konyvtar",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@hapi/iron": "^6.0.0",
-    "@prisma/client": "^2.0.0",
+    "@prisma/client": "^2.8.1",
     "argon2": "^0.26.2",
     "cookie": "^0.4.1",
     "dotenv": "^8.2.0",
@@ -24,11 +24,12 @@
     "passport-local": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hook-form": "^5.7.2",
     "react-timeago": "^4.4.0",
     "swr": "^0.2.2"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.0.0",
+    "@prisma/cli": "^2.8.1",
     "@types/cookie": "^0.4.0",
     "@types/node": "^14.0.5",
     "@types/passport": "^1.0.3",

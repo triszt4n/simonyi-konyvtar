@@ -25,7 +25,7 @@ const App = ({ Component }: AppProps) => {
           <CSSReset />
           <Container>
             <Navbar />
-            <Box flex='1' maxWidth='84rem' width='100%'>
+            <Box flex='1' maxWidth='84rem' width='100%' px='1rem'>
               <Component />
             </Box>
             <Footer />

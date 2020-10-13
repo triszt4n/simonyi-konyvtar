@@ -1,7 +1,17 @@
-import { Flex, Link, Stack } from '@chakra-ui/core'
+import {
+  Flex,
+  Link,
+  Stack,
+  Menu,
+  MenuButton,
+  Button,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/core'
 import NextLink from 'next/link'
 import { useUser } from '../lib/hooks'
 import { DarkModeSwitch } from './DarkModeSwitch'
+import React from 'react'
 
 export default function Navbar() {
   const [user, { mutate }] = useUser()
@@ -19,7 +29,7 @@ export default function Navbar() {
       justifyContent='space-between'
       alignItems='center'
     >
-      <Stack shouldWrapChildren spacing={8} direction='row'>
+      <Stack shouldWrapChildren spacing={8} direction='row' alignItems='center'>
         <NextLink href='/'>
           <Link>Simonyi Könyvtár</Link>
         </NextLink>
@@ -40,6 +50,23 @@ export default function Navbar() {
             </NextLink>
           </Stack>
         )}
+        <Menu>
+          <MenuButton as={Button} rightIcon='chevron-down'>
+            Admin
+          </MenuButton>
+          <MenuList>
+            <MenuItem minH='48px'>
+              <NextLink href='/admin/books/create'>
+                <Link>Könv hozzáadása</Link>
+              </NextLink>
+            </MenuItem>
+            <MenuItem minH='48px'>
+              <NextLink href='/admin/books'>
+                <Link>Könyvek szerkesztese</Link>
+              </NextLink>
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Stack>
       <DarkModeSwitch />
     </Flex>

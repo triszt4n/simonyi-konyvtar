@@ -1,10 +1,28 @@
-import { Button } from '@chakra-ui/core'
-import { useCallback } from 'react'
+import { BookFormType } from '../../../lib/interfaces'
+import BookForm from '../../../components/books/BookForm'
 
-export default function CreateBook() {
-  const createBook = useCallback(async () => {
+const CreateBook = () => {
+  const createBook = async () => {
     await fetch('/api/books', { method: 'POST' })
-  }, [])
+  }
 
-  return <Button onClick={createBook}>Add book</Button>
+  const initialValues: BookFormType = {
+    author: '',
+    comment: '',
+    count: 0,
+    image: '',
+    isbn: '',
+    publishedAt: null,
+    publisher: '',
+    stock: 0,
+    title: '',
+    categories: [],
+  }
+  return (
+    <>
+      <BookForm initialValues={initialValues} onSubmit={createBook} />
+    </>
+  )
 }
+
+export default CreateBook
