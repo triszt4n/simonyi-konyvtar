@@ -17,7 +17,7 @@ CREATE TYPE "orderstatus" AS ENUM (
 
 CREATE TABLE IF NOT EXISTS "public"."User" (
   "id" SERIAL PRIMARY KEY,
-  "email" varchar,
+  "email" varchar UNIQUE,
   "password" varchar,
   "name" varchar,
   "createdAt" timestamp DEFAULT (now()),
@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS "public"."Book" (
   "isbn" varchar UNIQUE,
   "publisher" varchar,
   "publishedAt" int,
-  "stockCount" int,
-  "count" int,
+  "stockCount" int DEFAULT (1),
+  "count" int DEFAULT (1),
   "notes" varchar,
   "image" varchar,
   "createdAt" timestamp DEFAULT (now()),

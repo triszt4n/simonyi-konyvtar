@@ -1,7 +1,8 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import auth from '../../middleware/auth'
 
-const handler = nextConnect()
+const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler.use(auth).get((req, res) => {
   req.logOut()

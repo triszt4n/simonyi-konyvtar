@@ -1,13 +1,14 @@
 import { PrismaClient, Book } from '@prisma/client'
+import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 
-const handler = nextConnect()
+const handler = nextConnect<NextApiRequest, NextApiResponse>()
 const db = new PrismaClient()
 
 handler
   .get(async (req, res) => {
     try {
-      const books = await db.book.findMany({ include: { categories: true } })
+      const books = await db.book.findMany({ include: { categories: true, } })
       res.json({ books })
     } catch (e) {
       console.error(e.message)
@@ -32,6 +33,9 @@ handler
       //     title: 'Lorem ipsum',
       //     author: 'Dolor sit amet',
       //     isbn: 'aaabbbbcccc1234',
+      //     count: 1,
+      //     publisher: 'Bo Ok Kft.',
+      //     publishedAt: 2001,
       //     categories: {
       //       connect: [{ id: 1 }, { id: 2 }]
       //     }

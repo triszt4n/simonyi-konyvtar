@@ -1,21 +1,21 @@
-import { BookFormType } from '../../../lib/interfaces'
-import BookForm from '../../../components/books/BookForm'
+import { BookFormType } from "../../../lib/interfaces"
+import BookForm from "../../../components/books/BookForm"
 
 const CreateBook = () => {
   const createBook = async () => {
-    await fetch('/api/books', { method: 'POST' })
+    await fetch("/api/books", { method: "POST" })
   }
 
   const initialValues: BookFormType = {
-    author: '',
-    comment: '',
+    author: "",
+    notes: "",
     count: 0,
-    image: '',
-    isbn: '',
+    image: "",
+    isbn: "",
     publishedAt: null,
-    publisher: '',
-    stock: 0,
-    title: '',
+    publisher: "",
+    stockCount: 0,
+    title: "",
     categories: [],
   }
   return (

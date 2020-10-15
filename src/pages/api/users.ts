@@ -1,11 +1,12 @@
 import nextConnect from 'next-connect'
 import { PrismaClient, User } from '@prisma/client'
 import argon2 from 'argon2'
+import { NextApiRequest, NextApiResponse } from 'next'
 import auth from '../../middleware/auth'
 
 const db = new PrismaClient()
 
-const handler = nextConnect()
+const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
   .use(auth)

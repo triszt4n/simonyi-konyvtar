@@ -1,13 +1,13 @@
-import { Button, Heading, Input, Link, Stack, Text } from '@chakra-ui/core'
-import NextLink from 'next/link'
-import Router from 'next/router'
-import { useEffect, useState } from 'react'
+import { Button, Heading, Input, Link, Stack, Text } from "@chakra-ui/core"
+import NextLink from "next/link"
+import Router from "next/router"
+import { useEffect, useState } from "react"
 
-import { useUser } from '../lib/hooks'
+import { useUser } from "../lib/hooks"
 
 export default function SignupPage() {
   const [user, { mutate }] = useUser()
-  const [errorMsg, setErrorMsg] = useState('')
+  const [errorMsg, setErrorMsg] = useState("")
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -23,9 +23,9 @@ export default function SignupPage() {
       return
     }
 
-    const res = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
 
@@ -40,45 +40,45 @@ export default function SignupPage() {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (user) Router.push('/')
+    if (user) Router.push("/")
   }, [user])
 
   return (
     <>
-      <Heading as='h1'>Sign up to Example</Heading>
-      {errorMsg && <Text color='tomato'>{errorMsg}</Text>}
+      <Heading as="h1">Sign up to Example</Heading>
+      {errorMsg && <Text color="tomato">{errorMsg}</Text>}
       <form onSubmit={onSubmit}>
         <Stack spacing={3} shouldWrapChildren>
           <Input
-            variant='outline'
-            type='text'
-            name='username'
-            placeholder='Name'
+            variant="outline"
+            type="text"
+            name="username"
+            placeholder="Name"
             isRequired
           />
           <Input
-            variant='outline'
-            type='text'
-            name='email'
-            placeholder='Email'
+            variant="outline"
+            type="text"
+            name="email"
+            placeholder="Email"
             isRequired
           />
           <Input
-            variant='outline'
-            type='password'
-            name='password'
-            placeholder='Password'
+            variant="outline"
+            type="password"
+            name="password"
+            placeholder="Password"
             isRequired
           />
           <Input
-            variant='outline'
-            type='password'
-            name='rpassword'
-            placeholder='Repeat password'
+            variant="outline"
+            type="password"
+            name="rpassword"
+            placeholder="Repeat password"
             isRequired
           />
-          <Button type='submit'>Sign up</Button>
-          <NextLink href='/login'>
+          <Button type="submit">Sign up</Button>
+          <NextLink href="/login">
             <Link>I already have an account</Link>
           </NextLink>
         </Stack>

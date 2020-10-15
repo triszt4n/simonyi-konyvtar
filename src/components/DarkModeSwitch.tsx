@@ -1,16 +1,13 @@
-import { useColorMode, Switch } from '@chakra-ui/core'
+import { useColorMode, IconButton } from "@chakra-ui/core"
 
 export const DarkModeSwitch = () => {
   const { colorMode, toggleColorMode } = useColorMode()
-  const isDark = colorMode === 'dark'
+  const isDark = colorMode === "dark"
   return (
-    <Switch
-      position='fixed'
-      top='1rem'
-      right='1rem'
-      color='green'
-      isChecked={isDark}
-      onChange={toggleColorMode}
+    <IconButton
+      aria-label="Change color theme"
+      icon={isDark ? "moon" : "sun"}
+      onClick={toggleColorMode}
     />
   )
 }

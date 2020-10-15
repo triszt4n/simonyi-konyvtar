@@ -16,7 +16,6 @@ const auth = nextConnect()
       },
     })
   )
-  // @ts-ignore
   .use(passport.initialize())
   .use(passport.session())
 

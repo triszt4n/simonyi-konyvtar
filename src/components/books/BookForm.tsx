@@ -1,30 +1,30 @@
-import { BookWithCategoryIds } from '../../lib/interfaces'
-import { Button } from '@chakra-ui/core'
-import useSWR from 'swr'
-import { Category } from '@prisma/client'
-import { fetcher } from '../../lib/hooks'
+import { BookWithCategoryIds } from "../../lib/interfaces"
+import { Button } from "@chakra-ui/core"
+import useSWR from "swr"
+import { Category } from "@prisma/client"
+import { fetcher } from "../../lib/hooks"
 
-type BookForm = Omit<BookWithCategoryIds, 'id' | 'createdAt' | 'updatedAt'>
+type BookForm = Omit<BookWithCategoryIds, "id" | "createdAt" | "updatedAt">
 
 const BookForm: React.FC<{
   initialValues: BookForm
   onSubmit: (event: React.MouseEvent<any, MouseEvent>) => void
 }> = ({ initialValues, onSubmit }) => {
-  const {
-    data: { categories },
-    error,
-  } = useSWR<{ categories: Category[] }>('/api/categories', fetcher)
+  const { data, error } = useSWR<{ categories: Category[] }>(
+    "/api/categories",
+    fetcher
+  )
 
   initialValues = initialValues || {
-    author: '',
-    comment: '',
+    author: "",
+    notes: "",
     count: 0,
-    image: '',
-    isbn: '',
+    image: "",
+    isbn: "",
     publishedAt: null,
-    publisher: '',
-    stock: 0,
-    title: '',
+    publisher: "",
+    stockCount: 0,
+    title: "",
     categories: [],
   }
 

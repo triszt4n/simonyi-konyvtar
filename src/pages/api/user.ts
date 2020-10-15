@@ -1,9 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import nextConnect from 'next-connect'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 import auth from '../../middleware/auth'
 
-const handler = nextConnect()
+const handler = nextConnect<NextApiRequest, NextApiResponse>()
 const db = new PrismaClient()
 
 handler
@@ -12,8 +13,8 @@ handler
     // You do not generally want to return the whole user object
     // because it may contain sensitive field such as !!password!! Only return what needed
     if (req.user) {
-      const { id, name, email } = req.user
-      res.json({ user: { id, name, email } })
+      const { password, ...rest } = req.user
+      res.json({ user: rest })
     } else {
       res.json(null)
     }

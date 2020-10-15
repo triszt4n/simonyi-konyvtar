@@ -8,12 +8,12 @@ import {
   Stack,
   Tag,
   Text,
-} from '@chakra-ui/core'
-import { motion } from 'framer-motion'
-import NextLink from 'next/link'
+} from "@chakra-ui/core"
+import { motion } from "framer-motion"
+import NextLink from "next/link"
 
-import { BookWithCategories } from '../../lib/interfaces'
-import TimeAgo from '../HunTimeAgo'
+import { BookWithCategories } from "../../lib/interfaces"
+import TimeAgo from "../HunTimeAgo"
 
 const MotionBox = motion.custom(Box)
 
@@ -23,43 +23,41 @@ interface BookPreviewProps {
 
 export const BookPreview: React.FC<BookPreviewProps> = ({ book }) => {
   return (
-    <NextLink href='/books/[id]' as={`/books/${book.id}`}>
+    <NextLink href="/books/[id]" as={`/books/${book.id}`}>
       <MotionBox
-        padding='0.7rem'
-        borderRadius='4px'
-        cursor='pointer'
+        padding="0.7rem"
+        borderRadius="4px"
         whileHover={{
-          boxShadow: '0px 0px 8px lightgray',
-          scale: 1.02,
+          boxShadow: "0px 0px 8px lightgray",
         }}
       >
         <Flex>
           <Image
-            src={book.image || 'https://placekitten.com/200/300'}
-            maxH='14rem'
-            pr='1rem'
+            src={book.image || "https://placekitten.com/200/300"}
+            maxH="14rem"
+            pr="1rem"
           />
           <List spacing={4}>
             <ListItem>
-              <Heading as='h3' size='lg'>
+              <Heading as="h3" size="lg">
                 {book.title}
               </Heading>
             </ListItem>
             <ListItem>
-              <Heading as='h4' size='sm'>
+              <Heading as="h4" size="sm">
                 {book.author}
               </Heading>
             </ListItem>
             <ListItem>
-              <Text>Készleten: {book.stock || 0}</Text>
+              <Text>Készleten: {book.stockCount || 0}</Text>
             </ListItem>
           </List>
         </Flex>
-        <Text mt='0.5rem' opacity={0.7} fontSize='sm'>
+        <Text mt="0.5rem" opacity={0.7} fontSize="sm">
           Legutóbb frissítve:&nbsp;
           <TimeAgo date={book.updatedAt} />
         </Text>
-        <Stack spacing={4} isInline mt='0.5rem'>
+        <Stack spacing={4} isInline mt="0.5rem">
           {book.categories?.map((it) => (
             <Tag key={it.id}>{it.name}</Tag>
           ))}
