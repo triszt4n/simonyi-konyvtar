@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Heading,
   Image,
@@ -11,7 +12,7 @@ import { useRouter } from "next/router"
 import TimeAgo from "../../components/HunTimeAgo"
 import useSWR from "swr"
 
-import { fetcher } from "../../lib/hooks"
+import { useCart, fetcher } from "../../lib/hooks"
 import { BookWithCategories } from "../../lib/interfaces"
 
 const BookPage = () => {
@@ -21,6 +22,8 @@ const BookPage = () => {
     `/api/books/${router.query.id}`,
     fetcher
   )
+
+  const { addBook } = useCart()
 
   if (error) return <div>Failed to load book</div>
   if (!data) return <div>Loading...</div>
@@ -65,6 +68,18 @@ const BookPage = () => {
         Legutóbb frissítve:&nbsp;
         <TimeAgo date={book.updatedAt} />
       </Text>
+      <Button
+        onClick={() =>
+          addBook({
+            id: book.id,
+            quantity: 1,
+            author: book.author,
+            title: book.title,
+          })
+        }
+      >
+        Kosárba
+      </Button>
     </>
   )
 }

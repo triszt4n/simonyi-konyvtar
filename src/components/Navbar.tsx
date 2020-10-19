@@ -1,20 +1,14 @@
-import {
-  Flex,
-  Link,
-  Stack,
-  Menu,
-  MenuButton,
-  Button,
-  MenuList,
-  MenuItem,
-} from "@chakra-ui/core"
+import { Button, Flex, Link, Stack } from "@chakra-ui/core"
 import NextLink from "next/link"
-import { useUser } from "../lib/hooks"
-import { DarkModeSwitch } from "./DarkModeSwitch"
 import React from "react"
+import { HiOutlineShoppingCart } from "react-icons/hi"
+
+import { useCart, useUser } from "../lib/hooks"
+import { DarkModeSwitch } from "./DarkModeSwitch"
 
 export default function Navbar() {
   const [user, { mutate }] = useUser()
+  const { cart } = useCart()
 
   async function handleLogout() {
     await fetch("/api/logout")
@@ -52,6 +46,9 @@ export default function Navbar() {
         )}
         <NextLink href="/admin">
           <Link>Admin</Link>
+        </NextLink>
+        <NextLink href="/cart">
+          <Button leftIcon={HiOutlineShoppingCart}>{cart.length}</Button>
         </NextLink>
       </Stack>
       <DarkModeSwitch />

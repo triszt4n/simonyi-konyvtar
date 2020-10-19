@@ -61,29 +61,30 @@ CREATE TABLE IF NOT EXISTS "public"."BookToOrder" (
 
 CREATE UNIQUE INDEX "BookToOrder_book_order_unique" ON "BookToOrder"("bookId" int4_ops,"orderId" int4_ops);
 
-CREATE TABLE IF NOT EXISTS "public"."Cart" (
-  "id" int PRIMARY KEY,
-  "userId" int
-);
+-- CREATE TABLE IF NOT EXISTS "public"."Cart" (
+--   "id" int PRIMARY KEY,
+--   "userId" int REFERENCES "User"(id)
+--   FOREIGN KEY ("userId") REFERENCES "User"(id)
+-- );
 
-CREATE TABLE IF NOT EXISTS "public"."BookToCart" (
-  "id" SERIAL PRIMARY KEY,
-  "cartId" int NOT NULL,
-  "bookId" int NOT NULL,
-  "quantity" int DEFAULT 1,
-  FOREIGN KEY ("bookId")  REFERENCES "Book"(id),
-  FOREIGN KEY ("cartId") REFERENCES "Cart"(id)
-);
+-- CREATE TABLE IF NOT EXISTS "public"."BookToCart" (
+--   "id" SERIAL PRIMARY KEY,
+--   "cartId" int NOT NULL,
+--   "bookId" int NOT NULL,
+--   "quantity" int DEFAULT 1,
+--   FOREIGN KEY ("bookId")  REFERENCES "Book"(id),
+--   FOREIGN KEY ("cartId") REFERENCES "Cart"(id)
+-- );
 
-CREATE UNIQUE INDEX "BookToCart_book_cart_unique" ON "BookToCart"("bookId" int4_ops,"cartId" int4_ops);
+-- CREATE UNIQUE INDEX "BookToCart_book_cart_unique" ON "BookToCart"("bookId" int4_ops,"cartId" int4_ops);
 
-CREATE TABLE IF NOT EXISTS "public"."Comment" (
-  "id" SERIAL PRIMARY KEY,
-  "text" varchar,
-  "userId" int,
-  "orderId" int,
-  "createdAt" timestamp DEFAULT (now())
-);
+-- CREATE TABLE IF NOT EXISTS "public"."Comment" (
+--   "id" SERIAL PRIMARY KEY,
+--   "text" varchar,
+--   "userId" int,
+--   "orderId" int,
+--   "createdAt" timestamp DEFAULT (now())
+-- );
 
 CREATE TABLE IF NOT EXISTS "public"."Category" (
   "id" SERIAL PRIMARY KEY,
