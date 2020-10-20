@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import nextConnect from 'next-connect'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import auth from '../../middleware/auth'
+import auth from 'middleware/auth'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 const db = new PrismaClient()

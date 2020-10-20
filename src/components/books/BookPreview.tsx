@@ -12,7 +12,7 @@ import {
 import { motion } from "framer-motion"
 import NextLink from "next/link"
 
-import { BookWithCategories } from "../../lib/interfaces"
+import { BookWithCategories } from "lib/interfaces"
 import TimeAgo from "../HunTimeAgo"
 
 const MotionBox = motion.custom(Box)

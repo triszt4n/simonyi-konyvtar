@@ -1,14 +1,14 @@
-import { SimpleGrid, Input } from '@chakra-ui/core'
-import useSWR from 'swr'
+import { SimpleGrid, Input } from "@chakra-ui/core"
+import useSWR from "swr"
 
-import { BookPreview } from '../components/books/BookPreview'
-import { Main } from '../components/Main'
-import { fetcher } from '../lib/hooks'
-import { BookWithCategories } from '../lib/interfaces'
+import { BookPreview } from "components/books/BookPreview"
+import { Main } from "components/Main"
+import { fetcher } from "lib/hooks"
+import { BookWithCategories } from "lib/interfaces"
 
 const Index = () => {
   const { data, error } = useSWR<{ books: BookWithCategories[] }>(
-    '/api/books',
+    "/api/books",
     fetcher
   )
 
@@ -17,8 +17,8 @@ const Index = () => {
 
   return (
     <Main>
-      <Input placeholder='Keress a könyvek között!' mt='1rem' />
-      <SimpleGrid minChildWidth='min(100%, 24rem)' spacing='2rem'>
+      <Input placeholder="Keress a könyvek között!" mt="1rem" />
+      <SimpleGrid minChildWidth="min(100%, 24rem)" spacing="2rem">
         {data.books.map((book) => (
           <BookPreview key={book.id} book={book} />
         ))}

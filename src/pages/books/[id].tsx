@@ -10,11 +10,11 @@ import {
   useToast,
 } from "@chakra-ui/core"
 import { useRouter } from "next/router"
-import TimeAgo from "../../components/HunTimeAgo"
+import TimeAgo from "components/HunTimeAgo"
 import useSWR from "swr"
 
-import { useCart, fetcher } from "../../lib/hooks"
-import { BookWithCategories, CartItem } from "../../lib/interfaces"
+import { useCart, fetcher } from "lib/hooks"
+import { BookWithCategories, CartItem } from "lib/interfaces"
 
 const BookPage = () => {
   const router = useRouter()

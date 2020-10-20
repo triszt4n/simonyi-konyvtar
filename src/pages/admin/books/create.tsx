@@ -19,7 +19,7 @@ import { Category } from "@prisma/client"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
-import { fetcher } from "../../../lib/hooks"
+import { fetcher } from "lib/hooks"
 
 type FormData = {
   title: string

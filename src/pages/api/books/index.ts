@@ -1,6 +1,7 @@
-import { PrismaClient, Book } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
+import { BookWithCategoryIds } from 'lib/interfaces'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 const db = new PrismaClient()
@@ -18,14 +19,11 @@ handler
   .post(async (req, res) => {
     try {
       // TODO: validate book props here!
-      const { categories, publishedAt, count, stockCount, ...rest } = req.body
+      const { categories, ...rest } = req.body as BookWithCategoryIds
 
       const newBook = await db.book.create({
         data: {
           ...rest,
-          publishedAt: parseInt(publishedAt),
-          count: parseInt(count),
-          stockCount: parseInt(stockCount),
           categories: {
             connect: categories
           }

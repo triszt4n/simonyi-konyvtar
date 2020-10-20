@@ -8,12 +8,12 @@ import dynamic from "next/dynamic"
 import { AppProps } from "next/app"
 import Head from "next/head"
 
-import { Container } from "../components/Container"
-import Footer from "../components/Footer"
+import { Container } from "components/Container"
+import Footer from "components/Footer"
 
-import theme from "../theme"
+import theme from "theme"
 
-const Navbar = dynamic(() => import("../components/Navbar"), { ssr: false })
+const Navbar = dynamic(() => import("components/Navbar"), { ssr: false })
 
 const App = ({ Component }: AppProps) => {
   return (

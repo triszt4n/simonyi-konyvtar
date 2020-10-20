@@ -2,9 +2,8 @@ import { useToast } from "@chakra-ui/core"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 
-import BookForm from "../../../components/books/BookForm"
-import { fetcher } from "../../../lib/hooks"
-import { BookWithCategories } from "../../../lib/interfaces"
+import { fetcher } from "lib/hooks"
+import { BookWithCategories } from "lib/interfaces"
 
 const EditBook = () => {
   const router = useRouter()
@@ -27,11 +26,7 @@ const EditBook = () => {
 
   const initialValues = data?.book
 
-  return (
-    <>
-      <BookForm initialValues={initialValues} onSubmit={updateBook} />
-    </>
-  )
+  return <>{/* TODO */}</>
 }
 
 export default EditBook

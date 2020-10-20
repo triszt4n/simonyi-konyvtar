@@ -2,7 +2,7 @@ import { Button, Flex, List, ListItem, Text, useToast } from "@chakra-ui/core"
 import { Book } from "@prisma/client"
 import useSWR from "swr"
 
-import { fetcher } from "../../../lib/hooks"
+import { fetcher } from "lib/hooks"
 
 const BookList: React.FC = () => {
   const { data, error, mutate } = useSWR<{ books: Book[] }>(

@@ -1,26 +1,26 @@
-import { Button } from '@chakra-ui/core'
-import Router from 'next/router'
-import { useEffect } from 'react'
+import { Button } from "@chakra-ui/core"
+import Router from "next/router"
+import { useEffect } from "react"
 
-import { useUser } from '../lib/hooks'
+import { useUser } from "lib/hooks"
 
 export default function ProfilePage() {
   const [user, { loading, mutate }] = useUser()
 
   async function handleDeleteProfile() {
     const res = await fetch(`/api/user`, {
-      method: 'DELETE',
+      method: "DELETE",
     })
 
     if (res.status === 204) {
       mutate({ user: null })
-      Router.replace('/')
+      Router.replace("/")
     }
   }
 
   useEffect(() => {
     // redirect user to login if not authenticated
-    if (!loading && !user) Router.replace('/login')
+    if (!loading && !user) Router.replace("/login")
   }, [user, loading])
 
   return (
@@ -29,7 +29,7 @@ export default function ProfilePage() {
       {user && (
         <>
           <p>Your profile: {JSON.stringify(user)}</p>
-          <Button color='tomato' onClick={handleDeleteProfile}>
+          <Button color="tomato" onClick={handleDeleteProfile}>
             Delete profile
           </Button>
         </>

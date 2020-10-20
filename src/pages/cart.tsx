@@ -1,5 +1,5 @@
 import { Flex, IconButton, List, ListItem, Text } from "@chakra-ui/core"
-import { useCart } from "../lib/hooks"
+import { useCart } from "lib/hooks"
 
 export default function CartPage() {
   const { cart, addBook, removeBook, deleteBook } = useCart()

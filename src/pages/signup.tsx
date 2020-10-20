@@ -3,7 +3,7 @@ import NextLink from "next/link"
 import Router from "next/router"
 import { useEffect, useState } from "react"
 
-import { useUser } from "../lib/hooks"
+import { useUser } from "lib/hooks"
 
 export default function SignupPage() {
   const [user, { mutate }] = useUser()
