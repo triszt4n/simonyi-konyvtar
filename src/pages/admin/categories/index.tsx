@@ -57,6 +57,9 @@ export default function CategoriesIndexPage() {
     const res = await fetch("/api/categories", {
       method: "POST",
       body: JSON.stringify({ name: newCategory }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
     if (res.ok) {
       setNewCategory("")
@@ -74,6 +77,9 @@ export default function CategoriesIndexPage() {
       const response = await fetch(`/api/categories/${id}`, {
         method: "PUT",
         body: JSON.stringify({ name: newName }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       if (response.ok) {
         try {

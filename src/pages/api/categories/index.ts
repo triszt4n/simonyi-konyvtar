@@ -17,8 +17,7 @@ handler
   })
   .post(async (req, res) => {
     try {
-      const body = JSON.parse(req.body)
-      const name: string = body.name
+      const name: string = req.body.name
 
       const category = await db.category.create({
         data: { name }

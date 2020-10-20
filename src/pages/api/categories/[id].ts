@@ -9,8 +9,7 @@ handler
   .put(async (req, res) => {
     try {
       const id = parseInt(Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
-      const body = JSON.parse(req.body)
-      const name: string = body.name
+      const name: string = req.body.name
 
       await db.category.update({ where: { id }, data: { name } })
     } catch (e) {
