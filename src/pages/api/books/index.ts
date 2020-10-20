@@ -12,40 +12,30 @@ handler
       res.json({ books })
     } catch (e) {
       console.error(e.message)
-      res.status(500).send(e.message)
+      res.status(500).json({ message: e.message })
     }
   })
   .post(async (req, res) => {
     try {
-      // TODO: validate book props here too!
-      console.log(req.body)
-      const { categories, ...rest }: { categories: { id: number }[], book: Book } = req.body
+      // TODO: validate book props here!
+      const { categories, publishedAt, count, stockCount, ...rest } = req.body
+
       const newBook = await db.book.create({
         data: {
-          ...rest.book,
+          ...rest,
+          publishedAt: parseInt(publishedAt),
+          count: parseInt(count),
+          stockCount: parseInt(stockCount),
           categories: {
             connect: categories
           }
         }
       })
-      // const newBook = await db.book.create({
-      //   data: {
-      //     title: 'Lorem ipsum',
-      //     author: 'Dolor sit amet',
-      //     isbn: 'aaabbbbcccc1234',
-      //     count: 1,
-      //     publisher: 'Bo Ok Kft.',
-      //     publishedAt: 2001,
-      //     categories: {
-      //       connect: [{ id: 1 }, { id: 2 }]
-      //     }
-      //   }
-      // })
-      res.status(201).json({ book: newBook })
 
+      res.status(201).json({ book: newBook })
     } catch (e) {
-      res.status(500).send(e.message)
       console.error(e.message)
+      res.status(500).json({ message: e.message })
     }
   })
 
