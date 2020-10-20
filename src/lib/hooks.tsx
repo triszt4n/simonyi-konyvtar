@@ -14,43 +14,50 @@ export function useUser() {
 
 const useCartState = createPersistedState("cart")
 
-export const useCart = (initialState = []) => {
-  const [cart, setCart] = useCartState<CartItem[]>(initialState)
+export const useCart = (initialState = { sumCount: 0, books: [] }) => {
+  const [cart, setCart] = useCartState<{ sumCount: number; books: CartItem[] }>(
+    initialState
+  )
 
   return {
-    cart,
+    cart: cart,
     addBook: (book: CartItem) => {
-      if (cart.length) {
-        const cartBook = cart.find((it) => it.id === book.id)
+      if (cart.books.length) {
+        const cartBook = cart.books.find((it) => it.id === book.id)
         if (cartBook) {
-          setCart(
-            cart.map((it) =>
+          setCart({
+            sumCount: cart.sumCount + 1,
+            books: cart.books.map((it) =>
               it.id === book.id ? { ...it, quantity: it.quantity + 1 } : it
-            )
-          )
+            ),
+          })
         } else {
-          setCart([...cart, book])
+          setCart({ sumCount: cart.sumCount + 1, books: [...cart.books, book] })
         }
       } else {
-        setCart([book])
+        setCart({ sumCount: 1, books: [book] })
       }
     },
     removeBook: (book: CartItem) => {
-      if (!cart.length) return
-      const cartBook = cart.find((it) => it.id === book.id)
+      if (!cart.books.length) return
+      const cartBook = cart.books.find((it) => it.id === book.id)
       if (!cartBook) return
       if (cartBook.quantity > 1) {
-        setCart(
-          cart.map((it) =>
+        setCart({
+          sumCount: cart.sumCount - 1,
+          books: cart.books.map((it) =>
             it.id === book.id ? { ...it, quantity: it.quantity - 1 } : it
-          )
-        )
+          ),
+        })
       }
     },
     deleteBook: (book: CartItem) => {
-      const cartBook = cart.find((it) => it.id === book.id)
+      const cartBook = cart.books.find((it) => it.id === book.id)
       if (!cartBook) return
-      setCart(cart.filter((it) => it.id !== book.id))
+      setCart({
+        sumCount: cart.sumCount - cartBook.quantity,
+        books: cart.books.filter((it) => it.id !== book.id),
+      })
     },
   }
 }

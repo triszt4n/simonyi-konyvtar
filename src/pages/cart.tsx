@@ -5,7 +5,7 @@ export default function CartPage() {
   const { cart, addBook, removeBook, deleteBook } = useCart()
   return (
     <List>
-      {cart.map((book) => (
+      {cart.books.map((book) => (
         <ListItem key={book.id} as={Flex} flexDir="row" alignItems="center">
           <Text>{book.title}</Text>&nbsp;
           <Text>Darabszam:&nbsp;{book.quantity}</Text>

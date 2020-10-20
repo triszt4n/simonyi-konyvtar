@@ -7,13 +7,14 @@ import {
   ListItem,
   Tag,
   Text,
+  useToast,
 } from "@chakra-ui/core"
 import { useRouter } from "next/router"
 import TimeAgo from "../../components/HunTimeAgo"
 import useSWR from "swr"
 
 import { useCart, fetcher } from "../../lib/hooks"
-import { BookWithCategories } from "../../lib/interfaces"
+import { BookWithCategories, CartItem } from "../../lib/interfaces"
 
 const BookPage = () => {
   const router = useRouter()
@@ -22,13 +23,23 @@ const BookPage = () => {
     `/api/books/${router.query.id}`,
     fetcher
   )
-
+  const toast = useToast()
   const { addBook } = useCart()
 
   if (error) return <div>Failed to load book</div>
   if (!data) return <div>Loading...</div>
 
   const book = data.book
+
+  function addToCart(book: CartItem) {
+    addBook(book)
+    toast({
+      title: "A köny a kosárba került",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    })
+  }
 
   return (
     <>
@@ -70,7 +81,7 @@ const BookPage = () => {
       </Text>
       <Button
         onClick={() =>
-          addBook({
+          addToCart({
             id: book.id,
             quantity: 1,
             author: book.author,

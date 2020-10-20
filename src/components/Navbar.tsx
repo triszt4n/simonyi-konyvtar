@@ -48,7 +48,7 @@ export default function Navbar() {
           <Link>Admin</Link>
         </NextLink>
         <NextLink href="/cart">
-          <Button leftIcon={HiOutlineShoppingCart}>{cart.length}</Button>
+          <Button leftIcon={HiOutlineShoppingCart}>{cart.sumCount}</Button>
         </NextLink>
       </Stack>
       <DarkModeSwitch />
