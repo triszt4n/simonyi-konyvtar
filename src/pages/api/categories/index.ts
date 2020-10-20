@@ -9,7 +9,7 @@ handler
   .get(async (req, res) => {
     try {
       const categories = await db.category.findMany()
-      res.json({ categories })
+      res.json(categories)
     } catch (error) {
       console.error(error)
       res.status(500).send(error.message)
@@ -17,12 +17,15 @@ handler
   })
   .post(async (req, res) => {
     try {
-      console.log(req.body)
-      await db.category.create({
-        data: req.body
+      const body = JSON.parse(req.body)
+      const name: string = body.name
+
+      const category = await db.category.create({
+        data: { name }
       })
-      res.status(201).end()
+      res.status(201).json({ category })
     } catch (e) {
+      console.error(e)
       res.status(500).json({ error: e.message })
     }
   })

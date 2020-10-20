@@ -26,14 +26,14 @@ type FormData = {
   author: string
   isbn: string
   publisher: string
-  publishedAt: number
-  count: number
-  stockCount: number
+  publishedAt: string
+  count: string
+  stockCount: string
   notes: string
 }
 
 const CreateBook = () => {
-  const { data, error } = useSWR<{ categories: Category[] }>(
+  const { data: categories, error } = useSWR<Category[]>(
     "/api/categories",
     fetcher
   )
@@ -42,8 +42,8 @@ const CreateBook = () => {
   const [formCategories, setFormCategories] = useState([])
 
   useEffect(() => {
-    setFormCategories(data?.categories.map((it) => ({ ...it, checked: false })))
-  }, [data])
+    setFormCategories(categories?.map((it) => ({ ...it, checked: false })))
+  }, [categories])
 
   const { handleSubmit, errors, register, formState } = useForm<FormData>()
 
@@ -57,7 +57,12 @@ const CreateBook = () => {
 
     const result = await fetch("/api/books", {
       method: "POST",
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        count: parseInt(formData.count),
+        stockCount: parseInt(formData.stockCount),
+        publishedAt: parseInt(formData.publishedAt),
+      }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -119,7 +124,10 @@ const CreateBook = () => {
         <FormControl isInvalid={!!errors.count}>
           <FormLabel htmlFor="count">Darabszám</FormLabel>
           <NumberInput defaultValue={1} min={1}>
-            <NumberInputField name="count" ref={register({ required: true })} />
+            <NumberInputField
+              name="count"
+              ref={register({ required: true, min: 1 })}
+            />
             <NumberInputStepper>
               <NumberIncrementStepper />
               <NumberDecrementStepper />
@@ -140,10 +148,6 @@ const CreateBook = () => {
           <FormLabel htmlFor="publishedAt">Kiadás éve</FormLabel>
           <NumberInput>
             <NumberInputField name="publishedAt" ref={register} />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
           </NumberInput>
           <FormErrorMessage>
             {errors.publishedAt && errors.publishedAt.message}
@@ -154,7 +158,7 @@ const CreateBook = () => {
           <NumberInput defaultValue={1} min={0}>
             <NumberInputField
               name="stockCount"
-              ref={register({ required: true })}
+              ref={register({ required: true, min: 0 })}
             />
             <NumberInputStepper>
               <NumberIncrementStepper />
