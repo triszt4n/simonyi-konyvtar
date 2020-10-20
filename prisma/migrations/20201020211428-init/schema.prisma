@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model Book {
+  id          Int           @id @default(autoincrement())
+  title       String
+  author      String?
+  isbn        String?
+  publisher   String?
+  publishedAt Int?
+  stockCount  Int?          @default(1)
+  count       Int?          @default(1)
+  notes       String?
+  image       String?
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @default(now())
+  orders      BookToOrder[]
+  categories  Category[]
+}
+
+model BookToOrder {
+  id       Int   @id @default(autoincrement())
+  orderId  Int
+  bookId   Int
+  quantity Int?  @default(1)
+  books    Book  @relation(fields: [bookId], references: [id])
+  orders   Order @relation(fields: [orderId], references: [id])
+
+  @@unique([bookId, orderId], name: "BookToOrder_book_order_unique")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  books Book[]
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  text      String?
+  createdAt DateTime? @default(now())
+  userId    Int
+  orderId   Int
+  order     Order     @relation(fields: [orderId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Order {
+  id         Int           @id @default(autoincrement())
+  userId     Int
+  returnDate DateTime?
+  status     orderstatus?  @default(PENDING)
+  createdAt  DateTime?     @default(now())
+  updatedAt  DateTime?     @default(now())
+  user       User          @relation(fields: [userId], references: [id])
+  books      BookToOrder[]
+  comments   Comment[]
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String?
+  createdAt DateTime? @default(now())
+  role      userrole? @default(BASIC)
+  comments  Comment[]
+  orders    Order[]
+}
+
+enum orderstatus {
+  LATE
+  PENDING
+  RENTED
+  RETURNED
+}
+
+enum userrole {
+  ADMIN
+  BASIC
+  EDITOR
+}
