@@ -38,9 +38,3 @@ handler
   })
 
 export default handler
-
-export const config = {
-  api: {
-    bodyParser: true
-  }
-}

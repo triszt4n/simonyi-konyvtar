@@ -11,7 +11,8 @@ handler
       const id = parseInt(Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
       const name: string = req.body.name
 
-      await db.category.update({ where: { id }, data: { name } })
+      const category = await db.category.update({ where: { id }, data: { name } })
+      res.json({ category })
     } catch (e) {
       console.error(e.message)
       res.status(500).json({ message: e.message })

@@ -19,7 +19,7 @@ import { BookWithCategories, CartItem } from "lib/interfaces"
 const BookPage = () => {
   const router = useRouter()
 
-  const { data, error } = useSWR<{ book: BookWithCategories }>(
+  const { data: book, error } = useSWR<BookWithCategories>(
     `/api/books/${router.query.id}`,
     fetcher
   )
@@ -27,9 +27,7 @@ const BookPage = () => {
   const { addBook } = useCart()
 
   if (error) return <div>Failed to load book</div>
-  if (!data) return <div>Loading...</div>
-
-  const book = data.book
+  if (!book) return <div>Loading...</div>
 
   function addToCart(book: CartItem) {
     addBook(book)
