@@ -21,7 +21,7 @@ interface BookPreviewProps {
   book: BookWithCategories
 }
 
-export const BookPreview: React.FC<BookPreviewProps> = ({ book }) => {
+export const BookPreview = ({ book }: BookPreviewProps) => {
   return (
     <NextLink href="/books/[id]" as={`/books/${book.id}`}>
       <MotionBox

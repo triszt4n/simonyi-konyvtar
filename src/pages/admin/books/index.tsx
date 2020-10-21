@@ -1,11 +1,13 @@
-import { Button, Flex, List, ListItem, Text, useToast } from "@chakra-ui/core"
-import { Book } from "@prisma/client"
+import { Button, useToast } from "@chakra-ui/core"
+import NextLink from "next/link"
 import useSWR from "swr"
 
+import { BookList } from "components/books/BookList"
 import { fetcher } from "lib/hooks"
+import { BookWithCategories } from "lib/interfaces"
 
-const BookList: React.FC = () => {
-  const { data, error, mutate } = useSWR<{ books: Book[] }>(
+const BookAdminPage: React.FC = () => {
+  const { data, error, mutate } = useSWR<BookWithCategories[]>(
     "/api/books",
     fetcher
   )
@@ -14,12 +16,12 @@ const BookList: React.FC = () => {
   if (error) return <div>Failed to load books</div>
   if (!data) return <div>Loading...</div>
 
-  async function deleteBook(id: number) {
+  async function handleBookDelete(id: number) {
     if (confirm(`Bizosan törlöd a könyvet?`)) {
       const response = await fetch(`/api/books/${id}`, { method: "DELETE" })
       if (response.status === 204) {
-        const newBooks = data.books.filter((it) => it.id !== id)
-        mutate({ books: newBooks })
+        const newBooks = data.filter((it) => it.id !== id)
+        mutate(newBooks)
         toast({
           title: "Könyv sikeresen törölve!",
           position: "top",
@@ -41,23 +43,13 @@ const BookList: React.FC = () => {
   }
 
   return (
-    <List>
-      {data.books.map((book) => (
-        <ListItem key={book.id}>
-          <Flex
-            direction="row"
-            wrap="wrap"
-            alignItems="center"
-            justify="space-between"
-          >
-            <Text>{book.title}</Text>
-            <Button>Szerkesztes</Button>
-            <Button onClick={() => deleteBook(book.id)}>Torles</Button>
-          </Flex>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <NextLink href={"/admin/books/create"}>
+        <Button variant="link">Új könyv felvétele</Button>
+      </NextLink>
+      {data && <BookList data={data} onDelete={handleBookDelete} />}
+    </>
   )
 }
 
-export default BookList
+export default BookAdminPage

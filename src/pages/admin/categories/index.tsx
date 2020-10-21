@@ -1,17 +1,12 @@
 import {
   Button,
-  Flex,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  List,
-  ListItem,
-  Stack,
-  Text,
   useToast,
 } from "@chakra-ui/core"
 import { Category } from "@prisma/client"
+import { CategoryList } from "components/categories/CategoryList"
 import { fetcher } from "lib/hooks"
 import React, { FormEvent, useState } from "react"
 import useSWR from "swr"
@@ -66,13 +61,14 @@ export default function CategoriesIndexPage() {
 
       mutate(async (categories) => {
         const newCategory = await res.json()
+
         return [newCategory, ...categories.slice(1)]
       })
     }
   }
 
   async function handleEditCategory({ id, name }) {
-    const newName = prompt("Add meg a kategória új nevét!", name)
+    const newName = prompt("Kategória szerkesztése", name)
     if (newName) {
       const response = await fetch(`/api/categories/${id}`, {
         method: "PUT",
@@ -109,27 +105,13 @@ export default function CategoriesIndexPage() {
           </InputRightElement>
         </InputGroup>
       </form>
-      <List>
-        {data?.map(({ id, name }) => (
-          <ListItem key={id}>
-            <Stack spacing={4} isInline as={Flex} alignItems="center">
-              <Text>#{id}</Text>
-              <Text>{name}</Text>
-              <IconButton
-                aria-label="szerkesztés"
-                icon="edit"
-                onClick={() => handleEditCategory({ id, name })}
-              />
-              <IconButton
-                aria-label="törlés"
-                icon="delete"
-                variantColor="red"
-                onClick={() => handleDelete({ id, name })}
-              />
-            </Stack>
-          </ListItem>
-        ))}
-      </List>
+      {data && (
+        <CategoryList
+          data={data}
+          handleDelete={handleDelete}
+          handleEdit={handleEditCategory}
+        />
+      )}
     </>
   )
 }

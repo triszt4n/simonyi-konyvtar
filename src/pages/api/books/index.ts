@@ -10,7 +10,7 @@ handler
   .get(async (req, res) => {
     try {
       const books = await db.book.findMany({ include: { categories: true, } })
-      res.json({ books })
+      res.json(books)
     } catch (e) {
       console.error(e.message)
       res.status(500).json({ message: e.message })

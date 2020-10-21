@@ -7,10 +7,7 @@ import { fetcher } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
 
 const Index = () => {
-  const { data, error } = useSWR<{ books: BookWithCategories[] }>(
-    "/api/books",
-    fetcher
-  )
+  const { data, error } = useSWR<BookWithCategories[]>("/api/books", fetcher)
 
   if (error) return <div>Failed to load books</div>
   if (!data) return <div>Loading...</div>
@@ -19,7 +16,7 @@ const Index = () => {
     <Main>
       <Input placeholder="Keress a könyvek között!" mt="1rem" />
       <SimpleGrid minChildWidth="min(100%, 24rem)" spacing="2rem">
-        {data.books.map((book) => (
+        {data.map((book) => (
           <BookPreview key={book.id} book={book} />
         ))}
       </SimpleGrid>

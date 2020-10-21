@@ -2,9 +2,9 @@ import { Heading } from "@chakra-ui/core"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 
+import { BookForm } from "components/books/BookForm"
 import { fetcher } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
-import { BookForm } from "components/BookForm"
 
 const EditBook = () => {
   const router = useRouter()

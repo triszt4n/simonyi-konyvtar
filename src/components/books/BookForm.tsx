@@ -1,10 +1,10 @@
 import {
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
-  NumberInput,
   Stack,
   Tag,
   TagLabel,
@@ -43,7 +43,7 @@ export function BookForm({ initialValue }: Props) {
 
   const [formCategories, setFormCategories] = useState([])
 
-  const { handleSubmit, errors, register, formState, reset } = useForm<
+  const { handleSubmit, errors, register, formState } = useForm<
     BookWithCategories
   >({
     defaultValues: {
@@ -80,7 +80,6 @@ export function BookForm({ initialValue }: Props) {
     }
 
     if (initialValue) {
-      // TODO: update record
       const res = await fetch(`/api/books/${initialValue.id}`, {
         method: "PUT",
         body: JSON.stringify({
@@ -222,12 +221,19 @@ export function BookForm({ initialValue }: Props) {
         </FormControl>
         <FormControl>
           <FormLabel>Kategóriák</FormLabel>
-          <Stack spacing={4} isInline>
+          <Stack
+            spacing={4}
+            isInline
+            as={Flex}
+            alignItems="center"
+            flexWrap="wrap"
+          >
             {formCategories?.map((category) => (
               <Tag
                 key={category.id}
                 variantColor={category.checked ? "green" : "gray"}
                 cursor="pointer"
+                mb={2}
                 onClick={() => updateFormCategories(category.id)}
               >
                 <TagLabel>{category.name}</TagLabel>

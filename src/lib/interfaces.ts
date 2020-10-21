@@ -8,8 +8,6 @@ export interface BookWithCategoryIds extends Book {
   categories: { id: number }[]
 }
 
-export type BookFormType = Omit<BookWithCategoryIds, 'id' | 'createdAt' | 'updatedAt'>
-
 export interface CartItem {
   id: number
   quantity: number

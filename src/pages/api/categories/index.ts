@@ -17,12 +17,10 @@ handler
   })
   .post(async (req, res) => {
     try {
-      const name: string = req.body.name
-
       const category = await db.category.create({
-        data: { name }
+        data: { name: req.body.name }
       })
-      res.status(201).json({ category })
+      res.status(201).json(category)
     } catch (e) {
       console.error(e)
       res.status(500).json({ error: e.message })

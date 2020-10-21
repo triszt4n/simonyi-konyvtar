@@ -39,6 +39,7 @@ handler
       }
       return acc
     }, [])
+
     try {
       const updatedBook = await db.book.update({
         where: { id: bookId },
