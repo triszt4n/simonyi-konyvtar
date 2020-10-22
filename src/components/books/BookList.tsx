@@ -21,12 +21,7 @@ export function BookList({ data, onDelete }: Props) {
     <List>
       {data.map((book) => (
         <ListItem key={book.id}>
-          <Flex
-            as={Stack}
-            justifyContent="space-around"
-            alignItems="center"
-            flexDir="row"
-          >
+          <Flex as={Flex} alignItems="center" flexDir="row">
             <Text>#{book.id}</Text>
             <NextLink href={`/books/${book.id}`}>
               <Link>{book.title}</Link>

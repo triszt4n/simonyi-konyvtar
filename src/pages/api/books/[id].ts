@@ -45,6 +45,7 @@ handler
         where: { id: bookId },
         data: {
           ...bookUpdate,
+          updatedAt: new Date(),
           categories: {
             connect: categories,
             disconnect: removedCategories
