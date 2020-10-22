@@ -8,6 +8,11 @@ export interface BookWithCategoryIds extends Book {
   categories: { id: number }[]
 }
 
+export interface Cart {
+  sumCount: number
+  books: CartItem[]
+}
+
 export interface CartItem {
   id: number
   quantity: number

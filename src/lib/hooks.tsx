@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import createPersistedState from "use-persisted-state"
-import { CartItem } from "./interfaces"
+import { Cart, CartItem } from "./interfaces"
 
 export const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -14,10 +14,8 @@ export function useUser() {
 
 const useCartState = createPersistedState("cart")
 
-export const useCart = (initialState = { sumCount: 0, books: [] }) => {
-  const [cart, setCart] = useCartState<{ sumCount: number; books: CartItem[] }>(
-    initialState
-  )
+export const useCart = (initialState: Cart = { sumCount: 0, books: [] }) => {
+  const [cart, setCart] = useCartState<Cart>(initialState)
 
   return {
     cart: cart,
@@ -57,6 +55,12 @@ export const useCart = (initialState = { sumCount: 0, books: [] }) => {
       setCart({
         sumCount: cart.sumCount - cartBook.quantity,
         books: cart.books.filter((it) => it.id !== book.id),
+      })
+    },
+    deleteAll: () => {
+      setCart({
+        sumCount: 0,
+        books: [],
       })
     },
   }
