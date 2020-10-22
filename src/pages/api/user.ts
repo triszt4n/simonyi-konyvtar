@@ -33,5 +33,20 @@ handler
     req.logOut()
     res.status(204).end()
   })
+  .post(async (req, res) => {
+    try {
+      const { password, ...rest } = await db.user.update({
+        where: { id: req.user.id },
+        data: {
+          name: req.body.name,
+        }
+      })
+
+      res.json(rest)
+    } catch (e) {
+      console.error(e)
+      res.status(500).json({ message: e.message })
+    }
+  })
 
 export default handler
