@@ -2,11 +2,13 @@ import { PrismaClient } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 import { BookWithCategoryIds } from 'lib/interfaces'
+import auth from 'middleware/auth'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 const db = new PrismaClient()
 
 handler
+  .use(auth)
   .get(async (req, res) => {
     try {
       const books = await db.book.findMany({ include: { categories: true, } })

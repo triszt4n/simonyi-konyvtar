@@ -3,6 +3,7 @@ import nextConnect from 'next-connect'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import auth from 'middleware/auth'
+import requireLogin from 'middleware/requireLogin'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 const db = new PrismaClient()
@@ -19,15 +20,7 @@ handler
       res.json(null)
     }
   })
-  .use((req, res, next) => {
-    // handlers after this (PUT, DELETE) all require an authenticated user
-    // This middleware to check if user is authenticated before continuing
-    if (!req.user) {
-      res.status(401).send('unauthenticated')
-    } else {
-      next()
-    }
-  })
+  .use(requireLogin)
   .delete(async (req, res) => {
     await db.user.delete({ where: { id: req.user.id } })
     req.logOut()
