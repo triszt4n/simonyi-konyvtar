@@ -1,19 +1,21 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/core"
-import React from "react"
+import { List, ListItem } from "@chakra-ui/core"
+import NextLink from "next/link"
 
 export default function AdminIndex() {
   return (
-    <Tabs>
-      <TabList>
-        <Tab>Kölcsönzések</Tab>
-        <Tab>Konyvek</Tab>
-        <Tab>Felhasznalok</Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel>help</TabPanel>
-        <TabPanel>me</TabPanel>
-        <TabPanel>please</TabPanel>
-      </TabPanels>
-    </Tabs>
+    <List>
+      <ListItem>
+        <NextLink href="/admin/books">Konyvek</NextLink>
+      </ListItem>
+      <ListItem>
+        <NextLink href="/admin/categories">Kategoriak</NextLink>
+      </ListItem>
+      <ListItem>
+        <NextLink href="/admin/orders">Kolcsonzesek (TODO)</NextLink>
+      </ListItem>
+      <ListItem>
+        <NextLink href="/admin/users">Felhasznalok (TODO)</NextLink>
+      </ListItem>
+    </List>
   )
 }
