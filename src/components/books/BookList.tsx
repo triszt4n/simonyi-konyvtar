@@ -4,7 +4,6 @@ import {
   IconButton,
   Text,
   Flex,
-  Stack,
   Link,
   Tooltip,
 } from "@chakra-ui/core"
@@ -21,7 +20,7 @@ export function BookList({ data, onDelete }: Props) {
     <List>
       {data.map((book) => (
         <ListItem key={book.id}>
-          <Flex as={Flex} alignItems="center" flexDir="row">
+          <Flex alignItems="center" flexDir="row">
             <Text>#{book.id}</Text>
             <NextLink href={`/books/${book.id}`}>
               <Link>{book.title}</Link>

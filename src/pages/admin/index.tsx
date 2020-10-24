@@ -14,7 +14,7 @@ export default function AdminIndex() {
         <NextLink href="/admin/orders">Kolcsonzesek (TODO)</NextLink>
       </ListItem>
       <ListItem>
-        <NextLink href="/admin/users">Felhasznalok (TODO)</NextLink>
+        <NextLink href="/admin/users">Felhasznalok</NextLink>
       </ListItem>
     </List>
   )

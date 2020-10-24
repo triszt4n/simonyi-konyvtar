@@ -1,8 +1,10 @@
 import nextConnect from 'next-connect'
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient, User, userrole } from '@prisma/client'
 import argon2 from 'argon2'
 import { NextApiRequest, NextApiResponse } from 'next'
 import auth from 'middleware/auth'
+import requireLogin from 'middleware/requireLogin'
+import requireRole from 'middleware/requireRole'
 
 const db = new PrismaClient()
 
@@ -33,6 +35,26 @@ handler
         user,
       })
     })
+  })
+  .use(requireLogin)
+  .use(requireRole(userrole.ADMIN))
+  .get(async (req, res) => {
+    try {
+      const users = await db.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+        }
+      })
+
+      res.json(users)
+    } catch (e) {
+      console.error(e)
+      res.status(500).json({ messsage: e.message })
+    }
   })
 
 export default handler
