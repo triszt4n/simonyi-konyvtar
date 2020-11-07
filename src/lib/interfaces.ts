@@ -1,4 +1,4 @@
-import { Book, Category } from '@prisma/client'
+import { Book, Category, Order, Comment, BookToOrder, User } from '@prisma/client'
 
 export interface BookWithCategories extends Book {
   categories: Category[]
@@ -6,6 +6,22 @@ export interface BookWithCategories extends Book {
 
 export interface BookWithCategoryIds extends Book {
   categories: { id: number }[]
+}
+
+export interface OrderWithComments extends Order {
+  comments: Comment[]
+}
+
+interface BookToOrderWithBooks extends BookToOrder {
+  books: Book
+}
+
+export interface OrderWithBooks extends Order {
+  books: BookToOrderWithBooks[]
+}
+
+export interface CommentWithUser extends Comment {
+  user: User
 }
 
 export interface Cart {

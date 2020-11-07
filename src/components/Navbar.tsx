@@ -30,17 +30,20 @@ export default function Navbar() {
         {user ? (
           <Stack shouldWrapChildren spacing={8} direction="row">
             <NextLink href="/profile">
-              <Link>Profile</Link>
+              <Link>Profilom</Link>
             </NextLink>
-            <Link onClick={handleLogout}>Logout</Link>
+            <Link onClick={handleLogout}>Kijelentkezés</Link>
+            <NextLink href="/orders">
+              <Link>Kölcsönzéseim</Link>
+            </NextLink>
           </Stack>
         ) : (
           <Stack shouldWrapChildren spacing={8} direction="row">
             <NextLink href="/signup">
-              <Link>Sign up</Link>
+              <Link>Regisztráció</Link>
             </NextLink>
             <NextLink href="/login">
-              <Link>Login</Link>
+              <Link>Bejelentkezés</Link>
             </NextLink>
           </Stack>
         )}

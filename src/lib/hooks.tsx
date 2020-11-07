@@ -57,7 +57,7 @@ export const useCart = (initialState: Cart = { sumCount: 0, books: [] }) => {
         books: cart.books.filter((it) => it.id !== book.id),
       })
     },
-    deleteAll: () => {
+    emptyCart: () => {
       setCart({
         sumCount: 0,
         books: [],

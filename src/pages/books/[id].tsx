@@ -7,6 +7,7 @@ import {
   ListItem,
   Tag,
   Text,
+  Tooltip,
   useToast,
 } from "@chakra-ui/core"
 import { useRouter } from "next/router"
@@ -78,6 +79,7 @@ const BookPage = () => {
         <TimeAgo date={book.updatedAt} />
       </Text>
       <Button
+        isDisabled={book.stockCount === 0}
         onClick={() =>
           addToCart({
             id: book.id,

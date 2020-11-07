@@ -5,12 +5,13 @@ import { BookPreview } from "components/books/BookPreview"
 import { Main } from "components/Main"
 import { fetcher } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
+import Loading from "components/Loading"
 
 const Index = () => {
   const { data, error } = useSWR<BookWithCategories[]>("/api/books", fetcher)
 
   if (error) return <div>Failed to load books</div>
-  if (!data) return <div>Loading...</div>
+  if (!data) return <Loading />
 
   return (
     <Main>
