@@ -2,10 +2,10 @@ import { SimpleGrid, Input } from "@chakra-ui/core"
 import useSWR from "swr"
 
 import { BookPreview } from "components/books/BookPreview"
+import Loading from "components/Loading"
 import { Main } from "components/Main"
 import { fetcher } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
-import Loading from "components/Loading"
 
 const Index = () => {
   const { data, error } = useSWR<BookWithCategories[]>("/api/books", fetcher)

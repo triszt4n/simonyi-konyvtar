@@ -10,8 +10,7 @@ const db = new PrismaClient()
 handler
   .get(async (req, res) => {
     const { query: { id }, } = req
-    // This hack is needed because `id` has type string | string[]
-    const bookId = parseInt((Array.isArray(id) ? id[0] : id))
+    const bookId = Number(id)
     if (isNaN(bookId)) {
       res.status(500).json('ID must be number')
     } else {
@@ -29,7 +28,7 @@ handler
   })
   .put(async (req, res) => {
     const { query: { id }, } = req
-    const bookId = parseInt((Array.isArray(id) ? id[0] : id))
+    const bookId = Number(id)
     const { categories, ...bookUpdate } = req.body as BookWithCategoryIds
 
     const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
@@ -61,7 +60,7 @@ handler
   })
   .delete(async (req, res) => {
     const { query: { id } } = req
-    const bookId = parseInt((Array.isArray(id) ? id[0] : id))
+    const bookId = Number(id)
     const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
 
     try {

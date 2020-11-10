@@ -1,9 +1,11 @@
 import { List, ListItem, Text } from "@chakra-ui/core"
-import { fetcher } from "lib/hooks"
-import { OrderWithBooks } from "lib/interfaces"
+import NextLink from "next/link"
 import useSWR from "swr"
 
-export default function OrdersPage(props) {
+import { fetcher } from "lib/hooks"
+import { OrderWithBooks } from "lib/interfaces"
+
+export default function OrdersPage() {
   const { data, error } = useSWR<OrderWithBooks[]>(`/api/orders/`, fetcher)
 
   return (
@@ -15,10 +17,12 @@ export default function OrdersPage(props) {
               <Text>{order.status}</Text>
               <List>
                 {order.books.map((book) => (
-                  <ListItem key={book.id}>
-                    <Text>{book.books.title}</Text>
-                    <Text>{book.quantity}</Text>
-                  </ListItem>
+                  <NextLink href={`/orders/${order.id}`} key={book.id}>
+                    <ListItem key={book.id}>
+                      <Text>{book.books.title}</Text>
+                      <Text>{book.quantity}</Text>
+                    </ListItem>
+                  </NextLink>
                 ))}
               </List>
             </ListItem>

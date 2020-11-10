@@ -1,16 +1,16 @@
 import {
+  Box,
   Button,
   Flex,
   Heading,
-  Image,
   List,
   ListItem,
   Tag,
   Text,
-  Tooltip,
   useToast,
 } from "@chakra-ui/core"
 import { useRouter } from "next/router"
+import Image from "next/image"
 import TimeAgo from "components/HunTimeAgo"
 import useSWR from "swr"
 
@@ -43,11 +43,13 @@ const BookPage = () => {
   return (
     <>
       <Flex>
-        <Image
-          src={book.image || "https://placekitten.com/200/300"}
-          maxH="14rem"
-          pr="1rem"
-        />
+        <Box pr={1}>
+          <Image
+            src={book.image || "https://placekitten.com/200/300"}
+            width={200}
+            height={300}
+          />
+        </Box>
         <List spacing={4}>
           <ListItem>
             <Heading as="h1" size="xl">

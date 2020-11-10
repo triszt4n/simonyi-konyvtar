@@ -3,8 +3,8 @@ import NextLink from "next/link"
 import React from "react"
 import { HiOutlineShoppingCart } from "react-icons/hi"
 
+import { DarkModeSwitch } from "components/DarkModeSwitch"
 import { useCart, useUser } from "lib/hooks"
-import { DarkModeSwitch } from "./DarkModeSwitch"
 
 export default function Navbar() {
   const [user, { mutate }] = useUser()

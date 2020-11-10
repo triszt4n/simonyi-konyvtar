@@ -1,6 +1,7 @@
 import useSWR from "swr"
 import createPersistedState from "use-persisted-state"
-import { Cart, CartItem } from "./interfaces"
+
+import { Cart, CartItem } from "lib/interfaces"
 
 export const fetcher = (url: string) => fetch(url).then((r) => r.json())
 

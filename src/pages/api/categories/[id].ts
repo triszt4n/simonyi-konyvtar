@@ -14,7 +14,7 @@ handler
   .use(requireRole(userrole.ADMIN))
   .put(async (req, res) => {
     try {
-      const id = parseInt(Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
+      const id = Number(req.query.id)
       const name: string = req.body.name
 
       const category = await db.category.update({ where: { id }, data: { name } })
@@ -26,7 +26,7 @@ handler
   })
   .delete(async (req, res) => {
     try {
-      const id = parseInt(Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
+      const id = Number(req.query.id)
       await db.category.delete({ where: { id } })
       res.status(204).end()
     } catch (e) {

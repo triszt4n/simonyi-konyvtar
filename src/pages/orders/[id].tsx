@@ -4,17 +4,20 @@ import {
   ListItem,
   Button,
   FormControl,
+  FormErrorMessage,
   Input,
   Flex,
-  Stack,
+  Select,
+  useToast,
 } from "@chakra-ui/core"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
 
+import Comment from "components/orders/comment"
 import { fetcher, useUser } from "lib/hooks"
 import { CommentWithUser, OrderWithBooks } from "lib/interfaces"
-import TimeAgo from "components/HunTimeAgo"
+import { orderstatus } from "lib/prismaClient"
 
 interface FormData {
   comment: string
@@ -25,19 +28,23 @@ export default function OrderPage() {
   const router = useRouter()
   const orderId = router.query.id
 
-  const { data: order, error } = useSWR<OrderWithBooks>(
+  const { data: order, mutate: mutateOrder } = useSWR<OrderWithBooks>(
     user ? `/api/users/${user.id}/orders/${orderId}` : null,
     fetcher
   )
 
-  const { data: comments, mutate } = useSWR<CommentWithUser[]>(
+  const { data: comments, mutate: mutateComments } = useSWR<CommentWithUser[]>(
     orderId ? `/api/orders/${orderId}/comments` : null,
     fetcher
   )
 
-  const { handleSubmit, errors, register, reset } = useForm<FormData>({
+  const { handleSubmit, errors, register, reset, formState } = useForm<
+    FormData
+  >({
     defaultValues: { comment: "" },
   })
+
+  const toast = useToast()
 
   async function addComment(value: FormData) {
     if (!value.comment) return
@@ -45,14 +52,36 @@ export default function OrderPage() {
     const res = await fetch(`/api/orders/${orderId}/comments`, {
       method: "POST",
       body: value.comment,
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
     if (res.ok) {
       const newComment: CommentWithUser = await res.json()
 
-      mutate((comments) => {
+      mutateComments((comments) => {
         return [...comments, newComment]
       })
       reset()
+    }
+  }
+
+  async function updateStatus(e: React.FormEvent<HTMLSelectElement>) {
+    const res = await fetch(`/api/orders/${orderId}`, {
+      method: "PUT",
+      body: JSON.stringify({ status: e.currentTarget.value }),
+    })
+    if (!res.ok) {
+      toast({
+        title: "Hiba tortent!",
+        description: "Nem sikerult frissiteni az allapotot",
+        status: "error",
+        isClosable: true,
+        duration: 3000,
+      })
+    } else {
+      const newOrder = await res.json()
+      mutateOrder(newOrder)
     }
   }
 
@@ -60,6 +89,11 @@ export default function OrderPage() {
     <>
       {order && (
         <>
+          <Select onChange={updateStatus}>
+            {Object.keys(orderstatus).map((status) => (
+              <option value={status}>{status}</option>
+            ))}
+          </Select>
           <Text>{order.status}</Text>
           <List>
             {order?.books.map((book) => (
@@ -72,13 +106,9 @@ export default function OrderPage() {
         </>
       )}
       {comments && (
-        <List>
+        <List as={Flex} flexDirection="column">
           {comments.map((comment) => (
-            <ListItem key={comment.id}>
-              <Text>{comment.user.name}</Text>
-              <Text>{comment.text}</Text>
-              <TimeAgo date={comment.createdAt} />
-            </ListItem>
+            <Comment data={comment} key={comment.id} />
           ))}
         </List>
       )}
@@ -90,8 +120,13 @@ export default function OrderPage() {
               placeholder="Írd be az üzeneted"
               ref={register}
             />
+            <FormErrorMessage>
+              {errors.comment && errors.comment.message}
+            </FormErrorMessage>
           </FormControl>
-          <Button type="submit">Küldés</Button>
+          <Button isLoading={formState.isSubmitting} type="submit">
+            Küldés
+          </Button>
         </Flex>
       </form>
     </>
