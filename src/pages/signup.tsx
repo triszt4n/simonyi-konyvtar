@@ -19,7 +19,7 @@ export default function SignupPage() {
     }
 
     if (body.password !== e.currentTarget.rpassword.value) {
-      setErrorMsg(`The passwords don't match`)
+      setErrorMsg("A megadott jelszavak nem egyeznek")
       return
     }
 
@@ -53,7 +53,7 @@ export default function SignupPage() {
             variant="outline"
             type="text"
             name="username"
-            placeholder="Name"
+            placeholder="Név"
             isRequired
           />
           <Input
@@ -67,19 +67,19 @@ export default function SignupPage() {
             variant="outline"
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Jelszó"
             isRequired
           />
           <Input
             variant="outline"
             type="password"
             name="rpassword"
-            placeholder="Repeat password"
+            placeholder="Jelszó újra"
             isRequired
           />
-          <Button type="submit">Sign up</Button>
+          <Button type="submit">Regisztráció</Button>
           <NextLink href="/login">
-            <Link>I already have an account</Link>
+            <Link>Már van fiókom</Link>
           </NextLink>
         </Stack>
       </form>

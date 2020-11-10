@@ -67,7 +67,7 @@ export default function ProfilePage() {
                 variant="outline"
                 type="text"
                 name="username"
-                placeholder="Name"
+                placeholder="Név"
                 defaultValue={user.name}
                 isRequired
               />
@@ -97,7 +97,7 @@ export default function ProfilePage() {
             </Stack>
           </form>
           <Button color="tomato" onClick={handleDeleteProfile}>
-            Delete profile
+            Fiók törlése
           </Button>
         </>
       )}

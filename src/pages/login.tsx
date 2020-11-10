@@ -27,7 +27,7 @@ export default function LoginPage() {
       // set user to useSWR state
       mutate(userObj)
     } else {
-      setErrorMsg("Incorrect email or password. Try better!")
+      setErrorMsg("Nem megfelelő email vagy jelszó")
     }
   }
 
@@ -49,9 +49,9 @@ export default function LoginPage() {
             name="password"
             type="password"
           />
-          <Button type="submit">Login</Button>
+          <Button type="submit">Bejelentkezés</Button>
           <NextLink href="/signup">
-            <Link>I don't have an account</Link>
+            <Link>Még nincs fókom</Link>
           </NextLink>
         </Stack>
       </form>
