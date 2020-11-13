@@ -1,10 +1,10 @@
 import nextConnect, { NextHandler } from 'next-connect'
-import { PrismaClient, userrole } from '@prisma/client'
+import { userrole } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
+
+import db from 'lib/db'
 import auth from 'middleware/auth'
 import requireLogin from 'middleware/requireLogin'
-
-const db = new PrismaClient()
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -28,7 +28,7 @@ handler
     try {
       const comment = await db.comment.create({
         data: {
-          text: req.body,
+          text: req.body.comment,
           order: { connect: { id: orderId } },
           user: { connect: { id: req.user.id } }
         }

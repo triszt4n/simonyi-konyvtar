@@ -1,12 +1,12 @@
 import nextConnect from 'next-connect'
-import { PrismaClient, userrole } from '@prisma/client'
+import { userrole } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
+
+import db from 'lib/db'
 import auth from 'middleware/auth'
 import requireLogin from 'middleware/requireLogin'
 import requireRole from 'middleware/requireRole'
 import { CartItem } from 'lib/interfaces'
-
-const db = new PrismaClient()
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 

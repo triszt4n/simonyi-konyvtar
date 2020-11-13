@@ -15,9 +15,10 @@ import { useForm } from "react-hook-form"
 import useSWR from "swr"
 
 import Comment from "components/orders/comment"
+import HasRole from "components/HasRole"
 import { fetcher, useUser } from "lib/hooks"
 import { CommentWithUser, OrderWithBooks } from "lib/interfaces"
-import { orderstatus } from "lib/prismaClient"
+import { orderstatus, userrole } from "lib/prismaClient"
 
 interface FormData {
   comment: string
@@ -25,8 +26,9 @@ interface FormData {
 
 export default function OrderPage() {
   const [user] = useUser()
-  const router = useRouter()
-  const orderId = router.query.id
+  const {
+    query: { id: orderId },
+  } = useRouter()
 
   const { data: order, mutate: mutateOrder } = useSWR<OrderWithBooks>(
     user ? `/api/users/${user.id}/orders/${orderId}` : null,
@@ -51,7 +53,7 @@ export default function OrderPage() {
 
     const res = await fetch(`/api/orders/${orderId}/comments`, {
       method: "POST",
-      body: value.comment,
+      body: JSON.stringify({ comment: value.comment }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -89,13 +91,15 @@ export default function OrderPage() {
     <>
       {order && (
         <>
-          <Select onChange={updateStatus} defaultValue={order.status}>
-            {Object.keys(orderstatus).map((status) => (
-              <option value={status} key={status}>
-                {status}
-              </option>
-            ))}
-          </Select>
+          <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
+            <Select onChange={updateStatus} defaultValue={order.status}>
+              {Object.keys(orderstatus).map((status) => (
+                <option value={status} key={status}>
+                  {status}
+                </option>
+              ))}
+            </Select>
+          </HasRole>
           <Text>{order.status}</Text>
           <List>
             {order?.books.map((book) => (

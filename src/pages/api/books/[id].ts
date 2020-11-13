@@ -1,11 +1,16 @@
-import { PrismaClient } from '@prisma/client'
+import { userrole } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import nextConnect from 'next-connect'
 
 import { BookWithCategories, BookWithCategoryIds } from 'lib/interfaces'
+import db from 'lib/db'
+import parseMultipart from 'lib/parseMultipart'
+import { uploadToS3 } from 'lib/s3'
+import auth from 'middleware/auth'
+import requireLogin from 'middleware/requireLogin'
+import requireRole from 'middleware/requireRole'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
-const db = new PrismaClient()
 
 handler
   .get(async (req, res) => {
@@ -26,27 +31,57 @@ handler
       }
     }
   })
+  .use(auth)
+  .use(requireLogin)
+  .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .put(async (req, res) => {
-    const { query: { id }, } = req
-    const bookId = Number(id)
-    const { categories, ...bookUpdate } = req.body as BookWithCategoryIds
-
-    const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
-    const removedCategories: { id: number }[] = book.categories.reduce((acc, val) => {
-      if (!categories.some(it => it.id === val.id)) {
-        acc.push({ id: val.id })
-      }
-      return acc
-    }, [])
-
     try {
+      const { query: { id }, } = req
+      const bookId = Number(id)
+
+      // TODO: validate book params
+      const { parsedFields, parsedFiles } = await parseMultipart<BookWithCategoryIds>(req)
+      const { categories, ...bookUpdate } = parsedFields
+      bookUpdate.count = Number(bookUpdate.count)
+      bookUpdate.stockCount = Number(bookUpdate.stockCount)
+      bookUpdate.publishedAt = Number(bookUpdate.publishedAt)
+
+      // @ts-ignore
+      const parsedCategories = JSON.parse(categories) as { id: number }[]
+
+      let key = ""
+
+      if (parsedFiles.length) {
+        const file = parsedFiles[0]
+        key = await uploadToS3({
+          body: file.body,
+          contentType: file.contentType,
+          metadata: {
+            creator: req.user.id.toString(),
+            createdAt: Date.now().toString(),
+            originalName: file.originalName,
+          },
+          contentDisposition: `inline; filename="${file.originalName}"`,
+        })
+      }
+
+      const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
+      const removedCategories: { id: number }[] = book.categories.reduce((acc, val) => {
+        if (!parsedCategories.some(it => it.id === val.id)) {
+          acc.push({ id: val.id })
+        }
+        return acc
+      }, [])
+
+
       const updatedBook = await db.book.update({
         where: { id: bookId },
         data: {
           ...bookUpdate,
+          image: key || book.image,
           updatedAt: new Date(),
           categories: {
-            connect: categories,
+            connect: parsedCategories,
             disconnect: removedCategories
           }
         }
@@ -64,7 +99,7 @@ handler
     const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
 
     try {
-      await db.book.update({
+      const disconnectCategories = db.book.update({
         where: { id: bookId },
         data: {
           categories: {
@@ -73,15 +108,23 @@ handler
         },
       })
 
-      const removedBook = await db.book.delete({
+      const removeBook = db.book.delete({
         where: { id: bookId },
       })
 
-      res.status(204).json(removedBook)
+      const result = await db.$transaction([disconnectCategories, removeBook])
+
+      res.status(204).json(result[1])
     } catch (err) {
       console.error(err)
       res.status(500).send({ message: err.message })
     }
   })
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 export default handler

@@ -57,15 +57,15 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
             </ListItem>
           </List>
         </Flex>
-        <Text mt={2} opacity={0.7} fontSize="sm">
-          Legutóbb frissítve:&nbsp;
-          <TimeAgo date={book.updatedAt} />
-        </Text>
         <Stack spacing={4} isInline mt={2}>
           {book.categories?.map((it) => (
             <Tag key={it.id}>{it.name}</Tag>
           ))}
         </Stack>
+        <Text mt={2} opacity={0.7} fontSize="sm">
+          Legutóbb frissítve:&nbsp;
+          <TimeAgo date={book.updatedAt} />
+        </Text>
       </MotionBox>
     </NextLink>
   )

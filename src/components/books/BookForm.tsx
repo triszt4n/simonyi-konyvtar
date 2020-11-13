@@ -39,7 +39,7 @@ interface Props {
 }
 
 export function BookForm({ initialValue }: Props) {
-  const { id, createdAt, updatedAt, categories: cats, ...book } =
+  const { id, createdAt, updatedAt, categories: cts, ...book } =
     initialValue || {}
 
   const { data: categories } = useSWR<Category[]>("/api/categories", fetcher)
@@ -90,10 +90,9 @@ export function BookForm({ initialValue }: Props) {
   }
 
   async function onSubmit(values: BookFormData) {
-    values.count = parseInt(values.count as string)
-    values.stockCount = parseInt(values.stockCount as string)
-    values.publishedAt = parseInt(values.publishedAt as string)
-    console.log(values)
+    values.count = Number(values.count)
+    values.stockCount = Number(values.stockCount)
+    values.publishedAt = Number(values.publishedAt)
 
     const formData = new FormData()
 
@@ -257,7 +256,7 @@ export function BookForm({ initialValue }: Props) {
           <FormLabel>Kép</FormLabel>
 
           <Controller
-            name="file"
+            name="image"
             control={control}
             render={({ value, onChange }) => (
               <>

@@ -1,7 +1,8 @@
-import nextConnect from 'next-connect'
 import { NextApiRequest, NextApiResponse } from 'next'
-import auth from 'middleware/auth'
+import nextConnect from 'next-connect'
+
 import passport from 'lib/passport'
+import auth from 'middleware/auth'
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
