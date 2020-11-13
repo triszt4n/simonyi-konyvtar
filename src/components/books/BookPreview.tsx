@@ -2,13 +2,13 @@ import {
   Box,
   Flex,
   Heading,
-  Image,
   List,
   ListItem,
   Stack,
   Tag,
   Text,
-} from "@chakra-ui/core"
+  Image,
+} from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import NextLink from "next/link"
 
@@ -33,9 +33,13 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
       >
         <Flex>
           <Image
-            src={book.image || "https://placekitten.com/200/300"}
+            pr={2}
             maxH="14rem"
-            pr="1rem"
+            src={
+              book.image
+                ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
+                : "https://placekitten.com/200/300"
+            }
           />
           <List spacing={4}>
             <ListItem>
@@ -53,11 +57,11 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
             </ListItem>
           </List>
         </Flex>
-        <Text mt="0.5rem" opacity={0.7} fontSize="sm">
+        <Text mt={2} opacity={0.7} fontSize="sm">
           Legutóbb frissítve:&nbsp;
           <TimeAgo date={book.updatedAt} />
         </Text>
-        <Stack spacing={4} isInline mt="0.5rem">
+        <Stack spacing={4} isInline mt={2}>
           {book.categories?.map((it) => (
             <Tag key={it.id}>{it.name}</Tag>
           ))}

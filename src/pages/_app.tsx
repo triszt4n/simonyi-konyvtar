@@ -1,17 +1,10 @@
-import {
-  Box,
-  ColorModeProvider,
-  CSSReset,
-  ThemeProvider,
-} from "@chakra-ui/core"
-import dynamic from "next/dynamic"
+import { Box, ChakraProvider } from "@chakra-ui/react"
 import { AppProps } from "next/app"
+import dynamic from "next/dynamic"
 import Head from "next/head"
 
 import { Container } from "components/Container"
 import Footer from "components/Footer"
-
-import theme from "theme"
 
 const Navbar = dynamic(() => import("components/Navbar"), { ssr: false })
 
@@ -23,18 +16,15 @@ const App = ({ Component }: AppProps) => {
         <meta property="og:title" content="Simonyi Könvtár" key="title" />
         <meta lang="hu" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <ColorModeProvider>
-          <CSSReset />
-          <Container>
-            <Navbar />
-            <Box flex="1" width="100%" px="1rem">
-              <Component />
-            </Box>
-            <Footer />
-          </Container>
-        </ColorModeProvider>
-      </ThemeProvider>
+      <ChakraProvider>
+        <Container>
+          <Navbar />
+          <Box flex="1" width="100%" px="1rem">
+            <Component />
+          </Box>
+          <Footer />
+        </Container>
+      </ChakraProvider>
     </>
   )
 }

@@ -1,10 +1,12 @@
-import { Button, Flex, Link, Stack } from "@chakra-ui/core"
+import { Button, Flex, Link, Stack } from "@chakra-ui/react"
 import NextLink from "next/link"
 import React from "react"
 import { HiOutlineShoppingCart } from "react-icons/hi"
 
 import { DarkModeSwitch } from "components/DarkModeSwitch"
 import { useCart, useUser } from "lib/hooks"
+import HasRole from "./HasRole"
+import { userrole } from "lib/prismaClient"
 
 export default function Navbar() {
   const [user, { mutate }] = useUser()
@@ -47,11 +49,13 @@ export default function Navbar() {
             </NextLink>
           </Stack>
         )}
-        <NextLink href="/admin">
-          <Link>Admin</Link>
-        </NextLink>
+        <HasRole roles={[userrole.ADMIN]}>
+          <NextLink href="/admin">
+            <Link>Admin</Link>
+          </NextLink>
+        </HasRole>
         <NextLink href="/cart">
-          <Button leftIcon={HiOutlineShoppingCart}>{cart.sumCount}</Button>
+          <Button leftIcon={<HiOutlineShoppingCart />}>{cart.sumCount}</Button>
         </NextLink>
       </Stack>
       <DarkModeSwitch />

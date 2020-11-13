@@ -1,4 +1,5 @@
-import { Image, Flex, Text } from '@chakra-ui/core'
+import { Flex, Text } from "@chakra-ui/react"
+import Image from "next/image"
 
 interface ErrorPageProps {
   statusCode: number
@@ -7,12 +8,13 @@ interface ErrorPageProps {
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode, message }) => {
   return (
-    <Flex direction='column'>
+    <Flex direction="column">
       <Text>{message}</Text>
       <Image
         src={`https://http.cat/${statusCode}`}
-        alt={`Error ${statusCode}`}
-        htmlWidth='100%'
+        width={500}
+        height={500}
+        alt={`${statusCode} Error`}
       />
     </Flex>
   )

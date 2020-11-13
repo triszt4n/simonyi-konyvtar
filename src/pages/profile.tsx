@@ -1,4 +1,4 @@
-import { Button, Stack, Text, Input } from "@chakra-ui/core"
+import { Button, Stack, Text, Input } from "@chakra-ui/react"
 import Router from "next/router"
 import { useEffect, useState } from "react"
 

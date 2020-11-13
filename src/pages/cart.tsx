@@ -6,14 +6,19 @@ import {
   ListItem,
   Text,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { useCart } from "lib/hooks"
 import { useRouter } from "next/router"
+import { useState } from "react"
+import { HiMinusCircle, HiPlusCircle, HiTrash } from "react-icons/hi"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 export default function CartPage() {
   const router = useRouter()
   const toast = useToast()
   const { cart, addBook, removeBook, deleteBook, emptyCart } = useCart()
+  const [returnDate, setReturnDate] = useState(new Date())
 
   async function sendOrder() {
     const res = await fetch("/api/orders", {
@@ -38,7 +43,7 @@ export default function CartPage() {
     <>
       {cart.books.length ? (
         <>
-          <Button variantColor="red" onClick={emptyCart}>
+          <Button colorScheme="red" onClick={emptyCart}>
             Kosár ürítése
           </Button>
           <List>
@@ -53,22 +58,27 @@ export default function CartPage() {
                 <Text>Darabszam:&nbsp;{book.quantity}</Text>
                 <IconButton
                   aria-label="darabszám csökkentése"
-                  icon="minus"
+                  icon={<HiMinusCircle />}
                   onClick={() => removeBook(book)}
                 ></IconButton>
                 <IconButton
                   aria-label="hozzáadás"
-                  icon="add"
+                  icon={<HiPlusCircle />}
                   onClick={() => addBook(book)}
                 ></IconButton>
                 <IconButton
                   aria-label="törlés"
-                  icon="delete"
+                  colorScheme="red"
+                  icon={<HiTrash />}
                   onClick={() => deleteBook(book)}
                 ></IconButton>
               </ListItem>
             ))}
           </List>
+          <DatePicker
+            selected={returnDate}
+            onChange={(d) => setReturnDate(d)}
+          />
           <Button onClick={sendOrder}>Foglalás leadása</Button>
         </>
       ) : (

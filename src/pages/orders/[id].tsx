@@ -9,7 +9,7 @@ import {
   Flex,
   Select,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
@@ -89,9 +89,11 @@ export default function OrderPage() {
     <>
       {order && (
         <>
-          <Select onChange={updateStatus}>
+          <Select onChange={updateStatus} defaultValue={order.status}>
             {Object.keys(orderstatus).map((status) => (
-              <option value={status}>{status}</option>
+              <option value={status} key={status}>
+                {status}
+              </option>
             ))}
           </Select>
           <Text>{order.status}</Text>

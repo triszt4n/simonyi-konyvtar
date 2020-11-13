@@ -4,5 +4,11 @@ export enum orderstatus {
   PENDING = 'PENDING',
   RENTED = 'RENTED',
   LATE = 'LATE',
-  RETURNED = 'RETURNED'
+  RETURNED = 'RETURNED',
+}
+
+export enum userrole {
+  ADMIN = 'ADMIN',
+  BASIC = 'BASIC',
+  EDITOR = 'EDITOR',
 }

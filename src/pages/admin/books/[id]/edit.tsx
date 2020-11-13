@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/core"
+import { Heading } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 

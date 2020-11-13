@@ -1,4 +1,4 @@
-import { CircularProgress, Flex, Text } from "@chakra-ui/core"
+import { Flex, Spinner, Text } from "@chakra-ui/react"
 
 export default function Loading() {
   return (
@@ -9,7 +9,7 @@ export default function Loading() {
       justifyContent="center"
       direction="column"
     >
-      <CircularProgress isIndeterminate color="green"></CircularProgress>
+      <Spinner color="green"></Spinner>
       <Text mt={2}>Betöltés...</Text>
     </Flex>
   )

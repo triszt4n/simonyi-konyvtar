@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/core"
+import { Heading } from "@chakra-ui/react"
 import React from "react"
 import { BookForm } from "components/books/BookForm"
 

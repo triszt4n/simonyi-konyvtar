@@ -1,4 +1,4 @@
-import { List, ListItem, Text } from "@chakra-ui/core"
+import { List, ListItem, Text } from "@chakra-ui/react"
 import { fetcher, useUser } from "lib/hooks"
 import { OrderWithBooks } from "lib/interfaces"
 import useSWR from "swr"

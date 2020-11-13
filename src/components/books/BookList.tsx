@@ -6,7 +6,9 @@ import {
   Flex,
   Link,
   Tooltip,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
+import { HiPencilAlt, HiTrash } from "react-icons/hi"
+
 import { BookWithCategories } from "lib/interfaces"
 import NextLink from "next/link"
 
@@ -26,13 +28,13 @@ export function BookList({ data, onDelete }: Props) {
               <Link>{book.title}</Link>
             </NextLink>
             <NextLink href={`/admin/books/${book.id}/edit`}>
-              <IconButton aria-label="szerkesztés" icon="edit" />
+              <IconButton aria-label="szerkesztés" icon={<HiPencilAlt />} />
             </NextLink>
             <Tooltip label="Törlés" aria-label="Törlés" placement="top">
               <IconButton
                 aria-label="törlés"
-                icon="delete"
-                variantColor="red"
+                icon={<HiTrash />}
+                colorScheme="red"
                 cursor="pointer"
                 onClick={() => onDelete(book.id)}
               />

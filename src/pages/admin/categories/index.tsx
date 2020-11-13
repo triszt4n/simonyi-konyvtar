@@ -4,7 +4,7 @@ import {
   InputGroup,
   InputRightElement,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { Category } from "@prisma/client"
 import { CategoryList } from "components/categories/CategoryList"
 import { fetcher } from "lib/hooks"

@@ -6,8 +6,9 @@ import {
   Stack,
   Text,
   Tooltip,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { Category } from "@prisma/client"
+import { HiPencilAlt, HiTrash } from "react-icons/hi"
 
 interface Props {
   data: Category[]
@@ -30,15 +31,15 @@ export function CategoryList({ data, handleDelete, handleEdit }: Props) {
             >
               <IconButton
                 aria-label="szerkesztés"
-                icon="edit"
+                icon={<HiPencilAlt />}
                 onClick={() => handleEdit({ id, name })}
               />
             </Tooltip>
             <Tooltip label="Törlés" aria-label="Törlés" placement="top">
               <IconButton
                 aria-label="törlés"
-                icon="delete"
-                variantColor="red"
+                icon={<HiTrash />}
+                colorScheme="red"
                 onClick={() => handleDelete({ id, name })}
               />
             </Tooltip>

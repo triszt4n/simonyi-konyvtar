@@ -2,6 +2,7 @@ import useSWR from "swr"
 import createPersistedState from "use-persisted-state"
 
 import { Cart, CartItem } from "lib/interfaces"
+import { userrole } from "./prismaClient"
 
 export const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -11,6 +12,12 @@ export function useUser() {
   const loading = !data
   const user = data?.user
   return [user, { mutate, loading }]
+}
+
+export function useRequireRoles(roles: userrole[] = []) {
+  const [user] = useUser()
+
+  return roles.some((it) => it === user?.role)
 }
 
 const useCartState = createPersistedState("cart")

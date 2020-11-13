@@ -1,4 +1,4 @@
-import { Flex, List, ListItem, Text } from "@chakra-ui/core"
+import { Flex, List, ListItem, Text } from "@chakra-ui/react"
 import { User } from "@prisma/client"
 import NextLink from "next/link"
 import { fetcher } from "lib/hooks"

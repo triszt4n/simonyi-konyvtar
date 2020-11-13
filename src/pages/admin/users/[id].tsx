@@ -1,4 +1,4 @@
-import { Heading } from "@chakra-ui/core"
+import { Heading } from "@chakra-ui/react"
 import { User } from "@prisma/client"
 import { fetcher } from "lib/hooks"
 import { useRouter } from "next/router"

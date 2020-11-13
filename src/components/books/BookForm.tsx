@@ -10,25 +10,28 @@ import {
   TagLabel,
   Textarea,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { Category } from "@prisma/client"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+import { useRouter } from "next/router"
+import { useEffect, useRef, useState } from "react"
+import { HiX, HiLink } from "react-icons/hi"
+import { useForm, Controller } from "react-hook-form"
 import useSWR from "swr"
 
+import { DELETE_CURRENT_FILE } from "lib/constants"
 import { fetcher } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
-import { useRouter } from "next/router"
 
-type FormData = {
+type BookFormData = {
   title: string
   author: string
   isbn: string
   publisher: string
-  publishedAt: string
-  count: string
-  stockCount: string
+  publishedAt: string | number
+  count: string | number
+  stockCount: string | number
   notes: string
+  image: string
 }
 
 interface Props {
@@ -43,13 +46,24 @@ export function BookForm({ initialValue }: Props) {
 
   const [formCategories, setFormCategories] = useState([])
 
-  const { handleSubmit, errors, register, formState } = useForm<
-    BookWithCategories
-  >({
+  const fileInputRef = useRef(null)
+
+  const {
+    handleSubmit,
+    errors,
+    register,
+    formState,
+    control,
+    setError,
+    clearErrors,
+    watch,
+  } = useForm<BookWithCategories>({
     defaultValues: {
       ...book,
     },
   })
+
+  const watchFile = watch("file")
 
   useEffect(() => {
     setFormCategories(
@@ -71,26 +85,32 @@ export function BookForm({ initialValue }: Props) {
     )
   }
 
-  async function onSubmit(values: FormData) {
-    const formData = {
-      ...values,
-      categories: formCategories
-        .filter((it) => it.checked)
-        .map((it) => ({ id: it.id })),
+  function handleUploadButtonClick() {
+    fileInputRef.current.click()
+  }
+
+  async function onSubmit(values: BookFormData) {
+    values.count = parseInt(values.count as string)
+    values.stockCount = parseInt(values.stockCount as string)
+    values.publishedAt = parseInt(values.publishedAt as string)
+    console.log(values)
+
+    const formData = new FormData()
+
+    for (let key of Object.keys(values)) {
+      formData.append(key, values[key])
     }
+    formData.append(
+      "categories",
+      JSON.stringify(
+        formCategories.filter((it) => it.checked).map((it) => ({ id: it.id }))
+      )
+    )
 
     if (initialValue) {
       const res = await fetch(`/api/books/${initialValue.id}`, {
         method: "PUT",
-        body: JSON.stringify({
-          ...formData,
-          count: parseInt(formData.count),
-          stockCount: parseInt(formData.stockCount),
-          publishedAt: parseInt(formData.publishedAt),
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       })
 
       if (res.ok) {
@@ -114,15 +134,7 @@ export function BookForm({ initialValue }: Props) {
     } else {
       const res = await fetch("/api/books", {
         method: "POST",
-        body: JSON.stringify({
-          ...formData,
-          count: parseInt(formData.count),
-          stockCount: parseInt(formData.stockCount),
-          publishedAt: parseInt(formData.publishedAt),
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formData,
       })
       if (res.ok) {
         toast({
@@ -231,7 +243,7 @@ export function BookForm({ initialValue }: Props) {
             {formCategories?.map((category) => (
               <Tag
                 key={category.id}
-                variantColor={category.checked ? "green" : "gray"}
+                colorScheme={category.checked ? "green" : "gray"}
                 cursor="pointer"
                 mb={2}
                 onClick={() => updateFormCategories(category.id)}
@@ -240,6 +252,67 @@ export function BookForm({ initialValue }: Props) {
               </Tag>
             ))}
           </Stack>
+        </FormControl>
+        <FormControl>
+          <FormLabel>Kép</FormLabel>
+
+          <Controller
+            name="file"
+            control={control}
+            render={({ value, onChange }) => (
+              <>
+                {value?.name && (
+                  <div>
+                    <p>{value.name}</p>
+                    <Button
+                      colorScheme="red"
+                      isDisabled={formState.isSubmitting}
+                      type="button"
+                      onClick={() => {
+                        fileInputRef.current.value = null
+                        onChange(initialValue?.image ? DELETE_CURRENT_FILE : "")
+                      }}
+                    >
+                      <HiX />
+                    </Button>
+                  </div>
+                )}
+                <Input
+                  hidden
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={(e) => {
+                    const file = e.target.files[0]
+
+                    if (!file) {
+                      clearErrors("fileSize")
+                      onChange("")
+                    } else if (file.size > 1024 * 1024 * 5) {
+                      setError("fileSize", {
+                        type: "manual",
+                        message: "5 MB a maximális fájlméret",
+                      })
+                    } else {
+                      clearErrors("fileSize")
+                      onChange(e.target.files[0])
+                    }
+                  }}
+                />
+              </>
+            )}
+          />
+
+          <Button
+            onClick={handleUploadButtonClick}
+            isDisabled={watchFile && watchFile !== DELETE_CURRENT_FILE}
+          >
+            <HiLink />
+          </Button>
+          <FormErrorMessage>
+            {/*
+            // @ts-ignore */}
+            {errors?.fileSize && errors.fileSize.message}
+          </FormErrorMessage>
         </FormControl>
 
         <Button isLoading={formState.isSubmitting} type="submit">

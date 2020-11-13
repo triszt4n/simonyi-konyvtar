@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/core"
+import { Box } from "@chakra-ui/react"
 import { useUser } from "lib/hooks"
 import { CommentWithUser } from "lib/interfaces"
 

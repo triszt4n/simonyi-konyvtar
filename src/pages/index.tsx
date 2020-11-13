@@ -1,4 +1,4 @@
-import { SimpleGrid, Input } from "@chakra-ui/core"
+import { SimpleGrid, Input } from "@chakra-ui/react"
 import useSWR from "swr"
 
 import { BookPreview } from "components/books/BookPreview"

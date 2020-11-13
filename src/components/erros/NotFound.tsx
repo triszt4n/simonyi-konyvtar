@@ -1,5 +1,5 @@
-import { Heading } from "@chakra-ui/core"
-import { Flex, Image } from "@chakra-ui/core"
+import { Heading } from "@chakra-ui/react"
+import { Flex, Image } from "@chakra-ui/react"
 
 const NotFound = () => {
   return (

@@ -1,4 +1,4 @@
-import { List, ListItem, Text } from "@chakra-ui/core"
+import { List, ListItem, Text } from "@chakra-ui/react"
 import NextLink from "next/link"
 import useSWR from "swr"
 

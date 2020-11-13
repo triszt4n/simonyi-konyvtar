@@ -8,7 +8,7 @@ import {
   Tag,
   Text,
   useToast,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import TimeAgo from "components/HunTimeAgo"
@@ -45,7 +45,11 @@ const BookPage = () => {
       <Flex>
         <Box pr={1}>
           <Image
-            src={book.image || "https://placekitten.com/200/300"}
+            src={
+              book.image
+                ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
+                : "https://placekitten.com/200/300"
+            }
             width={200}
             height={300}
           />

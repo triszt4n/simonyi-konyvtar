@@ -1,7 +1,18 @@
-import { List, ListItem } from "@chakra-ui/core"
+import { List, ListItem } from "@chakra-ui/react"
 import NextLink from "next/link"
 
+import ErrorPage from "components/ErrorPage"
+import { useRequireRoles } from "lib/hooks"
+import { userrole } from "lib/prismaClient"
+
 export default function AdminIndex() {
+  const hasAccess = useRequireRoles([userrole.ADMIN])
+  if (!hasAccess) {
+    return (
+      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
+    )
+  }
+
   return (
     <List>
       <ListItem>
