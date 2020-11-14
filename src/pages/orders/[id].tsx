@@ -14,7 +14,7 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
 
-import Comment from "components/orders/comment"
+import Comment from "components/orders/Comment"
 import HasRole from "components/HasRole"
 import { fetcher, useUser } from "lib/hooks"
 import { CommentWithUser, OrderWithBooks } from "lib/interfaces"
@@ -32,17 +32,15 @@ export default function OrderPage() {
 
   const { data: order, mutate: mutateOrder } = useSWR<OrderWithBooks>(
     user ? `/api/users/${user.id}/orders/${orderId}` : null,
-    fetcher
+    fetcher,
   )
 
   const { data: comments, mutate: mutateComments } = useSWR<CommentWithUser[]>(
     orderId ? `/api/orders/${orderId}/comments` : null,
-    fetcher
+    fetcher,
   )
 
-  const { handleSubmit, errors, register, reset, formState } = useForm<
-    FormData
-  >({
+  const { handleSubmit, errors, register, reset, formState } = useForm<FormData>({
     defaultValues: { comment: "" },
   })
 
@@ -121,11 +119,7 @@ export default function OrderPage() {
       <form onSubmit={handleSubmit(addComment)}>
         <Flex dir="row" mt={4}>
           <FormControl flex="1" mr={4}>
-            <Input
-              name="comment"
-              placeholder="Írd be az üzeneted"
-              ref={register}
-            />
+            <Input name="comment" placeholder="Írd be az üzeneted" ref={register} />
             <FormErrorMessage>
               {errors.comment && errors.comment.message}
             </FormErrorMessage>
