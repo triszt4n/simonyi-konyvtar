@@ -7,9 +7,9 @@ import {
   Stack,
   Tag,
   Text,
-  Image,
 } from "@chakra-ui/react"
 import { motion } from "framer-motion"
+import NextImage from "next/image"
 import NextLink from "next/link"
 
 import { BookWithCategories } from "lib/interfaces"
@@ -32,15 +32,17 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
         }}
       >
         <Flex>
-          <Image
-            pr={2}
-            maxH="14rem"
-            src={
-              book.image
-                ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
-                : "https://placekitten.com/200/300"
-            }
-          />
+          <Box pr={2}>
+            <NextImage
+              width={200}
+              height={300}
+              src={
+                book.image
+                  ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
+                  : "https://placekitten.com/200/300"
+              }
+            />
+          </Box>
           <List spacing={4}>
             <ListItem>
               <Heading as="h3" size="lg">

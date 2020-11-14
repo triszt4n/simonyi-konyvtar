@@ -36,7 +36,7 @@ handler
       res.status(500).json({ message: e.message })
     }
   })
-  .use(requireRole(userrole.ADMIN))
+  .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .get(async (req, res) => {
     try {
       const orders = await db.order.findMany({ include: { books: { include: { books: true } } } })

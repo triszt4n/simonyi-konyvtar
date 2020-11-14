@@ -3,10 +3,19 @@ import NextLink from "next/link"
 import useSWR from "swr"
 
 import { BookList } from "components/books/BookList"
-import { fetcher } from "lib/hooks"
+import ErrorPage from "components/ErrorPage"
+import Loading from "components/Loading"
+import { fetcher, useRequireRoles } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
+import { userrole } from "lib/prismaClient"
 
 const BookAdminPage: React.FC = () => {
+  const hasAccess = useRequireRoles([userrole.ADMIN])
+  if (!hasAccess) {
+    return (
+      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
+    )
+  }
   const { data, error, mutate } = useSWR<BookWithCategories[]>(
     "/api/books",
     fetcher
@@ -14,7 +23,7 @@ const BookAdminPage: React.FC = () => {
   const toast = useToast()
 
   if (error) return <div>Failed to load books</div>
-  if (!data) return <div>Loading...</div>
+  if (!data) return <Loading />
 
   async function handleBookDelete(id: number) {
     if (confirm(`Bizosan törlöd a könyvet?`)) {

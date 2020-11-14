@@ -12,7 +12,7 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>()
 handler
   .use(auth)
   .use(requireLogin)
-  .use(requireRole(userrole.ADMIN))
+  .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .put(async (req, res) => {
     const updates = JSON.parse(req.body)
     try {
@@ -28,7 +28,6 @@ handler
       console.error(e)
       res.status(500).json({ error: e.message })
     }
-
   })
   .delete(async (req, res) => {
     try {

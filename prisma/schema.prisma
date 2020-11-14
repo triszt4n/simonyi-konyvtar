@@ -75,14 +75,14 @@ model User {
 }
 
 enum orderstatus {
-  LATE
   PENDING
   RENTED
   RETURNED
+  LATE
 }
 
 enum userrole {
-  ADMIN
   BASIC
+  ADMIN
   EDITOR
 }

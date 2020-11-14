@@ -1,14 +1,25 @@
 import { Flex, List, ListItem, Text } from "@chakra-ui/react"
 import { User } from "@prisma/client"
 import NextLink from "next/link"
-import { fetcher } from "lib/hooks"
 import useSWR from "swr"
 
+import ErrorPage from "components/ErrorPage"
+import Loading from "components/Loading"
+import { fetcher, useRequireRoles } from "lib/hooks"
+import { userrole } from "lib/prismaClient"
+
 export default function UserList() {
+  const hasAccess = useRequireRoles([userrole.ADMIN])
+  if (!hasAccess) {
+    return (
+      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
+    )
+  }
+
   const { data, error } = useSWR<User[]>("/api/users", fetcher)
 
   if (error) return <div>Failed to load users</div>
-  if (!data) return <div>Loading...</div>
+  if (!data) return <Loading />
 
   return (
     <List>

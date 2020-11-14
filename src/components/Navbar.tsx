@@ -49,7 +49,7 @@ export default function Navbar() {
             </NextLink>
           </Stack>
         )}
-        <HasRole roles={[userrole.ADMIN]}>
+        <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
           <NextLink href="/admin">
             <Link>Admin</Link>
           </NextLink>

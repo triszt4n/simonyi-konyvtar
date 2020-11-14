@@ -6,19 +6,29 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { Category } from "@prisma/client"
-import { CategoryList } from "components/categories/CategoryList"
-import { fetcher } from "lib/hooks"
-import React, { FormEvent, useState } from "react"
+import { FormEvent, useState } from "react"
 import useSWR from "swr"
 
+import { CategoryList } from "components/categories/CategoryList"
+import ErrorPage from "components/ErrorPage"
+import Loading from "components/Loading"
+import { fetcher, useRequireRoles } from "lib/hooks"
+import { userrole } from "lib/prismaClient"
+
 export default function CategoriesIndexPage() {
+  const hasAccess = useRequireRoles([userrole.ADMIN])
+  if (!hasAccess) {
+    return (
+      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
+    )
+  }
   const [newCategory, setNewCategory] = useState("")
   const { data, error, mutate } = useSWR<Category[]>("/api/categories", fetcher)
 
   const toast = useToast()
 
   if (error) return <div>Failed to load categories</div>
-  if (!data) return <div>Loading...</div>
+  if (!data) return <Loading />
 
   async function handleDelete(cat: Category) {
     if (

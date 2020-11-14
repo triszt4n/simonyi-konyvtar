@@ -4,7 +4,7 @@ import { OrderWithBooks } from "lib/interfaces"
 import useSWR from "swr"
 import NextLink from "next/link"
 
-export default function OrdersPage(props) {
+export default function OrdersPage() {
   const [user] = useUser()
   const { data, error } = useSWR<OrderWithBooks[]>(
     user ? `/api/users/${user.id}/orders/` : null,

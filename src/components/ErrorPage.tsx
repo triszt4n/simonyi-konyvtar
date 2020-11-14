@@ -8,7 +8,7 @@ interface ErrorPageProps {
 
 const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode, message }) => {
   return (
-    <Flex direction="column">
+    <Flex direction="column" alignItems="center" justifyContent="center">
       <Text>{message}</Text>
       <Image
         src={`https://http.cat/${statusCode}`}

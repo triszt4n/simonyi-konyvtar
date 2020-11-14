@@ -38,7 +38,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Heading as="h1">Login to Example</Heading>
+      <Heading as="h1">Bejelentkezés</Heading>
       {errorMsg && <Text color="tomato">{errorMsg}</Text>}
       <form onSubmit={onSubmit}>
         <Stack spacing={3} shouldWrapChildren>

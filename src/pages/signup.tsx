@@ -45,7 +45,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <Heading as="h1">Sign up to Example</Heading>
+      <Heading as="h1">Regisztráció</Heading>
       {errorMsg && <Text color="tomato">{errorMsg}</Text>}
       <form onSubmit={onSubmit}>
         <Stack spacing={3} shouldWrapChildren>

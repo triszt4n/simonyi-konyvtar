@@ -3,10 +3,18 @@ import { useRouter } from "next/router"
 import useSWR from "swr"
 
 import { BookForm } from "components/books/BookForm"
-import { fetcher } from "lib/hooks"
+import ErrorPage from "components/ErrorPage"
+import { userrole } from "lib/prismaClient"
+import { fetcher, useRequireRoles } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
 
 const EditBook = () => {
+  const hasAccess = useRequireRoles([userrole.ADMIN])
+  if (!hasAccess) {
+    return (
+      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
+    )
+  }
   const router = useRouter()
 
   const { data } = useSWR<BookWithCategories>(

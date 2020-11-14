@@ -10,10 +10,11 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import Image from "next/image"
-import TimeAgo from "components/HunTimeAgo"
+import NextImage from "next/image"
 import useSWR from "swr"
 
+import TimeAgo from "components/HunTimeAgo"
+import Loading from "components/Loading"
 import { useCart, fetcher } from "lib/hooks"
 import { BookWithCategories, CartItem } from "lib/interfaces"
 
@@ -28,7 +29,7 @@ const BookPage = () => {
   const { addBook } = useCart()
 
   if (error) return <div>Failed to load book</div>
-  if (!book) return <div>Loading...</div>
+  if (!book) return <Loading />
 
   function addToCart(book: CartItem) {
     addBook(book)
@@ -43,8 +44,8 @@ const BookPage = () => {
   return (
     <>
       <Flex>
-        <Box pr={1}>
-          <Image
+        <Box pr={2}>
+          <NextImage
             src={
               book.image
                 ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
