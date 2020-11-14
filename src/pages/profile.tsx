@@ -9,7 +9,7 @@ export default function ProfilePage() {
   const [errorMsg, setErrorMsg] = useState("")
 
   async function handleDeleteProfile() {
-    const res = await fetch(`/api/user`, {
+    const res = await fetch("/api/user", {
       method: "DELETE",
     })
 
@@ -23,18 +23,14 @@ export default function ProfilePage() {
     e.preventDefault()
 
     const body = {
-      // password: e.currentTarget.password.value,
+      password: e.currentTarget.password.value,
+      newpassword: e.currentTarget.newpassword.value,
       name: e.currentTarget.username.value,
       email: e.currentTarget.email.value,
     }
 
-    // if (body.password !== e.currentTarget.rpassword.value) {
-    //   setErrorMsg(`The passwords don't match`)
-    //   return
-    // }
-
     const res = await fetch("/api/user", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
@@ -43,13 +39,13 @@ export default function ProfilePage() {
       const userObj = await res.json()
       // set user to useSWR state
       mutate(userObj)
+      Router.replace("/")
     } else {
       setErrorMsg(await res.text())
     }
   }
 
   useEffect(() => {
-    // todo: fix weird redirect on edit
     // redirect user to login if not authenticated
     if (!loading && !user) Router.replace("/login")
   }, [user, loading])
@@ -79,20 +75,18 @@ export default function ProfilePage() {
                 isRequired
                 isReadOnly
               />
-              {/* <Input
+              <Input
                 variant="outline"
                 type="password"
                 name="password"
-                placeholder="Password"
-                isRequired
+                placeholder="Régi jelszó"
               />
               <Input
                 variant="outline"
                 type="password"
-                name="rpassword"
-                placeholder="Repeat password"
-                isRequired
-              /> */}
+                name="newpassword"
+                placeholder="Új jelszó"
+              />
               <Button type="submit">Mentés</Button>
             </Stack>
           </form>

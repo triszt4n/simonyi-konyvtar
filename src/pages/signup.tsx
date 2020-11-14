@@ -9,6 +9,11 @@ export default function SignupPage() {
   const [user, { mutate }] = useUser()
   const [errorMsg, setErrorMsg] = useState("")
 
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (user) Router.push("/")
+  }, [user])
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
@@ -37,11 +42,6 @@ export default function SignupPage() {
       setErrorMsg(await res.text())
     }
   }
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user) Router.push("/")
-  }, [user])
 
   return (
     <>

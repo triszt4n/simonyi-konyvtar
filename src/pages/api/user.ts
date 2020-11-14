@@ -1,3 +1,4 @@
+import argon2 from 'argon2'
 import nextConnect from 'next-connect'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -25,12 +26,29 @@ handler
     req.logOut()
     res.status(204).end()
   })
-  .post(async (req, res) => {
+  .put(async (req, res) => {
     try {
-      const { password, ...rest } = await db.user.update({
+      const { name, password, newpassword } = req.body
+      if (!name) {
+        return res.status(400).send('A név nem lehet üres')
+      }
+      if (password && !(await argon2.verify(req.user.password, password))) {
+        return res.status(400).send('A régi jelszó nem megfelelő')
+      }
+      if (password && !newpassword) {
+        return res.status(400).send('Az új jelszó nem lehet üres')
+      }
+      // Security-wise, you must hash the password before saving it
+      const hashedPass = await argon2.hash(newpassword)
+      const user = { name }
+      if (password) {
+        // @ts-ignore
+        user.password = hashedPass
+      }
+      const { password: pass, ...rest } = await db.user.update({
         where: { id: req.user.id },
         data: {
-          name: req.body.name,
+          ...user
         }
       })
 
