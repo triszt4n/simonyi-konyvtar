@@ -1,10 +1,10 @@
-import nextConnect, { NextHandler } from 'next-connect'
-import { userrole } from '@prisma/client'
-import { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect, { NextHandler } from "next-connect"
+import { userrole } from "@prisma/client"
+import { NextApiRequest, NextApiResponse } from "next"
 
-import db from 'lib/db'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
+import db from "lib/db"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -20,7 +20,7 @@ handler
       req.user.id === order.userId) {
       next()
     } else {
-      res.status(401).send('unauthorized')
+      res.status(401).send("unauthorized")
     }
   })
   .post(async (req, res) => {
@@ -42,7 +42,10 @@ handler
   .get(async (req, res) => {
     try {
       const orderId = Number(req.query.id)
-      const comments = await db.comment.findMany({ where: { orderId: orderId }, include: { user: true } })
+      const comments = await db.comment.findMany({
+        where: { orderId: orderId },
+        include: { user: true }
+      })
       res.json(comments)
     } catch (e) {
       console.error(e)

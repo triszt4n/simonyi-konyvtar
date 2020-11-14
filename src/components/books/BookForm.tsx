@@ -39,8 +39,8 @@ interface Props {
 }
 
 export function BookForm({ initialValue }: Props) {
-  const { id, createdAt, updatedAt, categories: cts, ...book } =
-    initialValue || {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, createdAt, updatedAt, categories: cts, ...book } = initialValue || {}
 
   const { data: categories } = useSWR<Category[]>("/api/categories", fetcher)
 
@@ -72,7 +72,7 @@ export function BookForm({ initialValue }: Props) {
         checked: initialValue
           ? initialValue.categories.some((c) => c.id === it.id)
           : false,
-      }))
+      })),
     )
   }, [categories, initialValue])
 
@@ -81,7 +81,7 @@ export function BookForm({ initialValue }: Props) {
 
   function updateFormCategories(id: number) {
     setFormCategories((c) =>
-      c.map((it) => (it.id === id ? { ...it, checked: !it.checked } : it))
+      c.map((it) => (it.id === id ? { ...it, checked: !it.checked } : it)),
     )
   }
 
@@ -96,14 +96,14 @@ export function BookForm({ initialValue }: Props) {
 
     const formData = new FormData()
 
-    for (let key of Object.keys(values)) {
+    for (const key of Object.keys(values)) {
       formData.append(key, values[key])
     }
     formData.append(
       "categories",
       JSON.stringify(
-        formCategories.filter((it) => it.checked).map((it) => ({ id: it.id }))
-      )
+        formCategories.filter((it) => it.checked).map((it) => ({ id: it.id })),
+      ),
     )
 
     if (initialValue) {
@@ -160,11 +160,7 @@ export function BookForm({ initialValue }: Props) {
       <Stack spacing={4} shouldWrapChildren={true}>
         <FormControl isInvalid={!!errors.title}>
           <FormLabel htmlFor="title">Cím</FormLabel>
-          <Input
-            name="title"
-            placeholder="Cím"
-            ref={register({ required: true })}
-          />
+          <Input name="title" placeholder="Cím" ref={register({ required: true })} />
           <FormErrorMessage>
             {errors.title && "A cím kitöltése kötelező"}
           </FormErrorMessage>
@@ -172,29 +168,17 @@ export function BookForm({ initialValue }: Props) {
         <FormControl isInvalid={!!errors.author}>
           <FormLabel htmlFor="author">Szerző</FormLabel>
           <Input name="author" placeholder="Szerző" ref={register} />
-          <FormErrorMessage>
-            {errors.author && errors.author.message}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.author && errors.author.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.isbn}>
           <FormLabel htmlFor="isbn">ISBN</FormLabel>
           <Input name="isbn" placeholder="ISBN" ref={register} />
-          <FormErrorMessage>
-            {errors.isbn && errors.isbn.message}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.isbn && errors.isbn.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.count}>
           <FormLabel htmlFor="count">Darabszám</FormLabel>
-          <Input
-            type="number"
-            defaultValue={1}
-            name="count"
-            ref={register}
-            min={1}
-          />
-          <FormErrorMessage>
-            {errors.count && errors.count.message}
-          </FormErrorMessage>
+          <Input type="number" defaultValue={1} name="count" ref={register} min={1} />
+          <FormErrorMessage>{errors.count && errors.count.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.isbn}>
           <FormLabel htmlFor="publisher">Kiadó</FormLabel>
@@ -226,19 +210,11 @@ export function BookForm({ initialValue }: Props) {
         <FormControl isInvalid={!!errors.notes}>
           <FormLabel htmlFor="notes">Megjegyzés</FormLabel>
           <Textarea name="notes" placeholder="Megjegyzés" ref={register} />
-          <FormErrorMessage>
-            {errors.notes && errors.notes.message}
-          </FormErrorMessage>
+          <FormErrorMessage>{errors.notes && errors.notes.message}</FormErrorMessage>
         </FormControl>
         <FormControl>
           <FormLabel>Kategóriák</FormLabel>
-          <Stack
-            spacing={4}
-            isInline
-            as={Flex}
-            alignItems="center"
-            flexWrap="wrap"
-          >
+          <Stack spacing={4} isInline as={Flex} alignItems="center" flexWrap="wrap">
             {formCategories?.map((category) => (
               <Tag
                 key={category.id}

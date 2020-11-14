@@ -1,6 +1,6 @@
 import { Flex, Text, Link } from "@chakra-ui/react"
 
-const Footer: React.FC = (props) => (
+const Footer: React.FC = () => (
   <Flex as="footer" py="3rem">
     <Text>
       Made with ❤️ by{" "}

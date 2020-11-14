@@ -1,25 +1,25 @@
-import passport from 'passport'
-import { Strategy } from 'passport-local'
-import { NextApiRequest } from 'next'
-import { PrismaClient, User } from '@prisma/client'
-import argon2 from 'argon2'
+import passport from "passport"
+import { Strategy } from "passport-local"
+import { NextApiRequest } from "next"
+import { PrismaClient, User } from "@prisma/client"
+import argon2 from "argon2"
 
 const db = new PrismaClient()
 
-passport.serializeUser(function (user: User, done) {
+passport.serializeUser((user: User, done) => {
   // serialize the username into session
   done(null, user.id)
 })
 
-passport.deserializeUser(async function (req: NextApiRequest, id: number, done: Function) {
+passport.deserializeUser(async (req: NextApiRequest, id: number, done) => {
   // deserialize the username back into user object
-  const user = await db.user.findOne({ where: { id }})
+  const user = await db.user.findOne({ where: { id } })
   done(null, user)
 })
 
 passport.use(
   new Strategy(
-    { passReqToCallback: true, usernameField: 'email', },
+    { passReqToCallback: true, usernameField: "email", },
     async (req, email, password, done) => {
       // Here you lookup the user in your DB and compare the password/hashed password
       const user = await db.user.findOne({ where: { email } })

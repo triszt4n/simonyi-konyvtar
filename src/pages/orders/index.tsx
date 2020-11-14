@@ -6,9 +6,9 @@ import NextLink from "next/link"
 
 export default function OrdersPage() {
   const [user] = useUser()
-  const { data, error } = useSWR<OrderWithBooks[]>(
+  const { data } = useSWR<OrderWithBooks[]>(
     user ? `/api/users/${user.id}/orders/` : null,
-    fetcher
+    fetcher,
   )
 
   return (

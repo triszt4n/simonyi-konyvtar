@@ -8,12 +8,10 @@ import { fetcher, useRequireRoles } from "lib/hooks"
 import { OrderWithBooks } from "lib/interfaces"
 
 export default function OrdersPage() {
-  const { data, error } = useSWR<OrderWithBooks[]>(`/api/orders/`, fetcher)
+  const { data } = useSWR<OrderWithBooks[]>("/api/orders/", fetcher)
   const hasAccess = useRequireRoles([userrole.ADMIN, userrole.EDITOR])
   if (!hasAccess) {
-    return (
-      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
-    )
+    return <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
   }
 
   return (

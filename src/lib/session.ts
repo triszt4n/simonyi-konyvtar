@@ -1,11 +1,12 @@
-import Iron from '@hapi/iron'
-import { parse, serialize } from 'cookie'
-import { NextApiRequest, NextApiResponse } from 'next'
+import Iron from "@hapi/iron"
+import { parse, serialize } from "cookie"
+import { NextApiRequest, NextApiResponse } from "next"
+import { NextHandler } from "next-connect"
 
 export default function session({ name, secret, cookie: cookieOpts }) {
-  return async (req: NextApiRequest, res: NextApiResponse, next: Function) => {
+  return async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     const cookie = req.headers?.cookie ? parse(req.headers.cookie) : null
-    let unsealed: object
+    let unsealed: Record<string, unknown>
     if (cookie?.[name]) {
       try {
         // the cookie needs to be unsealed using the password `secret`
@@ -24,7 +25,7 @@ export default function session({ name, secret, cookie: cookieOpts }) {
       if (res.writableEnded || res.writableEnded || res.headersSent) return
       // sealing the cookie to be sent to client
       const sealed = await Iron.seal(req.session, secret, Iron.defaults)
-      res.setHeader('Set-Cookie', serialize(name, sealed, cookieOpts))
+      res.setHeader("Set-Cookie", serialize(name, sealed, cookieOpts))
       oldEnd.apply(this, args)
     }
 

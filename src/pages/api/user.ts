@@ -1,10 +1,10 @@
-import argon2 from 'argon2'
-import nextConnect from 'next-connect'
-import { NextApiRequest, NextApiResponse } from 'next'
+import argon2 from "argon2"
+import nextConnect from "next-connect"
+import { NextApiRequest, NextApiResponse } from "next"
 
-import db from 'lib/db'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
+import db from "lib/db"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -14,6 +14,7 @@ handler
     // You do not generally want to return the whole user object
     // because it may contain sensitive field such as !!password!! Only return what needed
     if (req.user) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = req.user
       res.json({ user: rest })
     } else {
@@ -30,13 +31,13 @@ handler
     try {
       const { name, password, newpassword } = req.body
       if (!name) {
-        return res.status(400).send('A név nem lehet üres')
+        return res.status(400).send("A név nem lehet üres")
       }
       if (password && !(await argon2.verify(req.user.password, password))) {
-        return res.status(400).send('A régi jelszó nem megfelelő')
+        return res.status(400).send("A régi jelszó nem megfelelő")
       }
       if (password && !newpassword) {
-        return res.status(400).send('Az új jelszó nem lehet üres')
+        return res.status(400).send("Az új jelszó nem lehet üres")
       }
       // Security-wise, you must hash the password before saving it
       const hashedPass = await argon2.hash(newpassword)
@@ -45,6 +46,7 @@ handler
         // @ts-ignore
         user.password = hashedPass
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: pass, ...rest } = await db.user.update({
         where: { id: req.user.id },
         data: {

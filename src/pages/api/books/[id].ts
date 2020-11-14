@@ -1,14 +1,14 @@
-import { userrole } from '@prisma/client'
-import { NextApiRequest, NextApiResponse } from 'next'
-import nextConnect from 'next-connect'
+import { userrole } from "@prisma/client"
+import { NextApiRequest, NextApiResponse } from "next"
+import nextConnect from "next-connect"
 
-import { BookWithCategories, BookWithCategoryIds } from 'lib/interfaces'
-import db from 'lib/db'
-import parseMultipart from 'lib/parseMultipart'
-import { uploadToS3 } from 'lib/s3'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
-import requireRole from 'middleware/requireRole'
+import { BookWithCategories, BookWithCategoryIds } from "lib/interfaces"
+import db from "lib/db"
+import parseMultipart from "lib/parseMultipart"
+import { uploadToS3 } from "lib/s3"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
+import requireRole from "middleware/requireRole"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -17,7 +17,7 @@ handler
     const { query: { id }, } = req
     const bookId = Number(id)
     if (isNaN(bookId)) {
-      res.status(500).json('ID must be number')
+      res.status(500).json("ID must be number")
     } else {
       try {
         const book = await db.book.findOne({
@@ -65,7 +65,10 @@ handler
         })
       }
 
-      const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
+      const book: BookWithCategories = await db.book.findOne({
+        where: { id: bookId },
+        include: { categories: true }
+      })
       const removedCategories: { id: number }[] = book.categories.reduce((acc, val) => {
         if (!parsedCategories.some(it => it.id === val.id)) {
           acc.push({ id: val.id })
@@ -96,7 +99,10 @@ handler
   .delete(async (req, res) => {
     const { query: { id } } = req
     const bookId = Number(id)
-    const book: BookWithCategories = await db.book.findOne({ where: { id: bookId }, include: { categories: true } })
+    const book: BookWithCategories = await db.book.findOne({
+      where: { id: bookId },
+      include: { categories: true }
+    })
 
     try {
       const disconnectCategories = db.book.update({

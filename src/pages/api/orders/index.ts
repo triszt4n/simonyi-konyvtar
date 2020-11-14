@@ -1,12 +1,12 @@
-import nextConnect from 'next-connect'
-import { userrole } from '@prisma/client'
-import { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from "next-connect"
+import { userrole } from "@prisma/client"
+import { NextApiRequest, NextApiResponse } from "next"
 
-import db from 'lib/db'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
-import requireRole from 'middleware/requireRole'
-import { CartItem } from 'lib/interfaces'
+import db from "lib/db"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
+import requireRole from "middleware/requireRole"
+import { CartItem } from "lib/interfaces"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -25,7 +25,10 @@ handler
             connect: { id: userId },
           },
           books: {
-            create: books.map(it => ({ quantity: it.quantity, books: { connect: { id: it.id } } }))
+            create: books.map(it => ({
+              quantity: it.quantity,
+              books: { connect: { id: it.id } }
+            }))
           }
         },
       })
@@ -39,7 +42,9 @@ handler
   .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .get(async (req, res) => {
     try {
-      const orders = await db.order.findMany({ include: { books: { include: { books: true } } } })
+      const orders = await db.order.findMany({
+        include: { books: { include: { books: true } } }
+      })
       res.json(orders)
     } catch (e) {
       console.error(e)

@@ -1,11 +1,11 @@
-import { userrole } from '@prisma/client'
-import { NextApiRequest, NextApiResponse } from 'next'
-import nextConnect from 'next-connect'
+import { userrole } from "@prisma/client"
+import { NextApiRequest, NextApiResponse } from "next"
+import nextConnect from "next-connect"
 
-import db from 'lib/db'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
-import requireRole from 'middleware/requireRole'
+import db from "lib/db"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
+import requireRole from "middleware/requireRole"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 

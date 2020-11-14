@@ -1,4 +1,5 @@
 import aws from "aws-sdk"
+import { PutObjectRequest } from "aws-sdk/clients/s3"
 import { nanoid } from "nanoid"
 
 const s3 = new aws.S3({
@@ -25,7 +26,7 @@ export async function deleteFromS3(key: string) {
 }
 
 export async function uploadToS3(file) {
-  const params: any = {
+  const params: PutObjectRequest = {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: nanoid(),
     Body: file.body,

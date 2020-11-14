@@ -1,11 +1,11 @@
-import { userrole } from '@prisma/client'
-import nextConnect, { NextHandler } from 'next-connect'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { userrole } from "@prisma/client"
+import nextConnect, { NextHandler } from "next-connect"
+import { NextApiRequest, NextApiResponse } from "next"
 
-import db from 'lib/db'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
-import requireRole from 'middleware/requireRole'
+import db from "lib/db"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
+import requireRole from "middleware/requireRole"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -45,16 +45,24 @@ handler
     const role = req.user.role
     const orderId = Number(req.query.id)
     const order = await db.order.findOne({ where: { id: orderId } })
-    if (role === userrole.ADMIN || role === userrole.EDITOR || req.user.id === order.userId) {
+    if (role === userrole.ADMIN ||
+      role === userrole.EDITOR ||
+      req.user.id === order.userId) {
       next()
     } else {
-      res.status(401).send('unauthorized')
+      res.status(401).send("unauthorized")
     }
   })
   .get(async (req, res) => {
     try {
       const id = Number(req.query.id)
-      const order = await db.order.findOne({ where: { id }, include: { comments: true, books: { include: { books: true } } } })
+      const order = await db.order.findOne({
+        where: { id },
+        include: {
+          comments: true,
+          books: { include: { books: true } }
+        }
+      })
       res.json(order)
     } catch (e) {
       console.error(e)

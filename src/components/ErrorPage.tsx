@@ -6,7 +6,7 @@ interface ErrorPageProps {
   message?: string
 }
 
-const ErrorPage: React.FC<ErrorPageProps> = ({ statusCode, message }) => {
+function ErrorPage({ statusCode, message }: ErrorPageProps) {
   return (
     <Flex direction="column" alignItems="center" justifyContent="center">
       <Text>{message}</Text>

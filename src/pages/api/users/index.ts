@@ -1,12 +1,12 @@
-import { User, userrole } from '@prisma/client'
-import argon2 from 'argon2'
-import { NextApiRequest, NextApiResponse } from 'next'
-import nextConnect from 'next-connect'
+import { User, userrole } from "@prisma/client"
+import argon2 from "argon2"
+import { NextApiRequest, NextApiResponse } from "next"
+import nextConnect from "next-connect"
 
-import db from 'lib/db'
-import auth from 'middleware/auth'
-import requireLogin from 'middleware/requireLogin'
-import requireRole from 'middleware/requireRole'
+import db from "lib/db"
+import auth from "middleware/auth"
+import requireLogin from "middleware/requireLogin"
+import requireRole from "middleware/requireRole"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -15,7 +15,7 @@ handler
   .post(async (req, res) => {
     const { email, name, password } = req.body
     if (!email || !name || !password) {
-      return res.status(400).send('Missing fields')
+      return res.status(400).send("Missing fields")
     }
     // Security-wise, you must hash the password before saving it
     const hashedPass = await argon2.hash(password)

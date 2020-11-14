@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import nextConnect from "next-connect"
 
 import { BookWithCategoryIds } from "lib/interfaces"
-import db from 'lib/db'
+import db from "lib/db"
 import parseMultipart from "lib/parseMultipart"
 import { uploadToS3 } from "lib/s3"
 import auth from "middleware/auth"

@@ -1,4 +1,4 @@
-import { Book, Category, Order, Comment, BookToOrder, User } from '@prisma/client'
+import { Book, Category, Order, Comment, BookToOrder, User } from "@prisma/client"
 
 export interface BookWithCategories extends Book {
   categories: Category[]

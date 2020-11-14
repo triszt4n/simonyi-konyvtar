@@ -26,7 +26,7 @@ const BookAdminPage: React.FC = () => {
   if (!data) return <Loading />
 
   async function handleBookDelete(id: number) {
-    if (confirm(`Bizosan törlöd a könyvet?`)) {
+    if (confirm("Bizosan törlöd a könyvet?")) {
       const response = await fetch(`/api/books/${id}`, { method: "DELETE" })
       if (response.status === 204) {
         const newBooks = data.filter((it) => it.id !== id)
