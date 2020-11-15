@@ -1,6 +1,5 @@
 import {
   Button,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -10,13 +9,15 @@ import {
   TagLabel,
   Textarea,
   useToast,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react"
 import { Category } from "@prisma/client"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import { HiX, HiLink } from "react-icons/hi"
 import { useForm, Controller } from "react-hook-form"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
 import { DELETE_CURRENT_FILE } from "lib/constants"
 import { fetcher } from "lib/hooks"
@@ -119,6 +120,7 @@ export function BookForm({ initialValue }: Props) {
           duration: 3000,
           isClosable: true,
         })
+        mutate(`/api/books/${initialValue.id}`)
         router.push("/admin")
       } else {
         const response = await res.json()
@@ -214,20 +216,21 @@ export function BookForm({ initialValue }: Props) {
         </FormControl>
         <FormControl>
           <FormLabel>Kategóriák</FormLabel>
-          <Stack spacing={4} isInline as={Flex} alignItems="center" flexWrap="wrap">
+          <Wrap>
             {formCategories?.map((category) => (
-              <Tag
-                size="lg"
-                key={category.id}
-                colorScheme={category.checked ? "green" : "gray"}
-                cursor="pointer"
-                mb={2}
-                onClick={() => updateFormCategories(category.id)}
-              >
-                <TagLabel>{category.name}</TagLabel>
-              </Tag>
+              <WrapItem key={category.id}>
+                <Tag
+                  size="lg"
+                  colorScheme={category.checked ? "green" : "gray"}
+                  cursor="pointer"
+                  mb={2}
+                  onClick={() => updateFormCategories(category.id)}
+                >
+                  <TagLabel>{category.name}</TagLabel>
+                </Tag>
+              </WrapItem>
             ))}
-          </Stack>
+          </Wrap>
         </FormControl>
         <FormControl>
           <FormLabel>Kép</FormLabel>

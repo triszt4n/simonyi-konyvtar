@@ -11,16 +11,11 @@ import { BookWithCategories } from "lib/interfaces"
 const EditBook = () => {
   const hasAccess = useRequireRoles([userrole.ADMIN])
   if (!hasAccess) {
-    return (
-      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
-    )
+    return <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
   }
   const router = useRouter()
 
-  const { data } = useSWR<BookWithCategories>(
-    `/api/books/${router.query.id}`,
-    fetcher
-  )
+  const { data } = useSWR<BookWithCategories>(`/api/books/${router.query.id}`, fetcher)
 
   return (
     <>

@@ -4,9 +4,10 @@ import {
   Heading,
   List,
   ListItem,
-  Stack,
   Tag,
   Text,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import NextImage from "next/image"
@@ -59,11 +60,13 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
             </ListItem>
           </List>
         </Flex>
-        <Stack spacing={4} isInline mt={2}>
+        <Wrap mt={2}>
           {book.categories?.map((it) => (
-            <Tag key={it.id}>{it.name}</Tag>
+            <WrapItem key={it.id}>
+              <Tag>{it.name}</Tag>
+            </WrapItem>
           ))}
-        </Stack>
+        </Wrap>
         <Text mt={2} opacity={0.7} fontSize="sm">
           Legutóbb frissítve:&nbsp;
           <TimeAgo date={book.updatedAt} />

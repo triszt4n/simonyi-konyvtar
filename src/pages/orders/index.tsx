@@ -19,6 +19,9 @@ export default function OrdersPage() {
           data.map((order) => (
             <ListItem key={order.id}>
               <>
+                <Text>{order.createdAt}</Text>
+                {"-"}
+                <Text>{order.returnDate}</Text>
                 <NextLink href={`/orders/${order.id}`}>
                   <Text>{STATUSES[order.status]}</Text>
                 </NextLink>

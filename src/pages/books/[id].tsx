@@ -7,6 +7,8 @@ import {
   ListItem,
   Tag,
   Text,
+  Wrap,
+  WrapItem,
   useToast,
 } from "@chakra-ui/react"
 import { useRouter } from "next/router"
@@ -23,7 +25,7 @@ const BookPage = () => {
 
   const { data: book, error } = useSWR<BookWithCategories>(
     `/api/books/${router.query.id}`,
-    fetcher
+    fetcher,
   )
   const toast = useToast()
   const { addBook } = useCart()
@@ -74,11 +76,13 @@ const BookPage = () => {
           <ListItem>Kiadó: {book.publisher}</ListItem>
           <ListItem>Megjegyzés: {book.notes}</ListItem>
           <ListItem>ISBN: {book.isbn}</ListItem>
-          <ListItem>
+          <Wrap>
             {book.categories?.map((it) => (
-              <Tag key={it.id}>{it.name}</Tag>
+              <WrapItem key={it.id}>
+                <Tag>{it.name}</Tag>
+              </WrapItem>
             ))}
-          </ListItem>
+          </Wrap>
         </List>
       </Flex>
       <Text>
