@@ -7,12 +7,13 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react"
-import { useCart } from "lib/hooks"
-import { useRouter } from "next/router"
 import { useState } from "react"
 import { HiMinusCircle, HiPlusCircle, HiTrash } from "react-icons/hi"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+
+import { useCart } from "lib/hooks"
+import { useRouter } from "next/router"
 
 export default function CartPage() {
   const router = useRouter()
@@ -23,7 +24,7 @@ export default function CartPage() {
   async function sendOrder() {
     const res = await fetch("/api/orders", {
       method: "POST",
-      body: JSON.stringify(cart.books),
+      body: JSON.stringify({ returnDate, books: cart.books }),
     })
 
     if (res.ok) {
@@ -48,12 +49,7 @@ export default function CartPage() {
           </Button>
           <List>
             {cart.books.map((book) => (
-              <ListItem
-                key={book.id}
-                as={Flex}
-                flexDir="row"
-                alignItems="center"
-              >
+              <ListItem key={book.id} as={Flex} flexDir="row" alignItems="center">
                 <Text>{book.title}</Text>&nbsp;
                 <Text>Darabszam:&nbsp;{book.quantity}</Text>
                 <IconButton
@@ -75,10 +71,7 @@ export default function CartPage() {
               </ListItem>
             ))}
           </List>
-          <DatePicker
-            selected={returnDate}
-            onChange={(d) => setReturnDate(d)}
-          />
+          <DatePicker selected={returnDate} onChange={(d) => setReturnDate(d)} />
           <Button onClick={sendOrder}>Foglalás leadása</Button>
         </>
       ) : (

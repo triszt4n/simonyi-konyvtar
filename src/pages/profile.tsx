@@ -1,4 +1,4 @@
-import { Button, Stack, Text, Input } from "@chakra-ui/react"
+import { Button, Stack, Text, Input, Heading } from "@chakra-ui/react"
 import Router from "next/router"
 import { useEffect, useState } from "react"
 
@@ -9,13 +9,15 @@ export default function ProfilePage() {
   const [errorMsg, setErrorMsg] = useState("")
 
   async function handleDeleteProfile() {
-    const res = await fetch("/api/user", {
-      method: "DELETE",
-    })
+    if (confirm("Biztosan törlöd a profilodat?")) {
+      const res = await fetch("/api/user", {
+        method: "DELETE",
+      })
 
-    if (res.status === 204) {
-      mutate({ user: null })
-      Router.replace("/")
+      if (res.status === 204) {
+        mutate({ user: null })
+        Router.replace("/")
+      }
     }
   }
 
@@ -52,10 +54,9 @@ export default function ProfilePage() {
 
   return (
     <>
-      <h1>Profile</h1>
+      <Heading as="h1">Profilom</Heading>
       {user && (
         <>
-          <p>Your profile: {JSON.stringify(user)}</p>
           {errorMsg && <Text color="tomato">{errorMsg}</Text>}
           <form onSubmit={onSubmit}>
             <Stack spacing={3} shouldWrapChildren>
@@ -87,12 +88,16 @@ export default function ProfilePage() {
                 name="newpassword"
                 placeholder="Új jelszó"
               />
-              <Button type="submit">Mentés</Button>
+              <Stack direction="row" spacing={2}>
+                <Button colorScheme="red" onClick={handleDeleteProfile}>
+                  Fiók törlése
+                </Button>
+                <Button colorScheme="green" type="submit">
+                  Mentés
+                </Button>
+              </Stack>
             </Stack>
           </form>
-          <Button color="tomato" onClick={handleDeleteProfile}>
-            Fiók törlése
-          </Button>
         </>
       )}
     </>

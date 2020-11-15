@@ -3,6 +3,7 @@ import NextLink from "next/link"
 import useSWR from "swr"
 
 import ErrorPage from "components/ErrorPage"
+import { STATUSES } from "lib/constants"
 import { userrole } from "lib/prismaClient"
 import { fetcher, useRequireRoles } from "lib/hooks"
 import { OrderWithBooks } from "lib/interfaces"
@@ -20,7 +21,7 @@ export default function OrdersPage() {
         {data &&
           data.map((order) => (
             <ListItem key={order.id}>
-              <Text>{order.status}</Text>
+              <Text>{STATUSES[order.status]}</Text>
               <List>
                 {order.books.map((book) => (
                   <NextLink href={`/orders/${order.id}`} key={book.id}>

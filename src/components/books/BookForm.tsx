@@ -217,6 +217,7 @@ export function BookForm({ initialValue }: Props) {
           <Stack spacing={4} isInline as={Flex} alignItems="center" flexWrap="wrap">
             {formCategories?.map((category) => (
               <Tag
+                size="lg"
                 key={category.id}
                 colorScheme={category.checked ? "green" : "gray"}
                 cursor="pointer"
@@ -290,7 +291,7 @@ export function BookForm({ initialValue }: Props) {
           </FormErrorMessage>
         </FormControl>
 
-        <Button isLoading={formState.isSubmitting} type="submit">
+        <Button colorScheme="green" isLoading={formState.isSubmitting} type="submit">
           Mentés
         </Button>
       </Stack>

@@ -1,8 +1,9 @@
 import { List, ListItem, Text } from "@chakra-ui/react"
-import { fetcher, useUser } from "lib/hooks"
-import { OrderWithBooks } from "lib/interfaces"
 import useSWR from "swr"
 import NextLink from "next/link"
+import { STATUSES } from "lib/constants"
+import { fetcher, useUser } from "lib/hooks"
+import { OrderWithBooks } from "lib/interfaces"
 
 export default function OrdersPage() {
   const [user] = useUser()
@@ -19,7 +20,7 @@ export default function OrdersPage() {
             <ListItem key={order.id}>
               <>
                 <NextLink href={`/orders/${order.id}`}>
-                  <Text>{order.status}</Text>
+                  <Text>{STATUSES[order.status]}</Text>
                 </NextLink>
                 <List>
                   {order.books.map((book) => (

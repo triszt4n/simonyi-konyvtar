@@ -16,9 +16,10 @@ import useSWR from "swr"
 
 import Comment from "components/orders/Comment"
 import HasRole from "components/HasRole"
+import { STATUSES } from "lib/constants"
 import { fetcher, useUser } from "lib/hooks"
 import { CommentWithUser, OrderWithBooks } from "lib/interfaces"
-import { orderstatus, userrole } from "lib/prismaClient"
+import { userrole } from "lib/prismaClient"
 
 interface FormData {
   comment: string
@@ -91,14 +92,14 @@ export default function OrderPage() {
         <>
           <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
             <Select onChange={updateStatus} defaultValue={order.status}>
-              {Object.keys(orderstatus).map((status) => (
-                <option value={status} key={status}>
-                  {status}
+              {Object.keys(STATUSES).map((key) => (
+                <option value={key} key={key}>
+                  {STATUSES[key]}
                 </option>
               ))}
             </Select>
           </HasRole>
-          <Text>{order.status}</Text>
+          <Text>{STATUSES[order.status]}</Text>
           <List>
             {order?.books.map((book) => (
               <ListItem key={book.id}>

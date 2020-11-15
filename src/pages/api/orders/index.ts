@@ -16,11 +16,14 @@ handler
   .post(async (req, res) => {
     try {
       const userId = req.user.id
-      const books = JSON.parse(req.body) as CartItem[]
+      const { books, returnDate } = JSON.parse(req.body) as {
+        books: CartItem[],
+        returnDate: Date
+      }
 
       const createdOrder = await db.order.create({
         data: {
-          returnDate: new Date(), // TODO
+          returnDate,
           user: {
             connect: { id: userId },
           },
