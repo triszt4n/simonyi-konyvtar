@@ -72,7 +72,16 @@ handler
   .get(async (req, res) => {
     try {
       const orders = await db.order.findMany({
-        include: { books: { include: { books: true } } }
+        include: {
+          books: { include: { books: true } },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            }
+          }
+        }
       })
       res.json(orders)
     } catch (e) {

@@ -1,12 +1,4 @@
-import {
-  List,
-  ListItem,
-  IconButton,
-  Text,
-  Flex,
-  Link,
-  Tooltip,
-} from "@chakra-ui/react"
+import { List, ListItem, IconButton, Text, Flex, Link, Tooltip } from "@chakra-ui/react"
 import { HiPencilAlt, HiTrash } from "react-icons/hi"
 
 import { BookWithCategories } from "lib/interfaces"
@@ -28,7 +20,11 @@ export function BookList({ data, onDelete }: Props) {
               <Link>{book.title}</Link>
             </NextLink>
             <NextLink href={`/admin/books/${book.id}/edit`}>
-              <IconButton aria-label="szerkesztés" icon={<HiPencilAlt />} />
+              <Link>
+                <Tooltip label="Szerkesztés" aria-label="Szerkesztés" placement="top">
+                  <IconButton aria-label="szerkesztés" icon={<HiPencilAlt />} />
+                </Tooltip>
+              </Link>
             </NextLink>
             <Tooltip label="Törlés" aria-label="Törlés" placement="top">
               <IconButton

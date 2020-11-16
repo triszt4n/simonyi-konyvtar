@@ -8,6 +8,10 @@ export interface BookWithCategoryIds extends Book {
   categories: { id: number }[]
 }
 
+export interface BookWithCategoriesAndOrders extends BookWithCategories {
+  orders: (BookToOrder & { orders: Order })[]
+}
+
 export interface OrderWithComments extends Order {
   comments: Comment[]
 }
@@ -20,8 +24,11 @@ export interface OrderWithBooks extends Order {
   books: BookToOrderWithBooks[]
 }
 
-export interface OrderWithBooksAndComments extends Order {
-  books: BookToOrderWithBooks[]
+export interface OrderWithBooksAndUser extends OrderWithBooks {
+  user: Partial<User>
+}
+
+export interface OrderWithBooksAndComments extends OrderWithBooks {
   comments: CommentWithUser[]
 }
 

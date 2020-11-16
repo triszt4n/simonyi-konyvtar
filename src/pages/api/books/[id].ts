@@ -6,6 +6,7 @@ import { BookWithCategories, BookWithCategoryIds } from "lib/interfaces"
 import db from "lib/db"
 import parseMultipart from "lib/parseMultipart"
 import { uploadToS3 } from "lib/s3"
+import { BookSchema } from "lib/schemas"
 import auth from "middleware/auth"
 import requireLogin from "middleware/requireLogin"
 import requireRole from "middleware/requireRole"
@@ -22,7 +23,10 @@ handler
       try {
         const book = await db.book.findOne({
           where: { id: bookId },
-          include: { categories: true }
+          include: {
+            categories: true,
+            orders: { include: { orders: true } }
+          }
         })
         res.json(book)
       } catch (e) {
@@ -45,6 +49,12 @@ handler
       bookUpdate.count = Number(bookUpdate.count)
       bookUpdate.stockCount = Number(bookUpdate.stockCount)
       bookUpdate.publishedAt = Number(bookUpdate.publishedAt)
+
+      const isValid = BookSchema.isValid(bookUpdate)
+
+      if (!isValid) {
+        res.status(400).json({ message: "Nem megfelelő formátum" })
+      }
 
       // @ts-ignore
       const parsedCategories = JSON.parse(categories) as { id: number }[]

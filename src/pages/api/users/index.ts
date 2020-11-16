@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import nextConnect from "next-connect"
 
 import db from "lib/db"
+import { UserSchema } from "lib/schemas"
 import auth from "middleware/auth"
 import requireLogin from "middleware/requireLogin"
 import requireRole from "middleware/requireRole"
@@ -14,12 +15,18 @@ handler
   .use(auth)
   .post(async (req, res) => {
     const { email, name, password } = req.body
-    if (!email || !name || !password) {
-      return res.status(400).send("Missing fields")
+    const isValid = UserSchema.isValid(req.body)
+    if (!isValid) {
+      return res.status(400).json({ message: "Nem megfelelő formátum" })
     }
     // Security-wise, you must hash the password before saving it
     const hashedPass = await argon2.hash(password)
+    const u = db.user.findOne({ where: { email } })
+    if (u) {
+      return res.status(406).json({ message: "A megadott email már foglalt" })
+    }
     const user = { name, password: hashedPass, email }
+
     let createdUser: User
     try {
       createdUser = await db.user.create({

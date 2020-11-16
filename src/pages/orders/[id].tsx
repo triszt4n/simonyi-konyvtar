@@ -1,4 +1,5 @@
 import {
+  Tag,
   Text,
   List,
   ListItem,
@@ -14,13 +15,17 @@ import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
 
-import Comment from "components/orders/Comment"
 import ErrorPage from "components/ErrorPage"
 import HasRole from "components/HasRole"
 import Loading from "components/Loading"
+import Comment from "components/orders/Comment"
 import { STATUSES } from "lib/constants"
 import { fetcher } from "lib/hooks"
-import { CommentWithUser, OrderWithBooksAndComments } from "lib/interfaces"
+import {
+  CommentWithUser,
+  OrderWithBooksAndComments,
+  OrderWithBooksAndUser,
+} from "lib/interfaces"
 import { userrole } from "lib/prismaClient"
 
 interface FormData {
@@ -28,14 +33,12 @@ interface FormData {
 }
 
 export default function OrderPage() {
-  const {
-    query: { id: orderId },
-  } = useRouter()
+  const router = useRouter()
+  const orderId = router.query.id
 
-  const { data: order, mutate: mutateOrder, error } = useSWR<OrderWithBooksAndComments>(
-    orderId ? `/api/orders/${orderId}` : null,
-    fetcher,
-  )
+  const { data: order, mutate: mutateOrder, error } = useSWR<
+    OrderWithBooksAndComments & OrderWithBooksAndUser
+  >(orderId ? `/api/orders/${orderId}` : null, fetcher)
 
   const { handleSubmit, errors, register, reset, formState } = useForm<FormData>({
     defaultValues: { comment: "" },
@@ -73,8 +76,8 @@ export default function OrderPage() {
     })
     if (!res.ok) {
       toast({
-        title: "Hiba tortent!",
-        description: "Nem sikerult frissiteni az allapotot",
+        title: "Hiba történt",
+        description: "Nem sikerült frissíteni az állapotot",
         status: "error",
         isClosable: true,
         duration: 3000,
@@ -82,6 +85,23 @@ export default function OrderPage() {
     } else {
       const newOrder = await res.json()
       mutateOrder((order) => ({ ...order, status: newOrder.status }))
+    }
+  }
+
+  async function deleteOrder() {
+    if (confirm("Biztosan törlöd a foglalást?")) {
+      const res = await fetch(`/api/orders/${orderId}`, { method: "DELETE" })
+      if (res.ok) {
+        router.replace("/orders")
+      } else {
+        toast({
+          title: "Hiba történt",
+          description: "Nem sikerült a foglalás törlése",
+          status: "error",
+          isClosable: true,
+          duration: 3000,
+        })
+      }
     }
   }
 
@@ -98,7 +118,13 @@ export default function OrderPage() {
               ))}
             </Select>
           </HasRole>
-          <Text>{STATUSES[order.status]}</Text>
+          <Tag size="md">{STATUSES[order.status]}</Tag>
+          <Text>{order.user.name}</Text>
+          <Text>
+            {new Date(order.createdAt).toLocaleDateString()}
+            {" - "}
+            {new Date(order.returnDate).toLocaleDateString()}
+          </Text>
           <List>
             {order?.books.map((book) => (
               <ListItem key={book.id}>
@@ -112,6 +138,9 @@ export default function OrderPage() {
               <Comment data={comment} key={comment.id} />
             ))}
           </List>
+          <Button colorScheme="red" onClick={deleteOrder}>
+            Rendelés törlése
+          </Button>
         </>
       )}
       <form onSubmit={handleSubmit(addComment)}>

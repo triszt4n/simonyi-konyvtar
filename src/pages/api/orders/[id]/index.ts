@@ -41,11 +41,37 @@ handler
               }
             }
           },
-          books: { include: { books: true } }
+          books: { include: { books: true } },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            }
+          }
         }
       })
 
       res.json(order)
+    } catch (e) {
+      console.error(e)
+      res.status(500).json({ message: e.message })
+    }
+  })
+  .delete(async (req, res) => {
+    try {
+      const orderId = Number(req.query.id)
+      const orders = await db.bookToOrder.findMany({ where: { orderId } })
+      const removeConnectedBooks = db.bookToOrder.deleteMany({ where: { orderId } })
+      const removeOrder = db.order.delete({ where: { id: orderId } })
+      const updateBooks = orders.map(o =>
+        db.book.update({
+          where: { id: o.bookId },
+          data: { stockCount: { increment: o.quantity } }
+        }))
+      // @ts-ignore
+      await db.$transaction([removeConnectedBooks, removeOrder, ...updateBooks])
+      res.status(200).end()
     } catch (e) {
       console.error(e)
       res.status(500).json({ message: e.message })
@@ -66,18 +92,6 @@ handler
     } catch (e) {
       console.error(e)
       res.status(500).json({ error: e.message })
-    }
-  })
-  .delete(async (req, res) => {
-    try {
-      const orderId = Number(req.query.id)
-      const removeConnectedBooks = db.bookToOrder.deleteMany({ where: { orderId } })
-      const removeOrder = db.order.delete({ where: { id: orderId } })
-      await db.$transaction([removeConnectedBooks, removeOrder])
-      res.status(200).end()
-    } catch (e) {
-      console.error(e)
-      res.status(500).json({ message: e.message })
     }
   })
 

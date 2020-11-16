@@ -34,12 +34,12 @@ export default function SignupPage() {
       body: JSON.stringify(body),
     })
 
-    if (res.status === 201) {
+    if (res.ok) {
       const userObj = await res.json()
       // set user to useSWR state
       mutate(userObj)
     } else {
-      setErrorMsg(await res.text())
+      setErrorMsg((await res.json()).message)
     }
   }
 

@@ -18,14 +18,14 @@ import useSWR from "swr"
 import TimeAgo from "components/HunTimeAgo"
 import Loading from "components/Loading"
 import { useCart, fetcher } from "lib/hooks"
-import { BookWithCategories, CartItem } from "lib/interfaces"
+import { BookWithCategoriesAndOrders, CartItem } from "lib/interfaces"
 
 const BookPage = () => {
   const {
     query: { id },
   } = useRouter()
 
-  const { data: book, error } = useSWR<BookWithCategories>(
+  const { data: book, error } = useSWR<BookWithCategoriesAndOrders>(
     id ? `/api/books/${id}` : null,
     fetcher,
   )

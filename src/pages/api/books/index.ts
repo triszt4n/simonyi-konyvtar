@@ -6,6 +6,7 @@ import db from "lib/db"
 import parseMultipart from "lib/parseMultipart"
 import { uploadToS3 } from "lib/s3"
 import auth from "middleware/auth"
+import { BookSchema } from "lib/schemas"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
@@ -28,6 +29,13 @@ handler
       rest.count = Number(rest.count)
       rest.stockCount = Number(rest.stockCount)
       rest.publishedAt = Number(rest.publishedAt)
+
+      const isValid = BookSchema.isValid(rest)
+
+      if (!isValid) {
+        res.status(400).json({ message: "Nem megfelelő formátum" })
+      }
+
       // @ts-ignore
       const parsedCategories = JSON.parse(categories)
 
