@@ -25,7 +25,8 @@ handler
     try {
       const orders = await db.order.findMany({
         where: { userId: req.user.id },
-        include: { books: { include: { books: true } } }
+        include: { books: { include: { books: true } } },
+        orderBy: { createdAt: "desc" }
       })
       res.json(orders)
     } catch (e) {

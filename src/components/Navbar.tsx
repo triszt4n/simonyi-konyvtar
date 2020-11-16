@@ -4,8 +4,8 @@ import React from "react"
 import { HiOutlineShoppingCart } from "react-icons/hi"
 
 import { DarkModeSwitch } from "components/DarkModeSwitch"
+import HasRole from "components/HasRole"
 import { useCart, useUser } from "lib/hooks"
-import HasRole from "./HasRole"
 import { userrole } from "lib/prismaClient"
 
 export default function Navbar() {
@@ -18,26 +18,20 @@ export default function Navbar() {
   }
 
   return (
-    <Flex
-      w="100%"
-      px={5}
-      py={4}
-      justifyContent="space-between"
-      alignItems="center"
-    >
+    <Flex w="100%" px={5} py={4} justifyContent="space-between" alignItems="center">
       <Stack shouldWrapChildren spacing={8} direction="row" alignItems="center">
         <NextLink href="/">
           <Link>Simonyi Könyvtár</Link>
         </NextLink>
         {user ? (
           <Stack shouldWrapChildren spacing={8} direction="row">
+            <NextLink href="/orders">
+              <Link>Kölcsönzéseim</Link>
+            </NextLink>
             <NextLink href="/profile">
               <Link>Profilom</Link>
             </NextLink>
             <Link onClick={handleLogout}>Kijelentkezés</Link>
-            <NextLink href="/orders">
-              <Link>Kölcsönzéseim</Link>
-            </NextLink>
           </Stack>
         ) : (
           <Stack shouldWrapChildren spacing={8} direction="row">

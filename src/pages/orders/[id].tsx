@@ -16,6 +16,7 @@ import useSWR from "swr"
 
 import Comment from "components/orders/Comment"
 import HasRole from "components/HasRole"
+import Loading from "components/Loading"
 import { STATUSES } from "lib/constants"
 import { fetcher, useUser } from "lib/hooks"
 import { CommentWithUser, OrderWithBooks } from "lib/interfaces"
@@ -46,6 +47,8 @@ export default function OrderPage() {
   })
 
   const toast = useToast()
+
+  if (!order) return <Loading />
 
   async function addComment(value: FormData) {
     if (!value.comment) return

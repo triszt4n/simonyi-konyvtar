@@ -1,4 +1,4 @@
-import { List, ListItem, Text } from "@chakra-ui/react"
+import { List, ListItem, Stack, Tag, Text } from "@chakra-ui/react"
 import useSWR from "swr"
 import NextLink from "next/link"
 import { STATUSES } from "lib/constants"
@@ -14,27 +14,39 @@ export default function OrdersPage() {
 
   return (
     <>
-      <List>
+      <List as={Stack} direction="column" spacing={4}>
         {data &&
           data.map((order) => (
-            <ListItem key={order.id}>
-              <>
-                <Text>{order.createdAt}</Text>
-                {"-"}
-                <Text>{order.returnDate}</Text>
-                <NextLink href={`/orders/${order.id}`}>
-                  <Text>{STATUSES[order.status]}</Text>
-                </NextLink>
-                <List>
-                  {order.books.map((book) => (
-                    <ListItem key={book.id}>
-                      <Text>{book.books.title}</Text>
-                      <Text>{book.quantity}</Text>
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-            </ListItem>
+            <NextLink href={`/orders/${order.id}`} key={order.id}>
+              <ListItem
+                cursor="pointer"
+                boxShadow="md"
+                p="6"
+                rounded="md"
+                _hover={{
+                  transition: "all 200ms ease-in-out",
+                  transform: "translateY(-0.5rem)",
+                }}
+              >
+                <>
+                  <Tag size="md">{STATUSES[order.status]}</Tag>
+                  <Text>
+                    {new Date(order.createdAt).toLocaleDateString()}
+                    {" - "}
+                    {new Date(order.returnDate).toLocaleDateString()}
+                  </Text>
+                  <List>
+                    {order.books.map((book) => (
+                      <ListItem key={book.id}>
+                        <Text>
+                          {book.books.title} {book.quantity}
+                        </Text>
+                      </ListItem>
+                    ))}
+                  </List>
+                </>
+              </ListItem>
+            </NextLink>
           ))}
       </List>
     </>

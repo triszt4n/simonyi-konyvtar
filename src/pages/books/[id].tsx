@@ -21,10 +21,12 @@ import { useCart, fetcher } from "lib/hooks"
 import { BookWithCategories, CartItem } from "lib/interfaces"
 
 const BookPage = () => {
-  const router = useRouter()
+  const {
+    query: { id },
+  } = useRouter()
 
   const { data: book, error } = useSWR<BookWithCategories>(
-    `/api/books/${router.query.id}`,
+    id ? `/api/books/${id}` : null,
     fetcher,
   )
   const toast = useToast()
