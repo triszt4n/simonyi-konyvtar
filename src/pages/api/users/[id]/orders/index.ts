@@ -18,7 +18,7 @@ handler
     if (role === userrole.ADMIN || role === userrole.EDITOR || req.user.id === userId) {
       next()
     } else {
-      res.status(401).send("unauthorized")
+      res.status(401).json({ message: "Nincs megfelelő jogosultságod" })
     }
   })
   .get(async (req, res) => {

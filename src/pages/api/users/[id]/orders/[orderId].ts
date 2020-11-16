@@ -20,20 +20,7 @@ handler
       req.user.id === order.userId) {
       next()
     } else {
-      res.status(401).send("unauthorized")
-    }
-  })
-  .get(async (req, res) => {
-    try {
-      const orderId = Number(req.query.orderId)
-      const order = await db.order.findOne({
-        where: { id: orderId },
-        include: { books: { include: { books: true } } }
-      })
-      res.json(order)
-    } catch (e) {
-      console.error(e)
-      res.status(500).json({ message: e.message })
+      res.status(401).json({ message: "Nincs megfelelő jogosultságod" })
     }
   })
 

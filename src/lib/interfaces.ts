@@ -20,6 +20,11 @@ export interface OrderWithBooks extends Order {
   books: BookToOrderWithBooks[]
 }
 
+export interface OrderWithBooksAndComments extends Order {
+  books: BookToOrderWithBooks[]
+  comments: CommentWithUser[]
+}
+
 export interface CommentWithUser extends Comment {
   user: User
 }

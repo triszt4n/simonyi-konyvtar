@@ -8,6 +8,7 @@ import {
   Text,
   Wrap,
   WrapItem,
+  chakra,
 } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import NextImage from "next/image"
@@ -16,7 +17,7 @@ import NextLink from "next/link"
 import { BookWithCategories } from "lib/interfaces"
 import TimeAgo from "components/HunTimeAgo"
 
-const MotionBox = motion.custom(Box)
+const MotionBox = chakra(motion.div)
 
 interface BookPreviewProps {
   book: BookWithCategories
@@ -26,8 +27,9 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
   return (
     <NextLink href="/books/[id]" as={`/books/${book.id}`}>
       <MotionBox
-        padding="0.7rem"
-        borderRadius="4px"
+        p={4}
+        rounded="md"
+        cursor="pointer"
         whileHover={{
           boxShadow: "0px 0px 8px lightgray",
         }}

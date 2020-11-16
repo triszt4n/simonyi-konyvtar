@@ -20,7 +20,7 @@ handler
       req.user.id === order.userId) {
       next()
     } else {
-      res.status(401).send("unauthorized")
+      res.status(401).json({ message: "Nincs megfelelő jogosultságod" })
     }
   })
   .post(async (req, res) => {

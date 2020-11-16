@@ -12,6 +12,45 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>()
 handler
   .use(auth)
   .use(requireLogin)
+  .use(async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
+    const role = req.user.role
+    const orderId = Number(req.query.id)
+    const order = await db.order.findOne({ where: { id: orderId } })
+    if (role === userrole.ADMIN ||
+      role === userrole.EDITOR ||
+      req.user.id === order.userId) {
+      next()
+    } else {
+      res.status(401).json({ message: "Nincs megfelelő jogosultságod" })
+    }
+  })
+  .get(async (req, res) => {
+    try {
+      const id = Number(req.query.id)
+      const order = await db.order.findOne({
+        where: { id },
+        include: {
+          comments: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  role: true,
+                }
+              }
+            }
+          },
+          books: { include: { books: true } }
+        }
+      })
+
+      res.json(order)
+    } catch (e) {
+      console.error(e)
+      res.status(500).json({ message: e.message })
+    }
+  })
   .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .put(async (req, res) => {
     const updates = JSON.parse(req.body)
@@ -36,34 +75,6 @@ handler
       const removeOrder = db.order.delete({ where: { id: orderId } })
       await db.$transaction([removeConnectedBooks, removeOrder])
       res.status(200).end()
-    } catch (e) {
-      console.error(e)
-      res.status(500).json({ message: e.message })
-    }
-  })
-  .use(async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
-    const role = req.user.role
-    const orderId = Number(req.query.id)
-    const order = await db.order.findOne({ where: { id: orderId } })
-    if (role === userrole.ADMIN ||
-      role === userrole.EDITOR ||
-      req.user.id === order.userId) {
-      next()
-    } else {
-      res.status(401).send("unauthorized")
-    }
-  })
-  .get(async (req, res) => {
-    try {
-      const id = Number(req.query.id)
-      const order = await db.order.findOne({
-        where: { id },
-        include: {
-          comments: true,
-          books: { include: { books: true } }
-        }
-      })
-      res.json(order)
     } catch (e) {
       console.error(e)
       res.status(500).json({ message: e.message })

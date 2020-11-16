@@ -21,7 +21,18 @@ handler
         returnDate: Date
       }
 
-      const createdOrder = await db.order.create({
+      for await (const book of books) {
+        const b = await db.book.findOne({ where: { id: book.id } })
+        if (book.quantity > b.stockCount) {
+          return res
+            .status(422)
+            .json({
+              message: `A(z) ${book.title} könyvből csak ${b.stockCount} van raktáron`
+            })
+        }
+      }
+
+      const createOrder = db.order.create({
         data: {
           returnDate,
           user: {
@@ -30,13 +41,28 @@ handler
           books: {
             create: books.map(it => ({
               quantity: it.quantity,
-              books: { connect: { id: it.id } }
-            }))
+              books: {
+                connect: { id: it.id },
+              }
+            })),
           }
         },
       })
 
-      res.json(createdOrder)
+      const bookUpdates = books.map(book => {
+        const bookUpdate = db.book.update({
+          where: { id: book.id },
+          data: {
+            stockCount: { decrement: book.quantity }
+          }
+        })
+        return bookUpdate
+      })
+
+      // @ts-ignore
+      const [order] = await db.$transaction([createOrder, ...bookUpdates])
+
+      res.json(order)
     } catch (e) {
       console.error(e)
       res.status(500).json({ message: e.message })

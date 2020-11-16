@@ -10,7 +10,7 @@ const requireRole = (...roles: userrole[]) => {
     if (roles.some(it => it == req.user.role)) {
       return next()
     } else {
-      return res.status(401).send("unauthorized")
+      return res.status(401).json({ message: "Nincs megfelelő jogosultságod" })
     }
   }
 }

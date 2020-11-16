@@ -4,7 +4,20 @@ import createPersistedState from "use-persisted-state"
 import { Cart, CartItem } from "lib/interfaces"
 import { userrole } from "./prismaClient"
 
-export const fetcher = (url: string) => fetch(url).then((r) => r.json())
+export const fetcher = async (url) => {
+  const res = await fetch(url)
+  // If the status code is not in the range 200-299,
+  // we still try to parse and throw it.
+  if (!res.ok) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const error: any = new Error("An error occurred while fetching the data.")
+    // Attach extra info to the error object.
+    error.info = await res.json()
+    error.status = res.status
+    throw error
+  }
+  return res.json()
+}
 
 export function useUser() {
   const { data, mutate } = useSWR("/api/user", fetcher)
@@ -34,7 +47,7 @@ export const useCart = (initialState: Cart = { sumCount: 0, books: [] }) => {
           setCart({
             sumCount: cart.sumCount + 1,
             books: cart.books.map((it) =>
-              it.id === book.id ? { ...it, quantity: it.quantity + 1 } : it
+              it.id === book.id ? { ...it, quantity: it.quantity + 1 } : it,
             ),
           })
         } else {
@@ -52,7 +65,7 @@ export const useCart = (initialState: Cart = { sumCount: 0, books: [] }) => {
         setCart({
           sumCount: cart.sumCount - 1,
           books: cart.books.map((it) =>
-            it.id === book.id ? { ...it, quantity: it.quantity - 1 } : it
+            it.id === book.id ? { ...it, quantity: it.quantity - 1 } : it,
           ),
         })
       }

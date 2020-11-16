@@ -15,11 +15,12 @@ import { useForm } from "react-hook-form"
 import useSWR from "swr"
 
 import Comment from "components/orders/Comment"
+import ErrorPage from "components/ErrorPage"
 import HasRole from "components/HasRole"
 import Loading from "components/Loading"
 import { STATUSES } from "lib/constants"
-import { fetcher, useUser } from "lib/hooks"
-import { CommentWithUser, OrderWithBooks } from "lib/interfaces"
+import { fetcher } from "lib/hooks"
+import { CommentWithUser, OrderWithBooksAndComments } from "lib/interfaces"
 import { userrole } from "lib/prismaClient"
 
 interface FormData {
@@ -27,18 +28,12 @@ interface FormData {
 }
 
 export default function OrderPage() {
-  const [user] = useUser()
   const {
     query: { id: orderId },
   } = useRouter()
 
-  const { data: order, mutate: mutateOrder } = useSWR<OrderWithBooks>(
-    user ? `/api/users/${user.id}/orders/${orderId}` : null,
-    fetcher,
-  )
-
-  const { data: comments, mutate: mutateComments } = useSWR<CommentWithUser[]>(
-    orderId ? `/api/orders/${orderId}/comments` : null,
+  const { data: order, mutate: mutateOrder, error } = useSWR<OrderWithBooksAndComments>(
+    orderId ? `/api/orders/${orderId}` : null,
     fetcher,
   )
 
@@ -48,6 +43,7 @@ export default function OrderPage() {
 
   const toast = useToast()
 
+  if (error) return <ErrorPage statusCode={error.status} message={error.info.message} />
   if (!order) return <Loading />
 
   async function addComment(value: FormData) {
@@ -63,8 +59,8 @@ export default function OrderPage() {
     if (res.ok) {
       const newComment: CommentWithUser = await res.json()
 
-      mutateComments((comments) => {
-        return [...comments, newComment]
+      mutateOrder((order) => {
+        return { ...order, comments: [...order.comments, newComment] }
       })
       reset()
     }
@@ -85,7 +81,7 @@ export default function OrderPage() {
       })
     } else {
       const newOrder = await res.json()
-      mutateOrder(newOrder)
+      mutateOrder((order) => ({ ...order, status: newOrder.status }))
     }
   }
 
@@ -111,14 +107,12 @@ export default function OrderPage() {
               </ListItem>
             ))}
           </List>
+          <List as={Flex} flexDirection="column">
+            {order.comments.map((comment) => (
+              <Comment data={comment} key={comment.id} />
+            ))}
+          </List>
         </>
-      )}
-      {comments && (
-        <List as={Flex} flexDirection="column">
-          {comments.map((comment) => (
-            <Comment data={comment} key={comment.id} />
-          ))}
-        </List>
       )}
       <form onSubmit={handleSubmit(addComment)}>
         <Flex dir="row" mt={4}>

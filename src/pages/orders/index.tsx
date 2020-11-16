@@ -1,9 +1,13 @@
-import { List, ListItem, Stack, Tag, Text } from "@chakra-ui/react"
+import { List, ListItem, Stack, Tag, Text, chakra } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 import useSWR from "swr"
 import NextLink from "next/link"
+
 import { STATUSES } from "lib/constants"
 import { fetcher, useUser } from "lib/hooks"
 import { OrderWithBooks } from "lib/interfaces"
+
+const MotionBox = chakra(motion.div)
 
 export default function OrdersPage() {
   const [user] = useUser()
@@ -18,17 +22,14 @@ export default function OrdersPage() {
         {data &&
           data.map((order) => (
             <NextLink href={`/orders/${order.id}`} key={order.id}>
-              <ListItem
-                cursor="pointer"
-                boxShadow="md"
-                p="6"
-                rounded="md"
-                _hover={{
-                  transition: "all 200ms ease-in-out",
-                  transform: "translateY(-0.5rem)",
-                }}
-              >
-                <>
+              <ListItem cursor="pointer">
+                <MotionBox
+                  rounded="md"
+                  p={4}
+                  whileHover={{
+                    boxShadow: "0px 0px 8px lightgray",
+                  }}
+                >
                   <Tag size="md">{STATUSES[order.status]}</Tag>
                   <Text>
                     {new Date(order.createdAt).toLocaleDateString()}
@@ -44,7 +45,7 @@ export default function OrdersPage() {
                       </ListItem>
                     ))}
                   </List>
-                </>
+                </MotionBox>
               </ListItem>
             </NextLink>
           ))}
