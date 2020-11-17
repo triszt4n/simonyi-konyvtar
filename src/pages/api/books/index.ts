@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import nextConnect from "next-connect"
+import escape from "pg-escape"
 
 import { BookWithCategoryIds } from "lib/interfaces"
 import db from "lib/db"
@@ -14,8 +15,20 @@ handler
   .use(auth)
   .get(async (req, res) => {
     try {
-      const books = await db.book.findMany({ include: { categories: true, } })
-      res.json(books)
+      const term = req.query.q
+      if (term) {
+        const sql = escape(`
+        select id, title, author, "stockCount", "updatedAt", image
+        from "Book"
+        where document_with_idx @@ plainto_tsquery('%s')
+        order by ts_rank(document_with_idx, plainto_tsquery('%s')) desc;`, term)
+        const books = await db.$queryRaw(sql)
+
+        res.json(books)
+      } else {
+        const books = await db.book.findMany({ include: { categories: true, } })
+        res.json(books)
+      }
     } catch (e) {
       console.error(e.message)
       res.status(500).json({ message: e.message })
@@ -23,7 +36,6 @@ handler
   })
   .post(async (req, res) => {
     try {
-      // TODO: validate book params
       const { parsedFields, parsedFiles } = await parseMultipart<BookWithCategoryIds>(req)
       const { categories, ...rest } = parsedFields
       rest.count = Number(rest.count)

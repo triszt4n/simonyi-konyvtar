@@ -1,26 +1,15 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  List,
-  ListItem,
-  Tag,
-  Text,
-  Wrap,
-  WrapItem,
-  chakra,
-} from "@chakra-ui/react"
+import { Box, Flex, Heading, List, ListItem, Text, chakra } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import NextImage from "next/image"
 import NextLink from "next/link"
 
-import { BookWithCategories } from "lib/interfaces"
 import TimeAgo from "components/HunTimeAgo"
+import { Book } from "@prisma/client"
 
 const MotionBox = chakra(motion.div)
 
 interface BookPreviewProps {
-  book: BookWithCategories
+  book: Book
 }
 
 export const BookPreview = ({ book }: BookPreviewProps) => {
@@ -62,14 +51,7 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
             </ListItem>
           </List>
         </Flex>
-        <Wrap mt={2}>
-          {book.categories?.map((it) => (
-            <WrapItem key={it.id}>
-              <Tag>{it.name}</Tag>
-            </WrapItem>
-          ))}
-        </Wrap>
-        <Text mt={2} opacity={0.7} fontSize="sm">
+        <Text mt={2} opacity={0.6} fontSize="sm">
           Legutóbb frissítve:&nbsp;
           <TimeAgo date={book.updatedAt} />
         </Text>
