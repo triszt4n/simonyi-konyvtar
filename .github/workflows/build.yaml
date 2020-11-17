@@ -15,6 +15,9 @@ jobs:
       - name: install
         run: yarn install
       - name: build
+        env:
+          ROLLBAR_CLIENT_TOKEN: ${{ secrets.ROLLBAR_CLIENT_TOKEN }}
+          ROLLBAR_SERVER_TOKEN: ${{ secrets.ROLLBAR_SERVER_TOKEN }}
         run: yarn build
       - name: lint
         run: yarn lint
