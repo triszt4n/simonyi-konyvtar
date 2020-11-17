@@ -1,8 +1,10 @@
 import {
+  Stack,
   Tag,
   Text,
   List,
   ListItem,
+  Link,
   Button,
   FormControl,
   FormErrorMessage,
@@ -11,8 +13,11 @@ import {
   Select,
   useToast,
 } from "@chakra-ui/react"
+import NextImage from "next/image"
+import NextLink from "next/link"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
+import { HiOutlineUser, HiOutlineCalendar, HiArrowNarrowRight } from "react-icons/hi"
 import useSWR from "swr"
 
 import ErrorPage from "components/ErrorPage"
@@ -36,7 +41,7 @@ export default function OrderPage() {
   const router = useRouter()
   const orderId = router.query.id
 
-  const { data: order, mutate: mutateOrder, error } = useSWR<
+  const { data: order, mutate, error } = useSWR<
     OrderWithBooksAndComments & OrderWithBooksAndUser
   >(orderId ? `/api/orders/${orderId}` : null, fetcher)
 
@@ -62,7 +67,7 @@ export default function OrderPage() {
     if (res.ok) {
       const newComment: CommentWithUser = await res.json()
 
-      mutateOrder((order) => {
+      mutate((order) => {
         return { ...order, comments: [...order.comments, newComment] }
       })
       reset()
@@ -84,7 +89,7 @@ export default function OrderPage() {
       })
     } else {
       const newOrder = await res.json()
-      mutateOrder((order) => ({ ...order, status: newOrder.status }))
+      mutate((order) => ({ ...order, status: newOrder.status }))
     }
   }
 
@@ -109,53 +114,87 @@ export default function OrderPage() {
     <>
       {order && (
         <>
-          <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
-            <Select onChange={updateStatus} defaultValue={order.status}>
-              {Object.keys(STATUSES).map((key) => (
-                <option value={key} key={key}>
-                  {STATUSES[key]}
-                </option>
+          <Stack direction="column" spacing={4} align="start">
+            <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
+              <Select onChange={updateStatus} defaultValue={order.status}>
+                {Object.keys(STATUSES).map((key) => (
+                  <option value={key} key={key}>
+                    {STATUSES[key]}
+                  </option>
+                ))}
+              </Select>
+            </HasRole>
+            <Tag size="md">{STATUSES[order.status]}</Tag>
+            <Stack direction="row" spacing={2} align="center">
+              <HiOutlineUser />
+              <Text>{order.user.name}</Text>
+            </Stack>
+            <Stack direction="row" spacing={2} align="center">
+              <HiOutlineCalendar />
+              <Stack direction="row" spacing={2} align="center">
+                <Text>{new Date(order.createdAt).toLocaleDateString()}</Text>
+                <HiArrowNarrowRight />
+                <Text>{new Date(order.returnDate).toLocaleDateString()}</Text>
+              </Stack>
+            </Stack>
+            <List alignSelf="stretch" as={Stack} spacing={4}>
+              {order?.books.map((book) => (
+                <ListItem key={book.id} boxShadow="md" p="6" rounded="md">
+                  <Flex
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Flex direction="row" alignItems="center">
+                      <NextImage
+                        src={
+                          book.books.image
+                            ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.books.image}`
+                            : "https://placekitten.org/30/40"
+                        }
+                        height={60}
+                        width={40}
+                      />
+                      <Flex direction="column" ml={2}>
+                        <NextLink href={`/books/${book.books.id}`}>
+                          <Link>
+                            <Text fontSize="xl">{book.books.title}</Text>
+                          </Link>
+                        </NextLink>
+                        <Text fontSize="sm">{book.books.author}</Text>
+                      </Flex>
+                    </Flex>
+                    <Text>{book.quantity} db</Text>
+                  </Flex>
+                </ListItem>
               ))}
-            </Select>
-          </HasRole>
-          <Tag size="md">{STATUSES[order.status]}</Tag>
-          <Text>{order.user.name}</Text>
-          <Text>
-            {new Date(order.createdAt).toLocaleDateString()}
-            {" - "}
-            {new Date(order.returnDate).toLocaleDateString()}
-          </Text>
-          <List>
-            {order?.books.map((book) => (
-              <ListItem key={book.id}>
-                <Text>{book.books.title}</Text>
-                <Text>{book.books.author}</Text>
-              </ListItem>
-            ))}
-          </List>
-          <List as={Flex} flexDirection="column">
-            {order.comments.map((comment) => (
-              <Comment data={comment} key={comment.id} />
-            ))}
-          </List>
-          <Button colorScheme="red" onClick={deleteOrder}>
-            Rendelés törlése
-          </Button>
+            </List>
+            <Button colorScheme="red" onClick={deleteOrder}>
+              Foglalás törlése
+            </Button>
+          </Stack>
+          <Flex direction="column" justifyContent="space-between">
+            <List as={Flex} flexDirection="column">
+              {order.comments.map((comment) => (
+                <Comment data={comment} key={comment.id} />
+              ))}
+            </List>
+            <form onSubmit={handleSubmit(addComment)}>
+              <Flex dir="row" mt={4}>
+                <FormControl flex="1" mr={4}>
+                  <Input name="comment" placeholder="Írd be az üzeneted" ref={register} />
+                  <FormErrorMessage>
+                    {errors.comment && errors.comment.message}
+                  </FormErrorMessage>
+                </FormControl>
+                <Button isLoading={formState.isSubmitting} type="submit">
+                  Küldés
+                </Button>
+              </Flex>
+            </form>
+          </Flex>
         </>
       )}
-      <form onSubmit={handleSubmit(addComment)}>
-        <Flex dir="row" mt={4}>
-          <FormControl flex="1" mr={4}>
-            <Input name="comment" placeholder="Írd be az üzeneted" ref={register} />
-            <FormErrorMessage>
-              {errors.comment && errors.comment.message}
-            </FormErrorMessage>
-          </FormControl>
-          <Button isLoading={formState.isSubmitting} type="submit">
-            Küldés
-          </Button>
-        </Flex>
-      </form>
     </>
   )
 }

@@ -1,4 +1,6 @@
-import { Box } from "@chakra-ui/react"
+import { Box, Flex, Stack, Text } from "@chakra-ui/react"
+import { HiShieldCheck } from "react-icons/hi"
+
 import { useUser } from "lib/hooks"
 import { CommentWithUser } from "lib/interfaces"
 
@@ -11,8 +13,12 @@ export default function Comment({ data }: Props) {
   return (
     <>
       {user && (
-        <Box rounded="md" p={4} borderWidth={1} borderColor="lightgrey" mt={4}>
-          {data.text} ({data.user.name})
+        <Box rounded="md" p={4} boxShadow="md" mt={4}>
+          <Stack direction="row" spacing={2} as={Flex} alignItems="center" mb={2}>
+            <Text fontSize="sm">{data.user.name}</Text>
+            <HiShieldCheck />
+          </Stack>
+          <Text fontSize="xl">{data.text}</Text>
         </Box>
       )}
     </>

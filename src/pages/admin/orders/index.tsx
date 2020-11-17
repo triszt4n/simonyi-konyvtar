@@ -1,6 +1,12 @@
-import { Tag, chakra, List, ListItem, Text } from "@chakra-ui/react"
+import { Tag, chakra, List, ListItem, Text, Stack } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import NextLink from "next/link"
+import {
+  HiOutlineUser,
+  HiOutlineCalendar,
+  HiArrowNarrowRight,
+  HiOutlineBookOpen,
+} from "react-icons/hi"
 import useSWR from "swr"
 
 import ErrorPage from "components/ErrorPage"
@@ -20,7 +26,7 @@ export default function OrdersPage() {
 
   return (
     <>
-      <List>
+      <List as={Stack} spacing={6}>
         {data &&
           data.map((order) => (
             <NextLink key={order.id} href={`/orders/${order.id}`}>
@@ -32,21 +38,33 @@ export default function OrdersPage() {
                     boxShadow: "0px 0px 8px lightgray",
                   }}
                 >
-                  <Tag size="md">{STATUSES[order.status]}</Tag>
-                  <Text>
-                    {new Date(order.createdAt).toLocaleDateString()}
-                    {" - "}
-                    {new Date(order.returnDate).toLocaleDateString()}
-                  </Text>
-                  <List>
-                    <Text>{order.user.name}</Text>
-                    {order.books.map((book) => (
-                      <ListItem key={book.id}>
-                        <Text>{book.books.title}</Text>
-                        <Text>{book.quantity}</Text>
-                      </ListItem>
-                    ))}
-                  </List>
+                  <Stack spacing={4} align="start">
+                    <Stack direction="row" spacing={2} align="center">
+                      <HiOutlineUser />
+                      <Text fontSize="lg">{order.user.name}</Text>
+                      <Tag size="md">{STATUSES[order.status]}</Tag>
+                    </Stack>
+                    <Stack direction="row" spacing={2} align="center">
+                      <HiOutlineCalendar />
+                      <Stack direction="row" spacing={2} align="center">
+                        <Text>{new Date(order.createdAt).toLocaleDateString()}</Text>
+                        <HiArrowNarrowRight />
+                        <Text>{new Date(order.returnDate).toLocaleDateString()}</Text>
+                      </Stack>
+                    </Stack>
+                    <List>
+                      {order.books.map((book) => (
+                        <ListItem key={book.id}>
+                          <Stack direction="row" spacing={2} align="center">
+                            <HiOutlineBookOpen />
+                            <Text>
+                              {book.books.title} {book.quantity} db
+                            </Text>
+                          </Stack>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Stack>
                 </MotionBox>
               </ListItem>
             </NextLink>
