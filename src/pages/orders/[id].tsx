@@ -169,9 +169,11 @@ export default function OrderPage() {
                 </ListItem>
               ))}
             </List>
-            <Button colorScheme="red" onClick={deleteOrder}>
-              Foglalás törlése
-            </Button>
+            <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
+              <Button colorScheme="red" onClick={deleteOrder}>
+                Foglalás törlése
+              </Button>
+            </HasRole>
           </Stack>
           <Flex direction="column" justifyContent="space-between">
             <List as={Flex} flexDirection="column">

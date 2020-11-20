@@ -8,6 +8,7 @@ interface Props {
 
 export default function HasRole({ roles, children }: Props) {
   const [user] = useUser()
+  const hasRole = roles.some((it) => it === user?.role)
 
-  return <>{roles.some((it) => it === user?.role) ? children : null}</>
+  return <>{hasRole && children}</>
 }
