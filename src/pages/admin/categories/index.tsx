@@ -3,6 +3,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Text,
   useToast,
 } from "@chakra-ui/react"
 import { Category } from "@prisma/client"
@@ -18,23 +19,21 @@ import { userrole } from "lib/prismaClient"
 export default function CategoriesIndexPage() {
   const hasAccess = useRequireRoles([userrole.ADMIN])
   if (!hasAccess) {
-    return (
-      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
-    )
+    return <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
   }
   const [newCategory, setNewCategory] = useState("")
   const { data, error, mutate } = useSWR<Category[]>("/api/categories", fetcher)
 
   const toast = useToast()
 
-  if (error) return <div>Failed to load categories</div>
+  if (error) return <Text fontSize="lg">Nem sikerült betölteni a kategóriákat</Text>
   if (!data) return <Loading />
 
   async function handleDelete(cat: Category) {
     if (
       confirm(
         `A kategória törlésével minden kapcsolódó könyvnél is törlődik.\n
-        Biztosan törlöd a(z) "${cat.name}" kategóriát?`
+        Biztosan törlöd a(z) "${cat.name}" kategóriát?`,
       )
     ) {
       const response = await fetch(`/api/categories/${cat.id}`, {
@@ -106,7 +105,7 @@ export default function CategoriesIndexPage() {
             isRequired
             placeholder="Új kategória"
             value={newCategory}
-            onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            onChange={(e: FormEvent<HTMLInputElement>) =>
               setNewCategory(e.currentTarget.value)
             }
           />

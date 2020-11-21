@@ -11,14 +11,12 @@ import { userrole } from "lib/prismaClient"
 export default function UserList() {
   const hasAccess = useRequireRoles([userrole.ADMIN])
   if (!hasAccess) {
-    return (
-      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
-    )
+    return <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
   }
 
   const { data, error } = useSWR<User[]>("/api/users", fetcher)
 
-  if (error) return <div>Failed to load users</div>
+  if (error) return <Text fontSize="lg">Nem sikerült betölteni a felhasználókat</Text>
   if (!data) return <Loading />
 
   return (

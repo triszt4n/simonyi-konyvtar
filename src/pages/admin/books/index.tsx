@@ -1,4 +1,4 @@
-import { Button, useToast } from "@chakra-ui/react"
+import { Button, Text, useToast } from "@chakra-ui/react"
 import NextLink from "next/link"
 import useSWR from "swr"
 
@@ -12,17 +12,12 @@ import { userrole } from "lib/prismaClient"
 const BookAdminPage: React.FC = () => {
   const hasAccess = useRequireRoles([userrole.ADMIN])
   if (!hasAccess) {
-    return (
-      <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
-    )
+    return <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
   }
-  const { data, error, mutate } = useSWR<BookWithCategories[]>(
-    "/api/books",
-    fetcher
-  )
+  const { data, error, mutate } = useSWR<BookWithCategories[]>("/api/books", fetcher)
   const toast = useToast()
 
-  if (error) return <div>Failed to load books</div>
+  if (error) return <Text fontSize="lg">Nem sikerült betölteni a könyveket</Text>
   if (!data) return <Loading />
 
   async function handleBookDelete(id: number) {

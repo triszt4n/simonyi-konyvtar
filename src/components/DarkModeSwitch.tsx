@@ -6,7 +6,7 @@ export const DarkModeSwitch = (props: ChakraProps) => {
   const isDark = colorMode === "dark"
   return (
     <IconButton
-      aria-label="Change color theme"
+      aria-label="Téma megváltoztatása"
       icon={isDark ? <HiMoon /> : <HiSun />}
       onClick={toggleColorMode}
       {...props}
