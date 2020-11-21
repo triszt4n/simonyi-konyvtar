@@ -1,5 +1,4 @@
 import { SimpleGrid, Input } from "@chakra-ui/react"
-import { Book } from "@prisma/client"
 import { useState } from "react"
 import useSWR from "swr"
 import { useDebouncedCallback } from "use-debounce"
@@ -8,10 +7,11 @@ import { BookPreview } from "components/books/BookPreview"
 import Loading from "components/Loading"
 import { Main } from "components/Main"
 import { fetcher } from "lib/hooks"
+import { BookWithCategories } from "lib/interfaces"
 
 const Index = () => {
   const [term, setTerm] = useState("")
-  const { data, error } = useSWR<Book[]>(`/api/books?q=${term}`, fetcher)
+  const { data, error } = useSWR<BookWithCategories[]>(`/api/books?q=${term}`, fetcher)
   const debounced = useDebouncedCallback((value) => setTerm(value), 500)
 
   if (error) return <div>Nem sikerült betölteni a könyveket</div>
