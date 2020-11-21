@@ -10,6 +10,7 @@ import {
   ListItem,
   Stack,
   Text,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react"
 import dynamic from "next/dynamic"
@@ -49,15 +50,22 @@ function CartPage() {
 
   return (
     <>
-      <Heading as="h1" mb={4}>
-        Kosaram
-      </Heading>
+      <Stack spacing={4} direction="row">
+        <Heading as="h1" mb={4}>
+          Kosaram
+        </Heading>
+        <Tooltip label="Kosár ürítése" aria-label="Kosár ürítése">
+          <IconButton
+            colorScheme="red"
+            onClick={emptyCart}
+            aria-label="kosár ürítése"
+            icon={<HiTrash />}
+          />
+        </Tooltip>
+      </Stack>
       <>
         {cart.sumCount ? (
           <>
-            <Button colorScheme="red" onClick={emptyCart}>
-              Kosár ürítése
-            </Button>
             <List as={Stack} spacing={4} my={4}>
               {cart.books.map((book) => (
                 <ListItem key={book.id} boxShadow="md" p="6" rounded="md">

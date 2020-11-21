@@ -1,8 +1,9 @@
 import {
   Button,
+  Flex,
   Input,
-  InputGroup,
-  InputRightElement,
+  FormControl,
+  Heading,
   Text,
   useToast,
 } from "@chakra-ui/react"
@@ -100,20 +101,21 @@ export default function CategoriesIndexPage() {
   return (
     <>
       <form onSubmit={handleAddCategory}>
-        <InputGroup>
-          <Input
-            isRequired
-            placeholder="Új kategória"
-            value={newCategory}
-            onChange={(e: FormEvent<HTMLInputElement>) =>
-              setNewCategory(e.currentTarget.value)
-            }
-          />
-          <InputRightElement width="auto">
-            <Button type="submit">Hozzáadás</Button>
-          </InputRightElement>
-        </InputGroup>
+        <Flex direction="row" mb={6}>
+          <FormControl mr={4} flex="1">
+            <Input
+              isRequired
+              placeholder="Új kategória"
+              value={newCategory}
+              onChange={(e: FormEvent<HTMLInputElement>) =>
+                setNewCategory(e.currentTarget.value)
+              }
+            />
+          </FormControl>
+          <Button type="submit">Hozzáadás</Button>
+        </Flex>
       </form>
+      <Heading as="h1">Kategóriák</Heading>
       {data && (
         <CategoryList
           data={data}

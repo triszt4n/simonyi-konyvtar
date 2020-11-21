@@ -182,7 +182,7 @@ export default function OrderPage() {
               ))}
             </List>
             <form onSubmit={handleSubmit(addComment)}>
-              <Flex dir="row" mt={4}>
+              <Flex direction="row" mt={4}>
                 <FormControl flex="1" mr={4}>
                   <Input name="comment" placeholder="Írd be az üzeneted" ref={register} />
                   <FormErrorMessage>

@@ -1,4 +1,4 @@
-import { Button, Text, useToast } from "@chakra-ui/react"
+import { Button, Heading, Text, useToast } from "@chakra-ui/react"
 import NextLink from "next/link"
 import useSWR from "swr"
 
@@ -48,8 +48,11 @@ const BookAdminPage: React.FC = () => {
 
   return (
     <>
+      <Heading as="h1" mb={4}>
+        Könyvek kezelése
+      </Heading>
       <NextLink href={"/admin/books/create"}>
-        <Button variant="link">Új könyv felvétele</Button>
+        <Button mb={4}>Új könyv felvétele</Button>
       </NextLink>
       {data && <BookList data={data} onDelete={handleBookDelete} />}
     </>

@@ -29,13 +29,14 @@ export default function Navbar() {
       py={4}
       w="100%"
       display={["block", null, "flex"]}
+      alignItems="center"
       justifyContent={[null, null, "space-between"]}
     >
       <Flex justifyContent="space-between" alignItems="center">
         <NextLink href="/">
           <Link fontSize="lg">Simonyi Könyvtár</Link>
         </NextLink>
-        <Stack direction="row" align="center">
+        <Stack direction="row" align="center" spacing={4}>
           <DarkModeSwitch display={["flex", null, "none"]} />
           <Box
             cursor="pointer"
@@ -86,7 +87,7 @@ export default function Navbar() {
           <Button leftIcon={<HiOutlineShoppingCart />}>{cart.sumCount}</Button>
         </NextLink>
       </Stack>
-      <DarkModeSwitch display={["none", null, "flex"]} />
+      <DarkModeSwitch display={["none", null, "block"]} />
     </Box>
   )
 }
