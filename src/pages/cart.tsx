@@ -13,15 +13,24 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react"
+import { addDays, addMonths } from "date-fns"
+import hu from "date-fns/locale/hu"
 import dynamic from "next/dynamic"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useState, forwardRef } from "react"
 import { HiMinusCircle, HiPlusCircle, HiTrash } from "react-icons/hi"
-import DatePicker from "react-datepicker"
+import DatePicker, { registerLocale } from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
 import { useCart, useUser } from "lib/hooks"
+
+registerLocale("hu", hu)
+
+interface DatePickerInputProps {
+  value?: string
+  onClick?: () => void
+}
 
 function CartPage() {
   const router = useRouter()
@@ -29,6 +38,16 @@ function CartPage() {
   const { cart, addBook, removeBook, deleteBook, emptyCart } = useCart()
   const [user] = useUser()
   const [returnDate, setReturnDate] = useState(new Date())
+
+  const CustomDatePickerInput = forwardRef(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ value, onClick }: DatePickerInputProps, ref) => (
+      <Button variant="outline" onClick={onClick}>
+        {value}
+      </Button>
+    ),
+  )
+  CustomDatePickerInput.displayName = "CustomDatePickerInput"
 
   async function sendOrder() {
     const res = await fetch("/api/orders", {
@@ -110,12 +129,23 @@ function CartPage() {
               ))}
             </List>
             {user ? (
-              <>
-                <DatePicker selected={returnDate} onChange={(d) => setReturnDate(d)} />
+              <Stack direction="column" spacing={4} align="start">
+                <Heading as="h2" fontSize="xl">
+                  Kölcsönzés lejárati ideje
+                </Heading>
+                <DatePicker
+                  locale="hu"
+                  dateFormat="yyyy-MM-dd"
+                  minDate={addDays(new Date(), 1)}
+                  maxDate={addMonths(new Date(), 3)}
+                  selected={returnDate}
+                  onChange={(d: Date) => setReturnDate(d)}
+                  customInput={<CustomDatePickerInput />}
+                />
                 <Button colorScheme="blue" onClick={sendOrder}>
                   Foglalás leadása
                 </Button>
-              </>
+              </Stack>
             ) : (
               <Text fontSize="lg">A foglalás leadásához jelentezz be!</Text>
             )}
