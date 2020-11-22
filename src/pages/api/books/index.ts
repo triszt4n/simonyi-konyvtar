@@ -24,6 +24,8 @@ handler
         order by ts_rank(document_with_idx, plainto_tsquery('%s')) desc;`, term)
         const books = await db.$queryRaw(sql)
 
+        // performace-wise, this is bad
+        // but it works
         for await (const book of books) {
           book.categories = await db.category.findMany({
             where: {
