@@ -5,7 +5,7 @@ import { NextHandler } from "next-connect"
 const requireRole = (...roles: userrole[]) => {
   return (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     if (!req.user) {
-      return res.status(401).send("unauthenticated")
+      return res.status(401).send({ message: "Nincs megfelelő jogosultságod" })
     }
     if (roles.some(it => it == req.user.role)) {
       return next()

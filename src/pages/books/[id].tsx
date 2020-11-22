@@ -32,7 +32,7 @@ const BookPage = () => {
   const toast = useToast()
   const { addBook } = useCart()
 
-  if (error) return <div>Failed to load book</div>
+  if (error) return <div>Nem sikerült betölteni a könyvet</div>
   if (!book) return <Loading />
 
   function addToCart(book: CartItem) {

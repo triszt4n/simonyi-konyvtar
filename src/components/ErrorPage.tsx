@@ -12,8 +12,8 @@ function ErrorPage({ statusCode, message }: ErrorPageProps) {
       <Text fontSize="xl">{message}</Text>
       <Image
         src={`https://http.cat/${statusCode}`}
-        width={500}
-        height={500}
+        width={640}
+        height={512}
         alt={`${statusCode} Error`}
       />
     </Flex>
