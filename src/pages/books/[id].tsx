@@ -15,8 +15,8 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import useSWR from "swr"
 
-import TimeAgo from "components/HunTimeAgo"
 import Loading from "components/Loading"
+import { timeAgo } from "lib/date"
 import { useCart, fetcher } from "lib/hooks"
 import { BookWithCategoriesAndOrders, CartItem } from "lib/interfaces"
 
@@ -89,7 +89,7 @@ const BookPage = () => {
       </Flex>
       <Text>
         Legutóbb frissítve:&nbsp;
-        <TimeAgo date={book.updatedAt} />
+        {timeAgo(new Date(book.updatedAt))}
       </Text>
       <Button
         isDisabled={book.stockCount === 0}

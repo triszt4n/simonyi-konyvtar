@@ -3,6 +3,7 @@ import NextLink from "next/link"
 import { HiOutlineBookOpen, HiOutlineCalendar, HiArrowNarrowRight } from "react-icons/hi"
 import useSWR from "swr"
 
+import { HunDate } from "components/HunDate"
 import { STATUSES } from "lib/constants"
 import { fetcher, useUser } from "lib/hooks"
 import { OrderWithBooks } from "lib/interfaces"
@@ -37,9 +38,9 @@ export default function OrdersPage() {
                   <Stack direction="row" spacing={2} align="center">
                     <HiOutlineCalendar />
                     <Stack direction="row" spacing={2} align="center">
-                      <Text>{new Date(order.createdAt).toLocaleDateString()}</Text>
+                      <HunDate date={new Date(order.createdAt)} />
                       <HiArrowNarrowRight />
-                      <Text>{new Date(order.returnDate).toLocaleDateString()}</Text>
+                      <HunDate date={new Date(order.returnDate)} />
                     </Stack>
                   </Stack>
                   <List>

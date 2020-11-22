@@ -32,7 +32,6 @@
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.9.5",
     "react-icons": "^3.11.0",
-    "react-timeago": "^5.2.0",
     "rollbar": "^2.19.4",
     "swr": "^0.3.8",
     "use-debounce": "^5.1.0",

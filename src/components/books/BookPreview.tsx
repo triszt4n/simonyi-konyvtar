@@ -14,7 +14,7 @@ import { motion } from "framer-motion"
 import NextImage from "next/image"
 import NextLink from "next/link"
 
-import TimeAgo from "components/HunTimeAgo"
+import { timeAgo } from "lib/date"
 import { BookWithCategories } from "lib/interfaces"
 
 const MotionBox = chakra(motion.div)
@@ -71,7 +71,7 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
         </Wrap>
         <Text mt={2} opacity={0.6} fontSize="sm">
           Legutóbb frissítve:&nbsp;
-          <TimeAgo date={book.updatedAt} />
+          {timeAgo(new Date(book.updatedAt))}
         </Text>
       </MotionBox>
     </NextLink>

@@ -48,12 +48,13 @@ export default function Navbar() {
         </Stack>
       </Flex>
       <Stack
+        as={Flex}
         shouldWrapChildren
         spacing={[4, null, 8]}
         alignItems={["start", null, "center"]}
         display={[isOpen ? "flex" : "none", null, "flex"]}
-        as={Flex}
         direction={["column", null, "row"]}
+        pt={[2, 0]}
       >
         {user && (
           <NextLink href="/orders">

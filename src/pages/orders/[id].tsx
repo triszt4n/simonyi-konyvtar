@@ -22,6 +22,7 @@ import useSWR from "swr"
 
 import ErrorPage from "components/ErrorPage"
 import HasRole from "components/HasRole"
+import { HunDate } from "components/HunDate"
 import Loading from "components/Loading"
 import Comment from "components/orders/Comment"
 import { STATUSES } from "lib/constants"
@@ -148,9 +149,9 @@ export default function OrderPage() {
             <Stack direction="row" spacing={2} align="center">
               <HiOutlineCalendar />
               <Stack direction="row" spacing={2} align="center">
-                <Text>{new Date(order.createdAt).toLocaleDateString()}</Text>
+                <HunDate date={new Date(order.createdAt)} />
                 <HiArrowNarrowRight />
-                <Text>{new Date(order.returnDate).toLocaleDateString()}</Text>
+                <HunDate date={new Date(order.returnDate)} />
               </Stack>
             </Stack>
             <List alignSelf="stretch" as={Stack} spacing={4}>
