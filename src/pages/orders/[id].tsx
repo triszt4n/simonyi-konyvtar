@@ -10,8 +10,8 @@ import {
   FormErrorMessage,
   Input,
   Flex,
-  Select,
   useToast,
+  Heading,
 } from "@chakra-ui/react"
 import NextImage from "next/image"
 import NextLink from "next/link"
@@ -35,6 +35,12 @@ import { userrole } from "lib/prismaClient"
 
 interface FormData {
   comment: string
+}
+
+const StatusButtonsMap = {
+  PENDING: "Függőben",
+  RENTED: "Kiadva",
+  RETURNED: "Visszahozva",
 }
 
 export default function OrderPage() {
@@ -74,22 +80,24 @@ export default function OrderPage() {
     }
   }
 
-  async function updateStatus(e: React.FormEvent<HTMLSelectElement>) {
-    const res = await fetch(`/api/orders/${orderId}`, {
-      method: "PUT",
-      body: JSON.stringify({ status: e.currentTarget.value }),
-    })
-    if (!res.ok) {
-      toast({
-        title: "Hiba történt",
-        description: "Nem sikerült frissíteni az állapotot",
-        status: "error",
-        isClosable: true,
-        duration: 3000,
+  async function updateStatus(e: string) {
+    if (confirm(`Biztosan ${e} státuszra állítod a kölcsönzést?`)) {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: "PUT",
+        body: JSON.stringify({ status: e }),
       })
-    } else {
-      const newOrder = await res.json()
-      mutate((order) => ({ ...order, status: newOrder.status }))
+      if (!res.ok) {
+        toast({
+          title: "Hiba történt",
+          description: "Nem sikerült frissíteni az állapotot",
+          status: "error",
+          isClosable: true,
+          duration: 3000,
+        })
+      } else {
+        const newOrder = await res.json()
+        mutate((order) => ({ ...order, status: newOrder.status }))
+      }
     }
   }
 
@@ -116,14 +124,22 @@ export default function OrderPage() {
         <>
           <Stack direction="column" spacing={4} align="start">
             <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
-              <Select onChange={updateStatus} defaultValue={order.status}>
-                {Object.keys(STATUSES).map((key) => (
-                  <option value={key} key={key}>
-                    {STATUSES[key]}
-                  </option>
-                ))}
-              </Select>
+              <>
+                <Heading as="h2" fontSize="lg">
+                  Kölcsönzés kezelése
+                </Heading>
+                <Stack direction="row" spacing={4}>
+                  {Object.keys(StatusButtonsMap).map((key) => (
+                    <Button onClick={() => updateStatus(key)} key={key}>
+                      {STATUSES[key]}
+                    </Button>
+                  ))}
+                </Stack>
+              </>
             </HasRole>
+            <Heading as="h2" fontSize="lg">
+              Kölcsönzés részletei
+            </Heading>
             <Tag size="md">{STATUSES[order.status]}</Tag>
             <Stack direction="row" spacing={2} align="center">
               <HiOutlineUser />

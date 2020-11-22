@@ -1,4 +1,4 @@
-import { userrole } from "@prisma/client"
+import { Order, orderstatus, userrole } from "@prisma/client"
 import nextConnect, { NextHandler } from "next-connect"
 import { NextApiRequest, NextApiResponse } from "next"
 
@@ -79,15 +79,26 @@ handler
   })
   .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .put(async (req, res) => {
-    const updates = JSON.parse(req.body)
+    const orderId = Number(req.query.id)
+    const updates = JSON.parse(req.body) as Partial<Order>
     try {
-      const order = await db.order.update({
-        where: { id: Number(req.query.id) },
+      const transactions = []
+      transactions.push(db.order.update({
+        where: { id: orderId },
         data: {
           ...updates
         },
         include: { comments: true, books: { include: { books: true } } }
-      })
+      }))
+      if (updates.status === orderstatus.RETURNED) {
+        const orders = await db.bookToOrder.findMany({ where: { orderId } })
+        transactions.push(...orders.map(o =>
+          db.book.update({
+            where: { id: o.bookId },
+            data: { stockCount: { increment: o.quantity } }
+          })))
+      }
+      const [order] = await db.$transaction(transactions)
       res.json(order)
     } catch (e) {
       console.error(e)
