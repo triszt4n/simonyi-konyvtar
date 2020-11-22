@@ -21,12 +21,13 @@ import { HiMinusCircle, HiPlusCircle, HiTrash } from "react-icons/hi"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
-import { useCart } from "lib/hooks"
+import { useCart, useUser } from "lib/hooks"
 
 function CartPage() {
   const router = useRouter()
   const toast = useToast()
   const { cart, addBook, removeBook, deleteBook, emptyCart } = useCart()
+  const [user] = useUser()
   const [returnDate, setReturnDate] = useState(new Date())
 
   async function sendOrder() {
@@ -54,14 +55,16 @@ function CartPage() {
         <Heading as="h1" mb={4}>
           Kosaram
         </Heading>
-        <Tooltip label="Kosár ürítése" aria-label="Kosár ürítése">
-          <IconButton
-            colorScheme="red"
-            onClick={emptyCart}
-            aria-label="kosár ürítése"
-            icon={<HiTrash />}
-          />
-        </Tooltip>
+        {cart.sumCount && (
+          <Tooltip label="Kosár ürítése" aria-label="Kosár ürítése">
+            <IconButton
+              colorScheme="red"
+              onClick={emptyCart}
+              aria-label="kosár ürítése"
+              icon={<HiTrash />}
+            />
+          </Tooltip>
+        )}
       </Stack>
       <>
         {cart.sumCount ? (
@@ -106,10 +109,16 @@ function CartPage() {
                 </ListItem>
               ))}
             </List>
-            <DatePicker selected={returnDate} onChange={(d) => setReturnDate(d)} />
-            <Button colorScheme="blue" onClick={sendOrder}>
-              Foglalás leadása
-            </Button>
+            {user ? (
+              <>
+                <DatePicker selected={returnDate} onChange={(d) => setReturnDate(d)} />
+                <Button colorScheme="blue" onClick={sendOrder}>
+                  Foglalás leadása
+                </Button>
+              </>
+            ) : (
+              <Text fontSize="lg">A foglalás leadásához jelentezz be!</Text>
+            )}
           </>
         ) : (
           <Center>
