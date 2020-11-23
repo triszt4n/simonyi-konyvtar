@@ -1,10 +1,13 @@
+import { User as DbUser } from "@prisma/client"
 import useSWR from "swr"
 import createPersistedState from "use-persisted-state"
 
 import { Cart, CartItem } from "lib/interfaces"
 import { userrole } from "./prismaClient"
 
-export const fetcher = async (url) => {
+type User = Omit<DbUser, "password">
+
+export const fetcher = async (url: string) => {
   const res = await fetch(url)
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
@@ -20,11 +23,11 @@ export const fetcher = async (url) => {
 }
 
 export function useUser() {
-  const { data, mutate } = useSWR("/api/user", fetcher)
+  const { data, mutate } = useSWR<{ user: User }>("/api/user", fetcher)
   // if data is not defined, the query has not completed
   const loading = !data
   const user = data?.user
-  return [user, { mutate, loading }]
+  return [user, { mutate, loading }] as const
 }
 
 export function useRequireRoles(roles: userrole[] = []) {
