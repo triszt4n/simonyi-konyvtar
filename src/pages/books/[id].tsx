@@ -15,7 +15,7 @@ import { useRouter } from "next/router"
 import NextImage from "next/image"
 import useSWR from "swr"
 
-import Loading from "components/Loading"
+import { Loading } from "components/Loading"
 import { timeAgo } from "lib/date"
 import { useCart, fetcher } from "lib/hooks"
 import { BookWithCategoriesAndOrders, CartItem } from "lib/interfaces"

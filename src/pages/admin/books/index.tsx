@@ -4,7 +4,7 @@ import useSWR from "swr"
 
 import { BookList } from "components/books/BookList"
 import ErrorPage from "components/ErrorPage"
-import Loading from "components/Loading"
+import { Loading } from "components/Loading"
 import { fetcher, useRequireRoles } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
 import { userrole } from "lib/prismaClient"

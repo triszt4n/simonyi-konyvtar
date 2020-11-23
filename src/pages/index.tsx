@@ -4,7 +4,7 @@ import useSWR from "swr"
 import { useDebouncedCallback } from "use-debounce"
 
 import { BookPreview } from "components/books/BookPreview"
-import Loading from "components/Loading"
+import { Loading } from "components/Loading"
 import { Main } from "components/Main"
 import { fetcher } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"

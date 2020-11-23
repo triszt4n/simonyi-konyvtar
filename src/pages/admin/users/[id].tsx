@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import useSWR from "swr"
 
 import ErrorPage from "components/ErrorPage"
-import Loading from "components/Loading"
+import { Loading } from "components/Loading"
 import { fetcher, useRequireRoles } from "lib/hooks"
 import { userrole } from "lib/prismaClient"
 

@@ -23,7 +23,7 @@ import useSWR from "swr"
 import ErrorPage from "components/ErrorPage"
 import HasRole from "components/HasRole"
 import { HunDate } from "components/HunDate"
-import Loading from "components/Loading"
+import { Loading } from "components/Loading"
 import Comment from "components/orders/Comment"
 import { STATUSES } from "lib/constants"
 import { fetcher } from "lib/hooks"
@@ -58,7 +58,7 @@ export default function OrderPage() {
 
   const toast = useToast()
 
-  if (error) return <ErrorPage statusCode={error.status} message={error.info.message} />
+  if (error) return <ErrorPage statusCode={error.status} message={error.info?.message} />
   if (!order) return <Loading />
 
   async function addComment(value: FormData) {

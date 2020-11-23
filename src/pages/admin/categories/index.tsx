@@ -13,7 +13,7 @@ import useSWR from "swr"
 
 import { CategoryList } from "components/categories/CategoryList"
 import ErrorPage from "components/ErrorPage"
-import Loading from "components/Loading"
+import { Loading } from "components/Loading"
 import { fetcher, useRequireRoles } from "lib/hooks"
 import { userrole } from "lib/prismaClient"
 

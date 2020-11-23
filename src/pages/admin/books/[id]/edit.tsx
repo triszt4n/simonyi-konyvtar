@@ -4,6 +4,7 @@ import useSWR from "swr"
 
 import { BookForm } from "components/books/BookForm"
 import ErrorPage from "components/ErrorPage"
+import { Loading } from "components/Loading"
 import { userrole } from "lib/prismaClient"
 import { fetcher, useRequireRoles } from "lib/hooks"
 import { BookWithCategories } from "lib/interfaces"
@@ -17,6 +18,7 @@ const EditBook = () => {
 
   const { data } = useSWR<BookWithCategories>(`/api/books/${router.query.id}`, fetcher)
 
+  if (!data) return <Loading />
   return (
     <>
       <Heading as="h2">Könyv szerkesztése</Heading>

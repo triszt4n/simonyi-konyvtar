@@ -1,6 +1,6 @@
 import { Center, Flex, Spinner, Text } from "@chakra-ui/react"
 
-export default function Loading() {
+export function Loading() {
   return (
     <Center>
       <Flex direction="column" alignItems="center" justifyContent="center">

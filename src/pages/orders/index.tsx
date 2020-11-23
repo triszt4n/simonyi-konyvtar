@@ -1,9 +1,10 @@
-import { Box, List, ListItem, Stack, Tag, Text } from "@chakra-ui/react"
+import { Box, Center, List, ListItem, Stack, Tag, Text } from "@chakra-ui/react"
 import NextLink from "next/link"
 import { HiOutlineBookOpen, HiOutlineCalendar, HiArrowNarrowRight } from "react-icons/hi"
 import useSWR from "swr"
 
 import { HunDate } from "components/HunDate"
+import { Loading } from "components/Loading"
 import { STATUSES } from "lib/constants"
 import { fetcher, useUser } from "lib/hooks"
 import { OrderWithBooks } from "lib/interfaces"
@@ -15,10 +16,12 @@ export default function OrdersPage() {
     fetcher,
   )
 
+  if (!data) return <Loading />
+
   return (
     <>
       <List as={Stack} direction="column" spacing={4}>
-        {data &&
+        {data?.length ? (
           data.map((order) => (
             <NextLink href={`/orders/${order.id}`} key={order.id}>
               <ListItem cursor="pointer">
@@ -58,7 +61,12 @@ export default function OrdersPage() {
                 </Box>
               </ListItem>
             </NextLink>
-          ))}
+          ))
+        ) : (
+          <Center>
+            <Text fontSize="xl">Nincsenek kölcsönzéseid</Text>
+          </Center>
+        )}
       </List>
     </>
   )

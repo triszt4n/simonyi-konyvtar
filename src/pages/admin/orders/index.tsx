@@ -11,6 +11,7 @@ import useSWR from "swr"
 
 import ErrorPage from "components/ErrorPage"
 import { HunDate } from "components/HunDate"
+import { Loading } from "components/Loading"
 import { STATUSES } from "lib/constants"
 import { fetcher, useRequireRoles } from "lib/hooks"
 import { OrderWithBooksAndUser } from "lib/interfaces"
@@ -24,6 +25,8 @@ export default function OrdersPage() {
   if (!hasAccess) {
     return <ErrorPage statusCode={401} message="Nincs megfelelő jogosultságod!" />
   }
+
+  if (!data) return <Loading />
 
   return (
     <>
