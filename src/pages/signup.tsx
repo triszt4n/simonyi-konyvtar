@@ -1,4 +1,5 @@
 import { Button, Heading, Input, Link, Stack, Text } from "@chakra-ui/react"
+import { UserCreateInput } from "@prisma/client"
 import NextLink from "next/link"
 import Router from "next/router"
 import { useEffect, useState } from "react"
@@ -17,7 +18,7 @@ export default function SignupPage() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    const body = {
+    const body: UserCreateInput = {
       password: e.currentTarget.password.value,
       name: e.currentTarget.username.value,
       email: e.currentTarget.email.value,

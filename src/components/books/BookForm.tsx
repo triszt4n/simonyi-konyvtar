@@ -12,7 +12,7 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react"
-import { Category } from "@prisma/client"
+import { Category, BookCreateInput } from "@prisma/client"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import { HiX, HiLink } from "react-icons/hi"
@@ -21,22 +21,9 @@ import useSWR, { mutate } from "swr"
 
 import { DELETE_CURRENT_FILE } from "lib/constants"
 import { fetcher } from "lib/hooks"
-import { BookWithCategories } from "lib/interfaces"
-
-type BookFormData = {
-  title: string
-  author: string
-  isbn: string
-  publisher: string
-  publishedAt: string | number
-  count: string | number
-  stockCount: string | number
-  notes: string
-  image: string
-}
 
 interface Props {
-  initialValue?: BookWithCategories
+  initialValue?: BookCreateInput & { id?: number; categories: Category[] }
 }
 
 export function BookForm({ initialValue }: Props) {
@@ -58,7 +45,7 @@ export function BookForm({ initialValue }: Props) {
     setError,
     clearErrors,
     watch,
-  } = useForm<BookWithCategories>({
+  } = useForm<BookCreateInput>({
     defaultValues: {
       ...book,
     },
@@ -71,7 +58,7 @@ export function BookForm({ initialValue }: Props) {
       categories?.map((it) => ({
         ...it,
         checked: initialValue
-          ? initialValue.categories.some((c) => c.id === it.id)
+          ? initialValue.categories?.some((c) => c.id === it.id)
           : false,
       })),
     )
@@ -90,7 +77,7 @@ export function BookForm({ initialValue }: Props) {
     fileInputRef.current.click()
   }
 
-  async function onSubmit(values: BookFormData) {
+  async function onSubmit(values: BookCreateInput) {
     values.count = Number(values.count)
     values.stockCount = Number(values.stockCount)
     values.publishedAt = Number(values.publishedAt)

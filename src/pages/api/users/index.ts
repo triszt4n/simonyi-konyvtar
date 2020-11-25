@@ -21,7 +21,7 @@ handler
     }
     // Security-wise, you must hash the password before saving it
     const hashedPass = await argon2.hash(password)
-    const u = db.user.findOne({ where: { email } })
+    const u = db.user.findUnique({ where: { email } })
     if (u) {
       return res.status(406).json({ message: "A megadott email már foglalt" })
     }

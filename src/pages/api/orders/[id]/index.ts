@@ -15,7 +15,7 @@ handler
   .use(async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     const role = req.user.role
     const orderId = Number(req.query.id)
-    const order = await db.order.findOne({ where: { id: orderId } })
+    const order = await db.order.findUnique({ where: { id: orderId } })
     if (role === userrole.ADMIN ||
       role === userrole.EDITOR ||
       req.user.id === order.userId) {
@@ -27,7 +27,7 @@ handler
   .get(async (req, res) => {
     try {
       const id = Number(req.query.id)
-      const order = await db.order.findOne({
+      const order = await db.order.findUnique({
         where: { id },
         include: {
           comments: {

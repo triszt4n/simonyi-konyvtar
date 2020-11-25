@@ -22,7 +22,7 @@ handler
       }
 
       for await (const book of books) {
-        const b = await db.book.findOne({ where: { id: book.id } })
+        const b = await db.book.findUnique({ where: { id: book.id } })
         if (book.quantity > b.stockCount) {
           return res
             .status(422)

@@ -7,7 +7,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react"
-import { Category } from "@prisma/client"
+import { Category, CategoryCreateInput } from "@prisma/client"
 import { FormEvent, useState } from "react"
 import useSWR from "swr"
 
@@ -59,9 +59,10 @@ export default function CategoriesIndexPage() {
 
   async function handleAddCategory(event: FormEvent) {
     event.preventDefault()
+    const category: CategoryCreateInput = { name: newCategory }
     const res = await fetch("/api/categories", {
       method: "POST",
-      body: JSON.stringify({ name: newCategory }),
+      body: JSON.stringify(category),
       headers: {
         "Content-Type": "application/json",
       },

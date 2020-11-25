@@ -21,7 +21,7 @@ handler
       res.status(500).json("ID must be number")
     } else {
       try {
-        const book = await db.book.findOne({
+        const book = await db.book.findUnique({
           where: { id: bookId },
           include: {
             categories: true,
@@ -75,7 +75,7 @@ handler
         })
       }
 
-      const book: BookWithCategories = await db.book.findOne({
+      const book: BookWithCategories = await db.book.findUnique({
         where: { id: bookId },
         include: { categories: true }
       })
@@ -109,7 +109,7 @@ handler
   .delete(async (req, res) => {
     const { query: { id } } = req
     const bookId = Number(id)
-    const book: BookWithCategories = await db.book.findOne({
+    const book: BookWithCategories = await db.book.findUnique({
       where: { id: bookId },
       include: { categories: true }
     })

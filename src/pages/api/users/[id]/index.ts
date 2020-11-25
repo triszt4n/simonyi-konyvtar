@@ -18,7 +18,7 @@ handler
       const { query: { id }, } = req
       if (!id) return res.json(null)
       const userId = parseInt((Array.isArray(id) ? id[0] : id))
-      const user = await db.user.findOne({ where: { id: userId } })
+      const user = await db.user.findUnique({ where: { id: userId } })
 
       res.json(user)
     } catch (e) {
