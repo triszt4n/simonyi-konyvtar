@@ -1,4 +1,4 @@
-import { SimpleGrid, Input } from "@chakra-ui/react"
+import { Input, Wrap, WrapItem, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import useSWR from "swr"
 import { useDebouncedCallback } from "use-debounce"
@@ -26,13 +26,15 @@ const Index = () => {
       {data ? (
         <>
           {data.length ? (
-            <SimpleGrid minChildWidth="min(100%, 24rem)" spacing="2rem">
+            <Wrap spacing="2rem" justify="center">
               {data.map((book) => (
-                <BookPreview key={book.id} book={book} />
+                <WrapItem key={book.id}>
+                  <BookPreview book={book} />
+                </WrapItem>
               ))}
-            </SimpleGrid>
+            </Wrap>
           ) : (
-            <p>Nincs a keresésnek megfelelő találat</p>
+            <Text size="lg">Nincs a keresésnek megfelelő találat</Text>
           )}
         </>
       ) : (

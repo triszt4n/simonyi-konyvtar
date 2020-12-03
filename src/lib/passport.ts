@@ -1,10 +1,10 @@
 import passport from "passport"
 import { Strategy } from "passport-local"
 import { NextApiRequest } from "next"
-import { PrismaClient, User } from "@prisma/client"
+import { User } from "@prisma/client"
 import argon2 from "argon2"
 
-const db = new PrismaClient()
+import db from "lib/db"
 
 passport.serializeUser((user: User, done) => {
   // serialize the username into session
