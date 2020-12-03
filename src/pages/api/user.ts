@@ -9,7 +9,7 @@ import requireLogin from "middleware/requireLogin"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
+  .use(auth())
   .get(async (req, res) => {
     // You do not generally want to return the whole user object
     // because it may contain sensitive field such as !!password!! Only return what needed
@@ -21,7 +21,7 @@ handler
       res.json(null)
     }
   })
-  .use(requireLogin)
+  .use(requireLogin())
   .delete(async (req, res) => {
     await db.user.delete({ where: { id: req.user.id } })
     req.logOut()

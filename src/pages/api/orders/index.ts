@@ -11,8 +11,8 @@ import { CartItem } from "lib/interfaces"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
-  .use(requireLogin)
+  .use(auth())
+  .use(requireLogin())
   .post(async (req, res) => {
     try {
       const userId = req.user.id

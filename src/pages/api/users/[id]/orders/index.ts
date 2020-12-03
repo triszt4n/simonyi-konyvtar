@@ -9,8 +9,8 @@ import requireLogin from "middleware/requireLogin"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
-  .use(requireLogin)
+  .use(auth())
+  .use(requireLogin())
   .use(async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     const role = req.user.role
     const userId = Number(req.query.id)

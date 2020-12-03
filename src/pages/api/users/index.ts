@@ -12,7 +12,7 @@ import requireRole from "middleware/requireRole"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
+  .use(auth())
   .post(async (req, res) => {
     const { email, name, password } = req.body
     const isValid = UserSchema.isValid(req.body)
@@ -43,7 +43,7 @@ handler
       })
     })
   })
-  .use(requireLogin)
+  .use(requireLogin())
   .use(requireRole(userrole.ADMIN))
   .get(async (req, res) => {
     try {

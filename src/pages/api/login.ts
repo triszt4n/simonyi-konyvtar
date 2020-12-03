@@ -6,8 +6,10 @@ import auth from "middleware/auth"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
-handler.use(auth).post(passport.authenticate("local"), (req, res) => {
-  res.json({ user: req.user })
-})
+handler
+  .use(auth())
+  .post(passport.authenticate("local"), (req, res) => {
+    res.json({ user: req.user })
+  })
 
 export default handler

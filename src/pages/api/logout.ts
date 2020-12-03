@@ -4,7 +4,7 @@ import auth from "middleware/auth"
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
-handler.use(auth).get((req, res) => {
+handler.use(auth()).get((req, res) => {
   req.logOut()
   res.status(204).end()
 })

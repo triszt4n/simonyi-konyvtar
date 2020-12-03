@@ -12,7 +12,7 @@ import { BookSchema } from "lib/schemas"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
+  .use(auth())
   .get(async (req, res) => {
     try {
       const term = req.query.q

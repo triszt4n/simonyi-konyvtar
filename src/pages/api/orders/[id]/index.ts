@@ -10,8 +10,8 @@ import requireRole from "middleware/requireRole"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
-  .use(requireLogin)
+  .use(auth())
+  .use(requireLogin())
   .use(async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
     const role = req.user.role
     const orderId = Number(req.query.id)

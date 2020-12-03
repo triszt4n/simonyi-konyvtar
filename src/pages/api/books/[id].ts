@@ -35,15 +35,14 @@ handler
       }
     }
   })
-  .use(auth)
-  .use(requireLogin)
+  .use(auth())
+  .use(requireLogin())
   .use(requireRole(userrole.ADMIN, userrole.EDITOR))
   .put(async (req, res) => {
     try {
       const { query: { id }, } = req
       const bookId = Number(id)
 
-      // TODO: validate book params
       const { parsedFields, parsedFiles } = await parseMultipart<BookWithCategoryIds>(req)
       const { categories, ...bookUpdate } = parsedFields
       bookUpdate.count = Number(bookUpdate.count)

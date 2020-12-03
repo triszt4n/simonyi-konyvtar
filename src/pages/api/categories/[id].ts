@@ -11,8 +11,8 @@ import requireRole from "middleware/requireRole"
 const handler = nextConnect<NextApiRequest, NextApiResponse>()
 
 handler
-  .use(auth)
-  .use(requireLogin)
+  .use(auth())
+  .use(requireLogin())
   .use(requireRole(userrole.ADMIN))
   .put(async (req, res) => {
     try {
