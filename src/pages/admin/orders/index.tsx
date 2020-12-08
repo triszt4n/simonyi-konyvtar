@@ -1,4 +1,4 @@
-import { Tag, chakra, List, ListItem, Text, Stack } from "@chakra-ui/react"
+import { Tag, chakra, List, ListItem, Text, Stack, Box } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import NextLink from "next/link"
 import {
@@ -35,11 +35,14 @@ export default function OrdersPage() {
           data.map((order) => (
             <NextLink key={order.id} href={`/orders/${order.id}`}>
               <ListItem cursor="pointer">
-                <MotionBox
+                <Box
                   rounded="md"
                   p={4}
-                  whileHover={{
-                    boxShadow: "0px 0px 8px lightgray",
+                  alignItems="start"
+                  boxShadow="md"
+                  _hover={{
+                    transition: "all 200ms ease-in-out",
+                    boxShadow: "xl",
                   }}
                 >
                   <Stack spacing={4} align="start">
@@ -69,7 +72,7 @@ export default function OrdersPage() {
                       ))}
                     </List>
                   </Stack>
-                </MotionBox>
+                </Box>
               </ListItem>
             </NextLink>
           ))}
