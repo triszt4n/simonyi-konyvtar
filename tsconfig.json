@@ -27,6 +27,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "cypress/integration/index.spec.js"
+    "cypress/integration/**/*.spec.js"
   ]
 }

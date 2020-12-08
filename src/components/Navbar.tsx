@@ -85,7 +85,7 @@ export default function Navbar() {
           </HasRole>
         )}
         <NextLink href="/cart">
-          <Button leftIcon={<HiOutlineShoppingCart />}>{cart.sumCount}</Button>
+          <Button leftIcon={<HiOutlineShoppingCart />}>{cart?.sumCount}</Button>
         </NextLink>
       </Stack>
       <DarkModeSwitch display={["none", null, "block"]} />
