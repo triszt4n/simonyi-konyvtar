@@ -24,7 +24,6 @@ export const fetcher = async (url: string) => {
 
 export function useUser() {
   const { data, mutate } = useSWR<{ user: User }>("/api/user", fetcher)
-  // if data is not defined, the query has not completed
   const loading = !data
   const user = data?.user
   return [user, { mutate, loading }] as const

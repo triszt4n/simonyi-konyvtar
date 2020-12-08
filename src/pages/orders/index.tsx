@@ -1,8 +1,9 @@
-import { Box, Center, List, ListItem, Stack, Tag, Text } from "@chakra-ui/react"
+import { Box, Center, List, ListItem, Stack, Tag, Text, Heading } from "@chakra-ui/react"
 import NextLink from "next/link"
 import { HiOutlineBookOpen, HiOutlineCalendar, HiArrowNarrowRight } from "react-icons/hi"
 import useSWR from "swr"
 
+import ErrorPage from "components/ErrorPage"
 import { HunDate } from "components/HunDate"
 import { Loading } from "components/Loading"
 import { STATUSES } from "lib/constants"
@@ -16,10 +17,19 @@ export default function OrdersPage() {
     fetcher,
   )
 
+  if (!user)
+    return (
+      <ErrorPage
+        statusCode={401}
+        message="Az oldal megtekintéséhez be kell jelentkezned"
+      />
+    )
+
   if (!data) return <Loading />
 
   return (
     <>
+      <Heading as="h1">Kölcsönzéseim</Heading>
       <List as={Stack} direction="column" spacing={4}>
         {data?.length ? (
           data.map((order) => (

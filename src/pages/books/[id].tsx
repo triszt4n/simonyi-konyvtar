@@ -47,16 +47,16 @@ const BookPage = () => {
 
   return (
     <>
-      <Flex>
-        <Box pr={2}>
+      <Flex direction={["column", null, "row"]}>
+        <Box mr={4}>
           <NextImage
             src={
               book.image
                 ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
-                : "https://placekitten.com/200/300"
+                : "https://via.placeholer.com/200x300"
             }
-            width={200}
-            height={300}
+            width={300}
+            height={450}
           />
         </Box>
         <List spacing={4}>
@@ -85,13 +85,16 @@ const BookPage = () => {
               </WrapItem>
             ))}
           </Wrap>
+          <ListItem>
+            <Text>
+              Legutóbb frissítve:&nbsp;
+              {timeAgo(new Date(book.updatedAt))}
+            </Text>
+          </ListItem>
         </List>
       </Flex>
-      <Text>
-        Legutóbb frissítve:&nbsp;
-        {timeAgo(new Date(book.updatedAt))}
-      </Text>
       <Button
+        mt={4}
         isDisabled={book.stockCount === 0}
         onClick={() =>
           addToCart({

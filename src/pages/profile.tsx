@@ -39,9 +39,9 @@ export default function ProfilePage() {
 
     if (res.ok) {
       const userObj = await res.json()
+      Router.replace("/")
       // set user to useSWR state
       mutate(userObj)
-      Router.replace("/")
     } else {
       setErrorMsg(await res.text())
     }

@@ -19,7 +19,7 @@ const App = ({ Component }: AppProps) => {
       <ChakraProvider>
         <Container>
           <Navbar />
-          <Box flex="1" width="100%" px={5} maxW="5xl">
+          <Box flex="1" width="100%" px={5} maxW="6xl">
             <Component />
           </Box>
           <Footer />

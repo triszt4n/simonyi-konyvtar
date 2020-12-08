@@ -30,7 +30,7 @@ export const BookPreview = ({ book }: BookPreviewProps) => {
             src={
               book.image
                 ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.image}`
-                : "https://placekitten.com/200/300"
+                : "https://via.placeholder.com/150x225"
             }
           />
         </Box>

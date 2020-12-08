@@ -23,7 +23,7 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "react/react-in-jsx-scope": "off",
     "semi": ["error", "never"],
-    "max-len": ["error", 90],
+    "max-len": ["warning", 90],
     "quotes": ["error", "double"]
   }
 }

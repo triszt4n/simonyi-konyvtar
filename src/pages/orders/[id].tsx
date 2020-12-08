@@ -167,7 +167,7 @@ export default function OrderPage() {
                         src={
                           book.books.image
                             ? `${process.env.NEXT_PUBLIC_S3_URL}/${book.books.image}`
-                            : "https://placekitten.org/30/40"
+                            : "https://via.placeholder.com/30x40"
                         }
                         height={60}
                         width={40}
