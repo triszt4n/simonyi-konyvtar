@@ -61,16 +61,24 @@ handler
   .delete(async (req, res) => {
     try {
       const orderId = Number(req.query.id)
+
+      const order = await db.order.findUnique({ where: { id: orderId } })
+
       const orders = await db.bookToOrder.findMany({ where: { orderId } })
       const removeConnectedBooks = db.bookToOrder.deleteMany({ where: { orderId } })
       const removeOrder = db.order.delete({ where: { id: orderId } })
-      const updateBooks = orders.map(o =>
-        db.book.update({
-          where: { id: o.bookId },
-          data: { stockCount: { increment: o.quantity } }
-        }))
-      // @ts-ignore
-      await db.$transaction([removeConnectedBooks, removeOrder, ...updateBooks])
+      if (order.status !== orderstatus.RETURNED) {
+        const updateBooks = orders.map(o =>
+          db.book.update({
+            where: { id: o.bookId },
+            data: { stockCount: { increment: o.quantity } }
+          }))
+        // @ts-ignore
+        await db.$transaction([removeConnectedBooks, removeOrder, ...updateBooks])
+
+      } else {
+        await db.$transaction([removeConnectedBooks, removeOrder])
+      }
       res.status(200).end()
     } catch (e) {
       console.error(e)

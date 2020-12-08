@@ -1,5 +1,6 @@
-import { List, ListItem, Link } from "@chakra-ui/react"
+import { List, ListItem, Link, Stack, Flex } from "@chakra-ui/react"
 import NextLink from "next/link"
+import { HiBookOpen, HiTag, HiUser, HiShare } from "react-icons/hi"
 
 import ErrorPage from "components/ErrorPage"
 import HasRole from "components/HasRole"
@@ -13,30 +14,50 @@ export default function AdminIndex() {
   }
 
   return (
-    <List>
+    <List as={Stack} spacing={4} direction="column" mt={4}>
       <HasRole roles={[userrole.ADMIN]}>
         <>
           <ListItem>
             <NextLink href="/admin/books">
-              <Link>Könyvek</Link>
+              <Flex direction="row" alignItems="center">
+                <HiBookOpen />
+                <Link ml={2} fontSize="xl">
+                  Könyvek
+                </Link>
+              </Flex>
             </NextLink>
           </ListItem>
           <ListItem>
             <NextLink href="/admin/categories">
-              <Link>Kategóriák</Link>
+              <Flex direction="row" alignItems="center">
+                <HiTag />
+                <Link ml={2} fontSize="xl">
+                  Kategóriák
+                </Link>
+              </Flex>
             </NextLink>
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <NextLink href="/admin/users">
-              <Link>Felhasználók</Link>
+              <Flex direction="row" alignItems="center">
+                <HiBookOpen />
+                <Link ml={2} fontSize="xl">
+                  Felhasználók
+                </Link>
+              </Flex>
             </NextLink>
-          </ListItem>
+          </ListItem> */}
         </>
       </HasRole>
       <HasRole roles={[userrole.ADMIN, userrole.EDITOR]}>
         <ListItem>
           <NextLink href="/admin/orders">
-            <Link>Kölcsönzések</Link>
+            <Flex direction="row" alignItems="center">
+              <HiShare />
+              <Link ml={2} fontSize="xl">
+                Kölcsönzések
+              </Link>
+            </Flex>
           </NextLink>
         </ListItem>
       </HasRole>
