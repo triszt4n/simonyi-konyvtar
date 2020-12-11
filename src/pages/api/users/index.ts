@@ -15,15 +15,19 @@ handler
   .use(auth())
   .post(async (req, res) => {
     const { email, name, password } = req.body
+    console.log(email)
+
     const isValid = UserSchema.isValid(req.body)
     if (!isValid) {
       return res.status(400).json({ message: "Nem megfelelő formátum" })
     }
     // Security-wise, you must hash the password before saving it
-    const u = db.user.findUnique({ where: { email } })
+    const u = await db.user.findUnique({ where: { email } })
     if (u) {
       return res.status(406).json({ message: "A megadott email már foglalt" })
     }
+    console.log(u)
+
     const hashedPass = await argon2.hash(password)
     const user = { name, password: hashedPass, email }
 
@@ -32,16 +36,18 @@ handler
       createdUser = await db.user.create({
         data: { ...user }
       })
+      req.logIn(createdUser, (err) => {
+        if (err) throw err
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...usr } = createdUser
+        res.status(201).json({
+          usr,
+        })
+      })
     } catch (err) {
       console.error(err)
+      res.status(500).json({ message: "Sikertelen regisztráció" })
     }
-    req.logIn(createdUser, (err) => {
-      if (err) throw err
-      // Log the signed up user in
-      res.status(201).json({
-        user,
-      })
-    })
   })
   .use(requireLogin())
   .use(requireRole(userrole.ADMIN))

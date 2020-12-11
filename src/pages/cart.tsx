@@ -61,7 +61,7 @@ function CartPage() {
     } else {
       const response = await res.json()
       toast({
-        title: "Hiba tortent",
+        title: "Hiba történt",
         description: response.message,
         status: "error",
       })
